@@ -22,6 +22,7 @@ public class FreecycleItemTest {
 	private String name;
 	private String description;
 	private Condition condition;
+	private String link;
 
 	/**
 	 * @throws java.lang.Exception
@@ -33,8 +34,10 @@ public class FreecycleItemTest {
 		this.name = "testitem";
 		this.description = "nice item";
 		this.condition = Condition.REFURBISHED;
+		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
 
-		this.testClass = new FreecycleItem(this.name, this.quantity, this.price, this.condition, this.description);
+		this.testClass = new FreecycleItem(this.name, this.quantity,
+				this.price, this.condition, this.description, this.link);
 
 	}
 

@@ -6,9 +6,12 @@ package com.leonarduk.itemfinder.freecycle;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 
 /**
@@ -26,7 +29,7 @@ public class FreecycleItemSearcherTest {
 	@Before
 	public void setUp() throws Exception {
 		this.searchTerm ="phone";
-		testClass = new FreecycleItemSearcher();
+		testClass = new FreecycleItemSearcher("kingston");
 	}
 
 	/**
@@ -76,7 +79,9 @@ public class FreecycleItemSearcherTest {
 	 */
 	@Test
 	public final void testFindItemsString() {
-		assertTrue(this.testClass.findItems(searchTerm).size() > 0);
+		List<Item> findItems = this.testClass.findItems(searchTerm);
+		System.out.println(findItems);
+		assertTrue(findItems.size() > 0);
 	}
 
 }

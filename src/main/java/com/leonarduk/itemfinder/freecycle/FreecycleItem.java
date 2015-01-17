@@ -16,15 +16,17 @@ public class FreecycleItem implements Item {
 	private double price;
 	private Condition condition;
 	private String description;
+	private String link;
 
 	public FreecycleItem(String name, int quantity, double price,
-			Condition condition, String description) {
+			Condition condition, String description, String link) {
 		this.name = name;
 		this.quantity = quantity;
 		this.description = description;
 		this.condition = condition;
 		this.price = price;
 
+		this.link = link;
 	}
 
 	/*
@@ -77,4 +79,14 @@ public class FreecycleItem implements Item {
 		return this.condition;
 	}
 
+	@Override
+	public String toString() {
+		return "FreecycleItem [name=" + name + ", quantity=" + quantity
+				+ ", price=" + price + ", condition=" + condition
+				+ ", description=" + description + ", link=" + link + "]";
+	}
+
+	public String getLink() {
+		return this.link;
+	}
 }
