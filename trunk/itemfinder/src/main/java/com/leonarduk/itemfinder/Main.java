@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.jbidwatcher.app.JBidWatch;
+import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
@@ -35,10 +35,13 @@ public final class Main {
 	private static final Logger LOGGER = Logger.getLogger(Main.class);
 
 	private Main() {
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher("kingston");
+		searcher.findItems("bed");
 	}
 
 	public static void main(String[] args) {
-		JBidWatch.main(new String[]{});
+//		JBidWatch.main(new String[]{});
+		
 	}
 
 	/**

@@ -3,8 +3,16 @@
  */
 package com.leonarduk.itemfinder.ebay;
 
+import org.htmlparser.Parser;
+import org.htmlparser.util.ParserException;
+
 import java.util.List;
 
+import com.adamshone.freecycle.FreecycleFeed;
+import com.adamshone.freecycle.Post;
+import com.adamshone.freecycle.PostProvider;
+import com.adamshone.freecycle.PostReceiver;
+import com.adamshone.freecycle.impl.FreecycleNewhamScraper;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
@@ -15,8 +23,16 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  */
 public class EbayItemSearcher implements ItemSearcher {
 
-	/* (non-Javadoc)
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.String, double, int)
+	public EbayItemSearcher() throws ParserException {
+		
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+	 * String, double, int)
 	 */
 	@Override
 	public List<Item> findItems(String searchTerm, double maxPrice, int quantity) {
@@ -24,8 +40,12 @@ public class EbayItemSearcher implements ItemSearcher {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.String, double, int, java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+	 * String, double, int, java.util.List)
 	 */
 	@Override
 	public List<Item> findItems(String searchTerm, double maxPrice,
@@ -34,8 +54,12 @@ public class EbayItemSearcher implements ItemSearcher {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.String, double, java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+	 * String, double, java.util.List)
 	 */
 	@Override
 	public List<Item> findItems(String searchTerm, double maxPrice,
@@ -44,8 +68,12 @@ public class EbayItemSearcher implements ItemSearcher {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.String, java.util.List)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+	 * String, java.util.List)
 	 */
 	@Override
 	public List<Item> findItems(String searchTerm,
@@ -54,8 +82,12 @@ public class EbayItemSearcher implements ItemSearcher {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+	 * String)
 	 */
 	@Override
 	public List<Item> findItems(String searchTerm) {

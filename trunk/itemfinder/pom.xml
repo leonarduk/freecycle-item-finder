@@ -27,6 +27,17 @@
 			<name>Spring Framework Maven Milestone Repository</name>
 			<url>https://repo.springsource.org/milestone</url>
 		</repository>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<id>leonarduk.com</id>
+			<name>leonarduk</name>
+			<url>http://leonarduk.com/maven2/</url>
+			<layout>default</layout>
+		</repository>
 	</repositories>
 
 	<build>
@@ -68,6 +79,7 @@
 		</plugins>
 	</build>
 
+
 	<dependencies>
 
 		<!-- Testing -->
@@ -108,6 +120,37 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.leonarduk</groupId>
+			<artifactId>freecycle-feed</artifactId>
+			<version>0.0.2</version>
+		</dependency>
 	</dependencies>
+	<organization>
+		<name>Leonard UK Ltd</name>
+		<url>http://leonarduk.com</url>
+	</organization>
+	<inceptionYear>2014</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0 or later</name>
+			<url>http://www.spdx.org/licenses/GPL-3.0+</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>leonarduk</id>
+			<name>Stephen Leonard</name>
+			<email>sourceforge@leonarduk.com</email>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+			<organization>Leonard UK Ltd</organization>
+			<organizationUrl>http://leonarduk.com</organizationUrl>
+			<timezone>0</timezone>
+			<url>http://uk.linkedin.com/in/steveleonard/</url>
+		</developer>
+	</developers>
 </project>
