@@ -28,12 +28,14 @@ public class FreecycleItemTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.testClass = new FreecycleItem();
 		this.quantity = 2;
 		this.price = 12.45;
 		this.name = "testitem";
 		this.description = "nice item";
 		this.condition = Condition.REFURBISHED;
+
+		this.testClass = new FreecycleItem(this.name, this.quantity, this.price, this.condition, this.description);
+
 	}
 
 	/**
