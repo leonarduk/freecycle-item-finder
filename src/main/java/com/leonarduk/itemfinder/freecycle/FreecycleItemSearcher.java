@@ -114,11 +114,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 			parser = getFreecycleParser();
 			List<Post> posts = parser.getPosts();
 			for (Post post : posts) {
-				FullPost details = parser.getFullPost(post);
-
-				items.add(new FreecycleItem(post.getText(), 1, 0,
-						Condition.USED, details.getDescription(), post
-								.getLink()));
+				items.add(new FreecycleItem(parser.getFullPost(post)));
 			}
 		} catch (ParserException e) {
 			// TODO Auto-generated catch block

@@ -3,6 +3,7 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
+import com.leonarduk.freecycle.FullPost;
 import com.leonarduk.itemfinder.interfaces.Item;
 
 /**
@@ -11,22 +12,14 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public class FreecycleItem implements Item {
 
-	private String name;
-	private int quantity;
-	private double price;
-	private Condition condition;
-	private String description;
-	private String link;
+	final private double price;
+	final private Condition condition;
+	final private FullPost post;
 
-	public FreecycleItem(String name, int quantity, double price,
-			Condition condition, String description, String link) {
-		this.name = name;
-		this.quantity = quantity;
-		this.description = description;
-		this.condition = condition;
-		this.price = price;
-
-		this.link = link;
+	public FreecycleItem(FullPost post) {
+		this.post = post;
+		this.condition = Condition.USED;
+		this.price = 0;
 	}
 
 	/*
@@ -36,7 +29,7 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public int getQuantity() {
-		return this.quantity;
+		return this.post.getQuantity();
 	}
 
 	/*
@@ -56,7 +49,7 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public String getName() {
-		return this.name;
+		return this.post.getText();
 	}
 
 	/*
@@ -66,7 +59,7 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public String getDescription() {
-		return this.description;
+		return this.post.getDescription();
 	}
 
 	/*
@@ -81,12 +74,17 @@ public class FreecycleItem implements Item {
 
 	@Override
 	public String toString() {
-		return "FreecycleItem [name=" + name + ", quantity=" + quantity
-				+ ", price=" + price + ", condition=" + condition
-				+ ", description=" + description + ", link=" + link + "]";
+		return "FreecycleItem [name=" + getName() + ", quantity="
+				+ getQuantity() + ", price=" + price + ", condition="
+				+ condition + ", description=" + getDescription() + ", link="
+				+ getLink() + "]";
 	}
 
 	public String getLink() {
-		return this.link;
+		return this.post.getLink();
+	}
+
+	public FullPost getPost() {
+		return this.post;
 	}
 }
