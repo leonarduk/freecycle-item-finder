@@ -3,10 +3,13 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 
 /**
  * @author stephen
@@ -14,15 +17,22 @@ import org.junit.Test;
  */
 public class FreecycleItemSearcherTest {
 
+	private ItemSearcher testClass;
+	private String searchTerm;
+
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUp() throws Exception {
+		this.searchTerm ="phone";
+		testClass = new FreecycleItemSearcher();
 	}
 
 	/**
-	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int)}.
+	 * Test method for
+	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int)}
+	 * .
 	 */
 	@Test
 	public final void testFindItemsStringDoubleInt() {
@@ -30,7 +40,9 @@ public class FreecycleItemSearcherTest {
 	}
 
 	/**
-	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int, java.util.List)}.
+	 * Test method for
+	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int, java.util.List)}
+	 * .
 	 */
 	@Test
 	public final void testFindItemsStringDoubleIntListOfCondition() {
@@ -38,7 +50,9 @@ public class FreecycleItemSearcherTest {
 	}
 
 	/**
-	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, java.util.List)}.
+	 * Test method for
+	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, java.util.List)}
+	 * .
 	 */
 	@Test
 	public final void testFindItemsStringDoubleListOfCondition() {
@@ -46,7 +60,9 @@ public class FreecycleItemSearcherTest {
 	}
 
 	/**
-	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, java.util.List)}.
+	 * Test method for
+	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, java.util.List)}
+	 * .
 	 */
 	@Test
 	public final void testFindItemsStringListOfCondition() {
@@ -54,11 +70,13 @@ public class FreecycleItemSearcherTest {
 	}
 
 	/**
-	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String)}.
+	 * Test method for
+	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String)}
+	 * .
 	 */
 	@Test
 	public final void testFindItemsString() {
-		fail("Not yet implemented"); // TODO
+		assertTrue(this.testClass.findItems(searchTerm).size() > 0);
 	}
 
 }

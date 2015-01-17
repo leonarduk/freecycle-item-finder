@@ -11,49 +11,70 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public class FreecycleItem implements Item {
 
-	/* (non-Javadoc)
+	private String name;
+	private int quantity;
+	private double price;
+	private Condition condition;
+	private String description;
+
+	public FreecycleItem(String name, int quantity, double price,
+			Condition condition, String description) {
+		this.name = name;
+		this.quantity = quantity;
+		this.description = description;
+		this.condition = condition;
+		this.price = price;
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getQuantity()
 	 */
 	@Override
 	public int getQuantity() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.quantity;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getPrice()
 	 */
 	@Override
 	public double getPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.price;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getName()
 	 */
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.name;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getDescription()
 	 */
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.description;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getCondition()
 	 */
 	@Override
 	public Condition getCondition() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.condition;
 	}
 
 }
