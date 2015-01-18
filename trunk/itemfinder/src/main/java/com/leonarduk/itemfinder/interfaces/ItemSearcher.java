@@ -2,6 +2,7 @@ package com.leonarduk.itemfinder.interfaces;
 
 import java.util.List;
 
+import com.leonarduk.itemfinder.freecycle.ItemFinderException;
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 
 public interface ItemSearcher {
@@ -16,6 +17,6 @@ public interface ItemSearcher {
 	public List<Item> findItems(String searchTerm,
 			List<Condition> conditionsAccepted);
 
-	public List<Item> findItems(String searchTerm);
+	public List<Item> findItems(String searchTerm) throws ItemFinderException;
 
 }

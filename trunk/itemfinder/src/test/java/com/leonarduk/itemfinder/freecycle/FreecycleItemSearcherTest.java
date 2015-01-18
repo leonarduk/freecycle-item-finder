@@ -76,9 +76,10 @@ public class FreecycleItemSearcherTest {
 	 * Test method for
 	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String)}
 	 * .
+	 * @throws ItemFinderException 
 	 */
 	@Test
-	public final void testFindItemsString() {
+	public final void testFindItemsString() throws ItemFinderException {
 		List<Item> findItems = this.testClass.findItems(searchTerm);
 		System.out.println(findItems);
 		assertTrue(findItems.size() > 0);

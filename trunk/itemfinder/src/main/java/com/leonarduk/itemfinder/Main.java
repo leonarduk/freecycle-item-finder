@@ -22,6 +22,7 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
+import com.leonarduk.itemfinder.freecycle.ItemFinderException;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
@@ -35,13 +36,25 @@ public final class Main {
 	private static final Logger LOGGER = Logger.getLogger(Main.class);
 
 	private Main() {
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher("kingston");
-		searcher.findItems("bed");
+
 	}
 
-	public static void main(String[] args) {
-//		JBidWatch.main(new String[]{});
-		
+	public static void main(String[] args) throws ItemFinderException {
+		// JBidWatch.main(new String[]{});
+		/**
+		 * Ealing, Elmbridge, Epsom, Hammersmith and Fulham, Kingston upon
+		 * Thames, Merton, Richmond upon Thames, Wandsworth
+		 */
+
+		/**
+		 * Double buggy or twin buggy/stroller, Travel system, Quinny, Buggy or
+		 * stroller, Pram, Changing table or changing station, Child's bike seat
+		 * or toddler bike seat, Printer table, Playhouse or outdoor playhouse,
+		 * Buggyboard, Roof rack or car roof rack, Food processor, Microwave,
+		 * Flatscreen TV or LCD TV,
+		 */
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher("kingston");
+		searcher.findItems("Quinny");
 	}
 
 	/**
