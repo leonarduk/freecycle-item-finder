@@ -28,48 +28,8 @@ public class FreecycleItemSearcherTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.searchTerm ="phone";
+		this.searchTerm ="Quinny";
 		testClass = new FreecycleItemSearcher("kingston");
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int)}
-	 * .
-	 */
-	@Test
-	public final void testFindItemsStringDoubleInt() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, int, java.util.List)}
-	 * .
-	 */
-	@Test
-	public final void testFindItemsStringDoubleIntListOfCondition() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, double, java.util.List)}
-	 * .
-	 */
-	@Test
-	public final void testFindItemsStringDoubleListOfCondition() {
-		fail("Not yet implemented"); // TODO
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher#findItems(java.lang.String, java.util.List)}
-	 * .
-	 */
-	@Test
-	public final void testFindItemsStringListOfCondition() {
-		fail("Not yet implemented"); // TODO
 	}
 
 	/**
