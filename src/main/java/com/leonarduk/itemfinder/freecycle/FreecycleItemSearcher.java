@@ -3,9 +3,11 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 
@@ -21,6 +23,7 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  *
  */
 public class FreecycleItemSearcher implements ItemSearcher {
+	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
 
 	private String town;
 
@@ -95,17 +98,18 @@ public class FreecycleItemSearcher implements ItemSearcher {
 
 		List<Item> items = new ArrayList<Item>();
 		try {
-			String url = new FreecycleQueryBuilder(town).setSearchWords(
-					searchTerm).build();
-			getPosts(items, url);
-		} catch (ParserException e) {
+			Parser parser = new FreecycleQueryBuilder(town)
+					.setSearchWords(searchTerm).useGet().build();
+			log.info("Connect to " + parser);
+			getPosts(items, parser);
+		} catch (ParserException  | IOException e) {
 			throw new ItemFinderException(e.getMessage());
 		}
 		return items;
 	}
 
-	public void getPosts(List<Item> items, String url) throws ParserException {
-		Parser parser = new Parser(url);
+	public void getPosts(List<Item> items, Parser parser)
+			throws ParserException {
 		FreecycleItemScraper postProvider = new FreecycleItemScraper(parser);
 		List<Post> posts = postProvider.getPosts();
 		for (Post post : posts) {

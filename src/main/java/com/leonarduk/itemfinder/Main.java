@@ -54,7 +54,7 @@ public final class Main {
 		 * Flatscreen TV or LCD TV,
 		 */
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher("kingston");
-		searcher.findItems("Quinny");
+		searcher.findItems("TV");
 	}
 
 	/**
