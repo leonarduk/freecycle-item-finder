@@ -15,13 +15,16 @@
  */
 package com.leonarduk.itemfinder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
@@ -43,10 +46,6 @@ public final class Main {
 
 	public static void main(String[] args) throws ItemFinderException {
 		// JBidWatch.main(new String[]{});
-		/**
-		 * Ealing, Elmbridge, Epsom, Hammersmith and Fulham, Kingston upon
-		 * Thames, Merton, Richmond upon Thames, Wandsworth
-		 */
 
 		/**
 		 * Double buggy or twin buggy/stroller, Travel system, Quinny, Buggy or
@@ -56,10 +55,19 @@ public final class Main {
 		 * Flatscreen TV or LCD TV,
 		 */
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
-		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
-				"kingston").setSearchWords("desk").useGet()
-				.setDateStart(9, 1, 2015).setDateEnd(11, 1, 2015);
-		List<Item> items = searcher.findItems(queryBuilder);
+		String filter = "desk";
+		Map<FreecycleGroups, List<Item>> resultsMap = new HashMap<>();
+		FreecycleGroups[] groups = new FreecycleGroups[] {
+				FreecycleGroups.kingston, FreecycleGroups.elmbridge };
+		for (FreecycleGroups freecycleGroups : groups) {
+			FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
+					freecycleGroups).setSearchWords(filter);
+			List<Item> items = searcher.findItems(queryBuilder);
+			resultsMap.put(freecycleGroups, items);
+		}
+
+		System.out.println(resultsMap);
+
 	}
 
 	/**

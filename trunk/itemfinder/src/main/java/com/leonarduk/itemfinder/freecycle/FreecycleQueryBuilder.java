@@ -2,7 +2,6 @@ package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import com.leonarduk.itemfinder.QueryBuilder;
 
 public class FreecycleQueryBuilder extends
 		AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
-	private String town;
+	private FreecycleGroups town;
 	private String filter;
 	private boolean includeWanted = false;
 	private boolean includeOffered = true;
@@ -23,7 +22,7 @@ public class FreecycleQueryBuilder extends
 	private LocalDate dateStart;
 	private LocalDate dateEnd;
 
-	public FreecycleQueryBuilder(String town) {
+	public FreecycleQueryBuilder(FreecycleGroups town) {
 		setTown(town);
 	}
 
@@ -44,8 +43,8 @@ public class FreecycleQueryBuilder extends
 		return this;
 	}
 
-	public FreecycleQueryBuilder setTown(String town) {
-		this.town = town;
+	public FreecycleQueryBuilder setTown(FreecycleGroups town2) {
+		this.town = town2;
 		return this;
 	}
 
@@ -73,8 +72,8 @@ public class FreecycleQueryBuilder extends
 	@Override
 	public Parser build() throws ParserException, IOException {
 		StringBuilder builder = new StringBuilder(
-				"https://groups.freecycle.org/group/freecycle-");
-		builder.append(town);
+				"https://groups.freecycle.org/group/");
+		builder.append(town.url());
 
 		builder.append("/posts/search");
 		Map<String, String> parameters = new HashMap<String, String>();

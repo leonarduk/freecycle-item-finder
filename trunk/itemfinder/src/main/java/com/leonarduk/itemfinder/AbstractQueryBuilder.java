@@ -13,7 +13,7 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	private boolean usePost;
 
 	public T usePost() {
-		this.usePost = true;
+		this.usePost = false;
 		return (T) this;
 	}
 
