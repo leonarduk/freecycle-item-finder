@@ -14,6 +14,7 @@ import org.htmlparser.util.ParserException;
 import com.adamshone.freecycle.Post;
 import com.leonarduk.freecycle.FreecycleItemScraper;
 import com.leonarduk.itemfinder.ItemFinderException;
+import com.leonarduk.itemfinder.QueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
@@ -25,12 +26,6 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 public class FreecycleItemSearcher implements ItemSearcher {
 	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
 
-	private String town;
-
-	public FreecycleItemSearcher(String town) {
-		this.town = town;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -39,27 +34,25 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * String)
 	 */
 	@Override
-	public List<Item> findItems(String searchTerm) throws ItemFinderException {
-
-		List<Item> items = new ArrayList<Item>();
+	public List<Item> findItems(QueryBuilder queryBuilder)
+			throws ItemFinderException {
 		try {
-			Parser parser = new FreecycleQueryBuilder(town)
-					.setSearchWords(searchTerm).useGet().build();
+			Parser parser = queryBuilder.build();
 			log.info("Connect to " + parser);
-			getPosts(items, parser);
-		} catch (ParserException  | IOException e) {
+			return getPosts(parser);
+		} catch (ParserException | IOException e) {
 			throw new ItemFinderException(e.getMessage());
 		}
-		return items;
 	}
 
-	private void getPosts(List<Item> items, Parser parser)
-			throws ParserException {
+	private List<Item> getPosts(Parser parser) throws ParserException {
+		List<Item> items = new ArrayList<Item>();
 		FreecycleItemScraper postProvider = new FreecycleItemScraper(parser);
 		List<Post> posts = postProvider.getPosts();
 		for (Post post : posts) {
 			items.add(new FreecycleItem(postProvider.getFullPost(post)));
 		}
+		return items;
 	}
 
 }
