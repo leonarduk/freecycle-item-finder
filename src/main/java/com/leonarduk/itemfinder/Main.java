@@ -22,7 +22,6 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
-import com.leonarduk.itemfinder.freecycle.ItemFinderException;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.

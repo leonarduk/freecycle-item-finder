@@ -13,7 +13,7 @@ import org.htmlparser.util.ParserException;
 
 import com.adamshone.freecycle.Post;
 import com.leonarduk.freecycle.FreecycleItemScraper;
-import com.leonarduk.freecycle.FreecycleQueryBuilder;
+import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
@@ -29,61 +29,6 @@ public class FreecycleItemSearcher implements ItemSearcher {
 
 	public FreecycleItemSearcher(String town) {
 		this.town = town;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
-	 * String, double, int)
-	 */
-	@Override
-	public List<Item> findItems(String searchTerm, double maxPrice, int quantity) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
-	 * String, double, int, java.util.List)
-	 */
-	@Override
-	public List<Item> findItems(String searchTerm, double maxPrice,
-			int quantity, List<Condition> conditionsAccepted) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
-	 * String, double, java.util.List)
-	 */
-	@Override
-	public List<Item> findItems(String searchTerm, double maxPrice,
-			List<Condition> conditionsAccepted) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
-	 * String, java.util.List)
-	 */
-	@Override
-	public List<Item> findItems(String searchTerm,
-			List<Condition> conditionsAccepted) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	/*
@@ -108,7 +53,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 		return items;
 	}
 
-	public void getPosts(List<Item> items, Parser parser)
+	private void getPosts(List<Item> items, Parser parser)
 			throws ParserException {
 		FreecycleItemScraper postProvider = new FreecycleItemScraper(parser);
 		List<Post> posts = postProvider.getPosts();

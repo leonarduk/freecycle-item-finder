@@ -1,4 +1,4 @@
-package com.leonarduk.itemfinder.freecycle;
+package com.leonarduk.itemfinder;
 
 public class ItemFinderException extends Exception {
 
