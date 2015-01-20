@@ -15,6 +15,7 @@
  */
 package com.leonarduk.itemfinder;
 
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.log4j.Logger;
@@ -22,6 +23,8 @@ import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
+import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
+import com.leonarduk.itemfinder.interfaces.Item;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
@@ -52,8 +55,11 @@ public final class Main {
 		 * Buggyboard, Roof rack or car roof rack, Food processor, Microwave,
 		 * Flatscreen TV or LCD TV,
 		 */
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher("kingston");
-		searcher.findItems("TV");
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
+		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
+				"kingston").setSearchWords("desk").useGet()
+				.setDateStart(9, 1, 2015).setDateEnd(11, 1, 2015);
+		List<Item> items = searcher.findItems(queryBuilder);
 	}
 
 	/**

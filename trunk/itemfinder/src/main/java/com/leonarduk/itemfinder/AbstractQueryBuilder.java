@@ -33,7 +33,9 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 			builder.append(entry.getKey() + "=");
 			builder.append(entry.getValue() + "&");
 		}
-		return new Parser(builder.toString());
+		String url = builder.toString();
+		System.out.println("URL:" + url);
+		return new Parser(url);
 	}
 
 	protected Parser getPOSTConnection(String urlString,

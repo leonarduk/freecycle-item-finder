@@ -1,7 +1,8 @@
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,21 +10,33 @@ import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.AbstractQueryBuilder;
+import com.leonarduk.itemfinder.QueryBuilder;
 
-public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBuilder>{
+public class FreecycleQueryBuilder extends
+		AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
 	private String town;
 	private String filter;
 	private boolean includeWanted = false;
 	private boolean includeOffered = true;
-	private boolean includeReceived = false;
-	private boolean includeTaken = false;
 	private int resultsPerPage = 50;
 	private int pageNumber = 1;
 	private LocalDate dateStart;
-	private Object dateEnd;
+	private LocalDate dateEnd;
 
 	public FreecycleQueryBuilder(String town) {
 		setTown(town);
+	}
+
+	@Override
+	public FreecycleQueryBuilder setDateEnd(int day, int month, int year) {
+		this.dateEnd = LocalDate.of(year, month, day);
+		return this;
+	}
+
+	@Override
+	public FreecycleQueryBuilder setDateStart(int day, int month, int year) {
+		this.dateStart = LocalDate.of(year, month, day);
+		return this;
 	}
 
 	public FreecycleQueryBuilder setPageNumber(int pageNumber) {
@@ -51,11 +64,13 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 		return this;
 	}
 
+	@Override
 	public FreecycleQueryBuilder setSearchWords(String filter) {
 		this.filter = filter;
 		return this;
 	}
 
+	@Override
 	public Parser build() throws ParserException, IOException {
 		StringBuilder builder = new StringBuilder(
 				"https://groups.freecycle.org/group/freecycle-");
@@ -72,13 +87,12 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 			parameters.put("include_wanteds", "on");
 		}
 		if (null != dateStart) {
-			parameters.put("date_start", dateStart);
+			parameters.put("date_start", dateStart.toString());
 		}
 		if (null != dateEnd) {
-			parameters.put("date_end", dateEnd);
+			parameters.put("date_end", dateEnd.toString());
 		}
-		
-		dd/mm/yyyy
+
 		if (this.filter != null) {
 			parameters.put("search_words", this.filter);
 		}
