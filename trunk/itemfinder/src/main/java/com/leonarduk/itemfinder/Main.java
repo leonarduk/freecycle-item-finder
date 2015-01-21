@@ -15,10 +15,17 @@
  */
 package com.leonarduk.itemfinder;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -44,7 +51,8 @@ public final class Main {
 
 	}
 
-	public static void main(String[] args) throws ItemFinderException {
+	public static void main(String[] args) throws ItemFinderException,
+			Exception {
 		// JBidWatch.main(new String[]{});
 
 		/**
@@ -54,16 +62,37 @@ public final class Main {
 		 * Buggyboard, Roof rack or car roof rack, Food processor, Microwave,
 		 * Flatscreen TV or LCD TV,
 		 */
+		Map<String, List<Item>> resultsMap = new HashMap<>();
+
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
-		String filter = "desk";
-		Map<FreecycleGroups, List<Item>> resultsMap = new HashMap<>();
-		FreecycleGroups[] groups = new FreecycleGroups[] {
-				FreecycleGroups.kingston, FreecycleGroups.elmbridge };
-		for (FreecycleGroups freecycleGroups : groups) {
-			FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
-					freecycleGroups).setSearchWords(filter);
-			List<Item> items = searcher.findItems(queryBuilder);
-			resultsMap.put(freecycleGroups, items);
+		String[] searches = new String[] { "Double buggy", "twin buggy",
+				"twin stroller", "Travel system", "Quinny", "Buggy",
+				"stroller", "Pram", "Changing table", "changing station",
+				"Child's bike seat", "toddler bike seat", "Printer table",
+				"Playhouse", "Roof rack", "Food processor", "Microwave",
+				"Flatscreen TV", "LCD TV" };
+		ExecutorService executor = Executors.newFixedThreadPool(20);
+
+		for (String filter : searches) {
+			FreecycleGroups[] groups = FreecycleGroups.values();
+			List<Item> items = new ArrayList<Item>();
+
+			List<FutureTask<List<Item>>> tasks = new ArrayList<>();
+			for (FreecycleGroups freecycleGroups : groups) {
+				FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
+						freecycleGroups).setSearchWords(filter).setDateStart(
+						LocalDate.now().minus(1, ChronoUnit.DAYS));
+				CallableQuery query = new CallableQuery(searcher, queryBuilder);
+				FutureTask<List<Item>> futureTask = new FutureTask<>(query);
+				tasks.add(futureTask);
+				executor.execute(futureTask);
+			}
+			for (FutureTask<List<Item>> futureTask : tasks) {
+				items.addAll(futureTask.get());
+			}
+
+			resultsMap.put(filter, items);
+
 		}
 
 		System.out.println(resultsMap);

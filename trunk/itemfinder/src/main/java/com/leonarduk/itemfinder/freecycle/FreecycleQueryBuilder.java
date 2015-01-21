@@ -38,6 +38,12 @@ public class FreecycleQueryBuilder extends
 		return this;
 	}
 
+	@Override
+	public FreecycleQueryBuilder setDateStart(LocalDate date) {
+		this.dateStart = date;
+		return this;
+	}
+
 	public FreecycleQueryBuilder setPageNumber(int pageNumber) {
 		this.pageNumber = pageNumber;
 		return this;

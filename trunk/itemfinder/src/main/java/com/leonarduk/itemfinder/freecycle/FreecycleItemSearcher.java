@@ -16,7 +16,6 @@ import com.leonarduk.freecycle.FreecycleItemScraper;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.QueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
-import com.leonarduk.itemfinder.interfaces.Item.Condition;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 
 /**
@@ -25,7 +24,7 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  */
 public class FreecycleItemSearcher implements ItemSearcher {
 	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -54,5 +53,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 		}
 		return items;
 	}
+
+
 
 }
