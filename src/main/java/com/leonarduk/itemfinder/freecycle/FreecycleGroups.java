@@ -1,12 +1,10 @@
 package com.leonarduk.itemfinder.freecycle;
 
-/**
- * Ealing, Elmbridge, Epsom, Hammersmith and Fulham, Kingston upon Thames,
- * Merton, Richmond upon Thames, Wandsworth
- */
-
 public enum FreecycleGroups {
-	kingston("freecycle-kingston"), elmbridge("Elmbridge_Freecycle");
+	kingston("freecycle-kingston"), elmbridge("Elmbridge_Freecycle"), richmond(
+			"richmonduponthamesfreecycle"), wandsworth("WandsworthUK"), merton(
+			"mertonfreecycle"), hammersmith("hammersmithandfulhamfreecycle"), epsom(
+			"Epsom"), ealing("EalingUK");
 	private String url;
 
 	private FreecycleGroups(String url) {

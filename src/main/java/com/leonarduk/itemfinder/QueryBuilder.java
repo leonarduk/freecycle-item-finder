@@ -1,6 +1,7 @@
 package com.leonarduk.itemfinder;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
@@ -16,5 +17,7 @@ public interface QueryBuilder {
 	FreecycleQueryBuilder setSearchWords(String filter);
 
 	Parser build() throws ParserException, IOException;
+
+	FreecycleQueryBuilder setDateStart(LocalDate date);
 
 }
