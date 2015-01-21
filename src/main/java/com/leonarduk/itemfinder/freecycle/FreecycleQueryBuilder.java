@@ -124,4 +124,9 @@ public class FreecycleQueryBuilder extends
 		}
 	}
 
+	@Override
+	public String getSearchWords() {
+		return this.filter;
+	}
+
 }

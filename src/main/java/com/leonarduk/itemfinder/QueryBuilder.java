@@ -20,4 +20,6 @@ public interface QueryBuilder {
 
 	FreecycleQueryBuilder setDateStart(LocalDate date);
 
+	String getSearchWords();
+
 }

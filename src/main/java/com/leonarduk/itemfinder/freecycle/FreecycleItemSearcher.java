@@ -24,7 +24,7 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  */
 public class FreecycleItemSearcher implements ItemSearcher {
 	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -38,22 +38,31 @@ public class FreecycleItemSearcher implements ItemSearcher {
 		try {
 			Parser parser = queryBuilder.build();
 			log.info("Connect to " + parser);
-			return getPosts(parser);
+			return getPosts(parser, queryBuilder);
 		} catch (ParserException | IOException e) {
 			throw new ItemFinderException(e.getMessage());
 		}
 	}
 
-	private List<Item> getPosts(Parser parser) throws ParserException {
+	private List<Item> getPosts(Parser parser, QueryBuilder queryBuilder)
+			throws ParserException {
 		List<Item> items = new ArrayList<Item>();
 		FreecycleItemScraper postProvider = new FreecycleItemScraper(parser);
 		List<Post> posts = postProvider.getPosts();
 		for (Post post : posts) {
-			items.add(new FreecycleItem(postProvider.getFullPost(post)));
+			FreecycleItem fullPost = new FreecycleItem(
+					postProvider.getFullPost(post));
+			if (fullPost.getName().toLowerCase()
+					.contains(queryBuilder.getSearchWords().toLowerCase())
+					|| fullPost
+							.getDescription()
+							.toLowerCase()
+							.contains(
+									queryBuilder.getSearchWords().toLowerCase())) {
+				items.add(fullPost);
+			}
 		}
 		return items;
 	}
-
-
 
 }
