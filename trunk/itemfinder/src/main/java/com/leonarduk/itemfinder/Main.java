@@ -69,11 +69,11 @@ public final class Main {
 
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
 		String[] searches = new String[] { "Double buggy", "twin buggy",
-				"twin stroller", "Travel system", "Quinny", "Buggy",
+				"bugaboo", "twin stroller", "Travel system", "Quinny", "Buggy",
 				"stroller", "Pram", "Changing table", "changing station",
 				"Child's bike seat", "toddler bike seat", "Printer table",
 				"Playhouse", "Roof rack", "Food processor", "Microwave",
-				"Flatscreen TV", "LCD TV" };
+				"Flatscreen TV", "LCD TV", "desk" };
 		ExecutorService executor = Executors.newFixedThreadPool(20);
 
 		for (String filter : searches) {
@@ -84,7 +84,7 @@ public final class Main {
 			for (FreecycleGroups freecycleGroups : groups) {
 				FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
 						freecycleGroups).setSearchWords(filter).setDateStart(
-						LocalDate.now().minus(1, ChronoUnit.DAYS));
+						LocalDate.now().minus(2, ChronoUnit.DAYS));
 				CallableQuery query = new CallableQuery(searcher, queryBuilder);
 				FutureTask<List<Item>> futureTask = new FutureTask<>(query);
 				tasks.add(futureTask);
@@ -97,13 +97,35 @@ public final class Main {
 			resultsMap.put(filter, items);
 
 		}
+		executor.shutdown();
 		Set<Entry<String, List<Item>>> keys = resultsMap.entrySet();
+		StringBuilder emailBodyBuilder = new StringBuilder();
 		for (Entry<String, List<Item>> entry : keys) {
 			System.out.println(entry.getKey());
-			System.out.println(entry.getValue());
+			List<Item> entries = entry.getValue();
+			System.out.println(entries);
+			if (entries.size() > 0) {
+				for (Item item : entries) {
+					emailBodyBuilder.append("\n\r");
+					emailBodyBuilder.append("#############");
+					emailBodyBuilder.append("\n\r");
+					emailBodyBuilder.append(item.getName());
+					emailBodyBuilder.append(item.getLocation());
+					emailBodyBuilder.append("\n\r");
 
+					emailBodyBuilder.append(item.getDescription());
+					emailBodyBuilder.append("\n\r");
+					emailBodyBuilder.append(item.getLink());
+
+				}
+			}
 		}
 
+		if (emailBodyBuilder.length() > 0) {
+			EmailSender.sendEmail("steveleonard11@gmail.com", "Steve",
+					"Matching Freecycle items found",
+					emailBodyBuilder.toString());
+		}
 	}
 
 	/**

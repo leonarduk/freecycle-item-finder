@@ -74,10 +74,9 @@ public class FreecycleItem implements Item {
 
 	@Override
 	public String toString() {
-		return "FreecycleItem [name=" + getName() + ", quantity="
-				+ getQuantity() + ", price=" + price + ", condition="
-				+ condition + ", description=" + getDescription() + ", link="
-				+ getLink() + "]";
+		return "FreecycleItem [name=" + getName() + ", description="
+				+ getDescription() + ", link=" + getLink() + ", location="
+				+ post.getLocation() + "]";
 	}
 
 	public String getLink() {
@@ -86,5 +85,10 @@ public class FreecycleItem implements Item {
 
 	public FullPost getPost() {
 		return this.post;
+	}
+
+	@Override
+	public String getLocation() {
+		return this.post.getLocation();
 	}
 }

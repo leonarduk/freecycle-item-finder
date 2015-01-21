@@ -14,4 +14,8 @@ public interface Item {
 	public enum Condition {
 		NEW, USED, REFURBISHED, BROKEN, UNKNOWN
 	}
+
+	public String getLocation();
+
+	public String getLink();
 }
