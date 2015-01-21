@@ -19,9 +19,12 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -94,8 +97,12 @@ public final class Main {
 			resultsMap.put(filter, items);
 
 		}
+		Set<Entry<String, List<Item>>> keys = resultsMap.entrySet();
+		for (Entry<String, List<Item>> entry : keys) {
+			System.out.println(entry.getKey());
+			System.out.println(entry.getValue());
 
-		System.out.println(resultsMap);
+		}
 
 	}
 
