@@ -11,6 +11,21 @@ import org.htmlparser.util.ParserException;
 import com.leonarduk.itemfinder.AbstractQueryBuilder;
 import com.leonarduk.itemfinder.QueryBuilder;
 
+/**
+ * use
+ * http://www.freemesa.org/post.php?topic=124814&distance=124.27423844747&city
+ * =252713&type=Offer&ret=view&item=&skip=2 instead?
+ * 
+ * 
+ *
+ * @author Stephen Leonard
+ * @since 21 Jan 2015
+ *
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ *
+ */
 public class FreecycleQueryBuilder extends
 		AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
 	private FreecycleGroups town;
