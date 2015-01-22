@@ -4,8 +4,9 @@
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.Parser;
@@ -13,6 +14,7 @@ import org.htmlparser.util.ParserException;
 
 import com.adamshone.freecycle.Post;
 import com.leonarduk.freecycle.FreecycleItemScraper;
+import com.leonarduk.itemfinder.HtmlParser;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.QueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
@@ -33,25 +35,26 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * String)
 	 */
 	@Override
-	public List<Item> findItems(QueryBuilder queryBuilder)
+	public Set<Item> findItems(QueryBuilder queryBuilder)
 			throws ItemFinderException {
 		try {
-			Parser parser = queryBuilder.build();
+			HtmlParser parser = queryBuilder.build();
 			log.info("Connect to " + parser);
 			return getPosts(parser, queryBuilder);
 		} catch (ParserException | IOException e) {
-			throw new ItemFinderException(e.getMessage());
+			e.printStackTrace();
+			throw new ItemFinderException(e.getMessage(),e);
 		}
 	}
 
-	private List<Item> getPosts(Parser parser, QueryBuilder queryBuilder)
+	private Set<Item> getPosts(HtmlParser parser, QueryBuilder queryBuilder)
 			throws ParserException {
-		List<Item> items = new ArrayList<Item>();
-		FreecycleItemScraper postProvider = new FreecycleItemScraper(parser);
-		List<Post> posts = postProvider.getPosts();
+		Set<Item> items = new HashSet<>();
+		FreecycleItemScraper scraper = new FreecycleItemScraper(parser);
+		List<Post> posts = scraper.getPosts();
 		for (Post post : posts) {
 			FreecycleItem fullPost = new FreecycleItem(
-					postProvider.getFullPost(post));
+					scraper.getFullPost(post));
 			if (fullPost.getName().toLowerCase()
 					.contains(queryBuilder.getSearchWords().toLowerCase())
 					|| fullPost

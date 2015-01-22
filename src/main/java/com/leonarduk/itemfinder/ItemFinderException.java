@@ -6,4 +6,8 @@ public class ItemFinderException extends Exception {
 		super(message);
 	}
 
+	public ItemFinderException(String message, Exception e) {
+		super(message, e);
+	}
+
 }

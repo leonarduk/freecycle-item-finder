@@ -44,7 +44,7 @@ public class FreecycleItemTest {
 
 		this.testClass = new FreecycleItem(new FullPost(this.location,
 				this.description, new Post(PostType.OFFER, new Date(),
-						this.name, this.link)));
+						this.name, this.link), ""));
 	}
 
 	/**

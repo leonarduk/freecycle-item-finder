@@ -12,24 +12,79 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public class FreecycleItem implements Item {
 
-	final private double price;
 	final private Condition condition;
 	final private FullPost post;
+
+	final private double price;
 
 	public FreecycleItem(FullPost post) {
 		this.post = post;
 		this.condition = Condition.USED;
 		this.price = 0;
 	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		FreecycleItem other = (FreecycleItem) obj;
+		if (condition != other.condition)
+			return false;
+		if (post == null) {
+			if (other.post != null)
+				return false;
+		} else if (!post.equals(other.post))
+			return false;
+		if (Double.doubleToLongBits(price) != Double
+				.doubleToLongBits(other.price))
+			return false;
+		return true;
+	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getQuantity()
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getCondition()
 	 */
 	@Override
-	public int getQuantity() {
-		return this.post.getQuantity();
+	public Condition getCondition() {
+		return this.condition;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getDescription()
+	 */
+	@Override
+	public String getDescription() {
+		return this.post.getDescription() + post.getExtraHtml();
+	}
+
+	public String getLink() {
+		return this.post.getLink();
+	}
+
+	@Override
+	public String getLocation() {
+		return this.post.getLocation();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getName()
+	 */
+	@Override
+	public String getName() {
+		return this.post.getText();
+	}
+
+	public FullPost getPost() {
+		return this.post;
 	}
 
 	/*
@@ -45,31 +100,24 @@ public class FreecycleItem implements Item {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getName()
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getQuantity()
 	 */
 	@Override
-	public String getName() {
-		return this.post.getText();
+	public int getQuantity() {
+		return this.post.getQuantity();
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getDescription()
-	 */
 	@Override
-	public String getDescription() {
-		return this.post.getDescription();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getCondition()
-	 */
-	@Override
-	public Condition getCondition() {
-		return this.condition;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((condition == null) ? 0 : condition.hashCode());
+		result = prime * result + ((post == null) ? 0 : post.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(price);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
 	}
 
 	@Override
@@ -77,18 +125,5 @@ public class FreecycleItem implements Item {
 		return "FreecycleItem [name=" + getName() + ", description="
 				+ getDescription() + ", link=" + getLink() + ", location="
 				+ post.getLocation() + "]";
-	}
-
-	public String getLink() {
-		return this.post.getLink();
-	}
-
-	public FullPost getPost() {
-		return this.post;
-	}
-
-	@Override
-	public String getLocation() {
-		return this.post.getLocation();
 	}
 }

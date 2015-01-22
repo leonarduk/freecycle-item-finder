@@ -1,12 +1,13 @@
 package com.leonarduk.itemfinder;
 
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 
-public class CallableQuery implements Callable<List<Item>> {
+public class CallableQuery implements Callable<Set<Item>> {
 
 	private ItemSearcher itemSearcher;
 	private QueryBuilder queryBuilder;
@@ -18,7 +19,7 @@ public class CallableQuery implements Callable<List<Item>> {
 	}
 
 	@Override
-	public List<Item> call() throws Exception {
+	public Set<Item> call() throws Exception {
 		return itemSearcher.findItems(queryBuilder);
 	}
 }

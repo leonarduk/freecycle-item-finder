@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.AbstractQueryBuilder;
+import com.leonarduk.itemfinder.HtmlParser;
 import com.leonarduk.itemfinder.QueryBuilder;
 
 /**
@@ -37,8 +37,7 @@ public class FreecycleQueryBuilder extends
 	private LocalDate dateStart;
 	private LocalDate dateEnd;
 
-	public FreecycleQueryBuilder(FreecycleGroups town) {
-		setTown(town);
+	public FreecycleQueryBuilder() {
 	}
 
 	@Override
@@ -91,7 +90,7 @@ public class FreecycleQueryBuilder extends
 	}
 
 	@Override
-	public Parser build() throws ParserException, IOException {
+	public HtmlParser build() throws ParserException, IOException {
 		StringBuilder builder = new StringBuilder(
 				"https://groups.freecycle.org/group/");
 		builder.append(town.url());
