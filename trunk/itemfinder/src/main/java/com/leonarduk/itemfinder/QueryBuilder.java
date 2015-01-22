@@ -16,7 +16,7 @@ public interface QueryBuilder {
 
 	FreecycleQueryBuilder setSearchWords(String filter);
 
-	Parser build() throws ParserException, IOException;
+	HtmlParser build() throws ParserException, IOException;
 
 	FreecycleQueryBuilder setDateStart(LocalDate date);
 

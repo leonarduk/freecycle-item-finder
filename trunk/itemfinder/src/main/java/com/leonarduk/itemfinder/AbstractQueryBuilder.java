@@ -26,7 +26,7 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 		return this.usePost;
 	}
 
-	protected Parser getGETConnection(String urlString,
+	protected HtmlParser getGETConnection(String urlString,
 			Map<String, String> parameters) throws IOException, ParserException {
 		StringBuilder builder = new StringBuilder(urlString + "?");
 		for (Entry<String, String> entry : parameters.entrySet()) {
@@ -35,10 +35,10 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 		}
 		String url = builder.toString();
 		System.out.println("URL:" + url);
-		return new Parser(url);
+		return new HtmlParser(url);
 	}
 
-	protected Parser getPOSTConnection(String urlString,
+	protected HtmlParser getPOSTConnection(String urlString,
 			Map<String, String> parameters) throws IOException, ParserException {
 		URL url = new URL(urlString);
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -61,7 +61,7 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 			buffer.append(entry.getValue());
 		}
 
-		return new Parser(connection);
+		return new HtmlParser(connection);
 
 		// PrintWriter out = new PrintWriter(connection.getOutputStream());
 		// out.print(buffer);

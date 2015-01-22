@@ -17,10 +17,8 @@ package com.leonarduk.itemfinder;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -34,6 +32,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.leonarduk.email.EmailSender;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
@@ -65,44 +64,26 @@ public final class Main {
 		 * Buggyboard, Roof rack or car roof rack, Food processor, Microwave,
 		 * Flatscreen TV or LCD TV,
 		 */
-		Map<String, List<Item>> resultsMap = new HashMap<>();
 
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
 		String[] searches = new String[] { "Double buggy", "twin buggy",
 				"bugaboo", "twin stroller", "Travel system", "Quinny", "Buggy",
 				"stroller", "Pram", "Changing table", "changing station",
 				"Child's bike seat", "toddler bike seat", "Printer table",
 				"Playhouse", "Roof rack", "Food processor", "Microwave",
-				"Flatscreen TV", "LCD TV", "desk" };
-		ExecutorService executor = Executors.newFixedThreadPool(20);
+				"Flatscreen TV", "LCD TV", "desk", "tiffany lamp"};
 
-		for (String filter : searches) {
-			FreecycleGroups[] groups = FreecycleGroups.values();
-			List<Item> items = new ArrayList<Item>();
+		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
+				.setDateStart(LocalDate.now().minus(3, ChronoUnit.DAYS));
+		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder);
+		sendResults(resultsMap);
+	}
 
-			List<FutureTask<List<Item>>> tasks = new ArrayList<>();
-			for (FreecycleGroups freecycleGroups : groups) {
-				FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder(
-						freecycleGroups).setSearchWords(filter).setDateStart(
-						LocalDate.now().minus(2, ChronoUnit.DAYS));
-				CallableQuery query = new CallableQuery(searcher, queryBuilder);
-				FutureTask<List<Item>> futureTask = new FutureTask<>(query);
-				tasks.add(futureTask);
-				executor.execute(futureTask);
-			}
-			for (FutureTask<List<Item>> futureTask : tasks) {
-				items.addAll(futureTask.get());
-			}
-
-			resultsMap.put(filter, items);
-
-		}
-		executor.shutdown();
-		Set<Entry<String, List<Item>>> keys = resultsMap.entrySet();
+	public static void sendResults(Map<String, Set<Item>> resultsMap) {
+		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		StringBuilder emailBodyBuilder = new StringBuilder();
-		for (Entry<String, List<Item>> entry : keys) {
+		for (Entry<String, Set<Item>> entry : keys) {
 			System.out.println(entry.getKey());
-			List<Item> entries = entry.getValue();
+			Set<Item> entries = entry.getValue();
 			System.out.println(entries);
 			if (entries.size() > 0) {
 				for (Item item : entries) {
@@ -110,6 +91,8 @@ public final class Main {
 					emailBodyBuilder.append("#############");
 					emailBodyBuilder.append("\n\r");
 					emailBodyBuilder.append(item.getName());
+					emailBodyBuilder.append(" - ");
+
 					emailBodyBuilder.append(item.getLocation());
 					emailBodyBuilder.append("\n\r");
 
@@ -122,10 +105,42 @@ public final class Main {
 		}
 
 		if (emailBodyBuilder.length() > 0) {
-			EmailSender.sendEmail("steveleonard11@gmail.com", "Steve",
+			String toEmail = "steveleonard11@gmail.com";
+			toEmail="stephen@localhost";
+			EmailSender.sendEmail(toEmail, "Steve",
 					"Matching Freecycle items found",
 					emailBodyBuilder.toString());
 		}
+	}
+
+	public static Map<String, Set<Item>> runQueries(String[] searches,
+			FreecycleQueryBuilder queryBuilder) throws InterruptedException,
+			ExecutionException {
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
+
+		ExecutorService executor = Executors.newFixedThreadPool(20);
+		Map<String, Set<Item>> resultsMap = new HashMap<>();
+
+		for (String filter : searches) {
+			Set<Item> items = new HashSet<Item>();
+
+			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
+			for (FreecycleGroups freecycleGroups : FreecycleGroups.values()) {
+				queryBuilder.setSearchWords(filter).setTown(freecycleGroups);
+				CallableQuery query = new CallableQuery(searcher, queryBuilder);
+				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
+				tasks.add(futureTask);
+				executor.execute(futureTask);
+			}
+			for (FutureTask<Set<Item>> futureTask : tasks) {
+				items.addAll(futureTask.get());
+			}
+
+			resultsMap.put(filter, items);
+
+		}
+		executor.shutdown();
+		return resultsMap;
 	}
 
 	/**
