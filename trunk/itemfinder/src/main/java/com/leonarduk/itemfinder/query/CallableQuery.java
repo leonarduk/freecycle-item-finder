@@ -1,6 +1,5 @@
-package com.leonarduk.itemfinder;
+package com.leonarduk.itemfinder.query;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
