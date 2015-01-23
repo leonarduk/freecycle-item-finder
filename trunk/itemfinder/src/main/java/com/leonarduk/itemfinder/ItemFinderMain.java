@@ -118,17 +118,17 @@ public final class ItemFinderMain {
 					emailBodyBuilder.append(spacer);
 					emailBodyBuilder.append("#############");
 					emailBodyBuilder.append(spacer);
+					emailBodyBuilder.append("<a href=\"" + item.getLink()
+							+ "\">");
 					emailBodyBuilder.append(item.getName());
+					emailBodyBuilder.append("</a>");
 					emailBodyBuilder.append(" - ");
 
 					emailBodyBuilder.append(item.getLocation());
 					emailBodyBuilder.append(spacer);
-					emailBodyBuilder
-							.append("<a href=\"" + item.getLink() + "\">");
 
 					emailBodyBuilder.append(item.getDescription());
 
-					emailBodyBuilder.append("</a>");
 					emailBodyBuilder.append(spacer);
 				}
 			}
