@@ -9,16 +9,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 
 import com.adamshone.freecycle.Post;
 import com.leonarduk.freecycle.FreecycleItemScraper;
-import com.leonarduk.itemfinder.HtmlParser;
 import com.leonarduk.itemfinder.ItemFinderException;
-import com.leonarduk.itemfinder.QueryBuilder;
+import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
+import com.leonarduk.itemfinder.query.QueryBuilder;
 
 /**
  * @author stephen

@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.AbstractQueryBuilder;
-import com.leonarduk.itemfinder.HtmlParser;
-import com.leonarduk.itemfinder.QueryBuilder;
+import com.leonarduk.itemfinder.query.AbstractQueryBuilder;
+import com.leonarduk.itemfinder.html.HtmlParser;
+import com.leonarduk.itemfinder.query.QueryBuilder;
 
 /**
  * use
@@ -38,6 +38,36 @@ public class FreecycleQueryBuilder extends
 	private LocalDate dateEnd;
 
 	public FreecycleQueryBuilder() {
+	}
+
+	public String getSearchCriteria() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Searched for:");
+		if (null != filter) {
+			stringBuilder.append(this.filter);
+		} else {
+			stringBuilder.append("all items");
+		}
+		stringBuilder.append(". ");
+
+		if (null != dateStart) {
+			stringBuilder.append("From:");
+			stringBuilder.append(this.dateStart);
+			stringBuilder.append(". ");
+		}
+		if (null != dateEnd) {
+			stringBuilder.append("From:");
+			stringBuilder.append(this.dateEnd);
+			stringBuilder.append(". ");
+
+		}
+		if (true == includeOffered) {
+			stringBuilder.append("Including offers. ");
+		}
+		if (true == includeWanted) {
+			stringBuilder.append("Including wanted. ");
+		}
+		return stringBuilder.toString();
 	}
 
 	@Override
