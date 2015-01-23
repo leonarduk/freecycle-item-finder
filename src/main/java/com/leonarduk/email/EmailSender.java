@@ -22,7 +22,7 @@ public class EmailSender {
 	private static Logger logger = Logger.getLogger(EmailSender.class);
 
 	public static void main(String[] args) {
-		sendEmail("stephen@localhost", "Stephen", "test", "test text");
+		sendEmail("test", "test text", "steveleonard11@gmail.com");
 	}
 
 	public static void sendEmail(String subject, String msgBody, String... to) {
@@ -34,9 +34,28 @@ public class EmailSender {
 			String subject, String msgBody, boolean html, String... to) {
 		logger.info("Sending to " + Arrays.asList(to) + " :  " + subject);
 		Properties props = new Properties();
-		props.setProperty("mail.smtp.host", "localhost");
+		// props.setProperty("mail.smtp.host", "localhost");
 
-		Session session = Session.getDefaultInstance(props, null);
+		props.put("mail.smtp.host", "warthog.acenet-inc.net");
+		// If you want to use SSL
+		props.put("mail.smtp.socketFactory.port", "465");
+		props.put("mail.smtp.socketFactory.class",
+				"javax.net.ssl.SSLSocketFactory");
+		String user = "leonard";
+		props.put("mail.stmp.user", user);
+		// If you want you use TLS
+		props.put("mail.smtp.auth", "true");
+
+		props.put("mail.smtp.starttls.enable", "true");
+		String password = "SW179TNKT26LJ";
+		props.put("mail.smtp.password", password);
+		Session session = Session.getDefaultInstance(props,
+				new Authenticator() {
+					@Override
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, password);
+					}
+				});
 
 		try {
 			Message msg = new MimeMessage(session);
