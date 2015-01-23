@@ -43,12 +43,12 @@ public class FreecycleQueryBuilder extends
 	public String getSearchCriteria() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Searched for:");
-		if (null != filter) {
-			stringBuilder.append(this.filter);
-		} else {
-			stringBuilder.append("all items");
-		}
-		stringBuilder.append(". ");
+//		if (null != filter) {
+//			stringBuilder.append(this.filter);
+//		} else {
+//			stringBuilder.append("all items");
+//		}
+//		stringBuilder.append(". ");
 
 		if (null != dateStart) {
 			stringBuilder.append("From:");

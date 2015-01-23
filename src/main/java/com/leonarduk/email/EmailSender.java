@@ -1,6 +1,7 @@
 package com.leonarduk.email;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 
@@ -13,6 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMessage.RecipientType;
 
 import org.apache.log4j.Logger;
 
@@ -23,16 +25,14 @@ public class EmailSender {
 		sendEmail("stephen@localhost", "Stephen", "test", "test text");
 	}
 
-	public static void sendEmail(String toEmail, String toName, String subject,
-			String msgBody) {
+	public static void sendEmail(String subject, String msgBody, String... to) {
 		sendEmail("FreecycleItemFinder@leonarduk.com", "FreecycleItemFinder",
-				toEmail, toName, subject, msgBody,true);
+				subject, msgBody, true, to);
 	}
 
 	public static void sendEmail(String fromEmail, String fromName,
-			String toEmail, String toName, String subject, String msgBody,
-			boolean html) {
-		logger.info("Sending to " + toEmail + " , " + toName + " :  " + subject);
+			String subject, String msgBody, boolean html, String... to) {
+		logger.info("Sending to " + Arrays.asList(to) + " :  " + subject);
 		Properties props = new Properties();
 		props.setProperty("mail.smtp.host", "localhost");
 
@@ -40,10 +40,13 @@ public class EmailSender {
 
 		try {
 			Message msg = new MimeMessage(session);
+			InternetAddress[] addressTo = new InternetAddress[to.length];
+			for (int i = 0; i < to.length; i++) {
+				addressTo[i] = new InternetAddress(to[i]);
+			}
+			msg.setRecipients(RecipientType.TO, addressTo);
 
 			msg.setFrom(new InternetAddress(fromEmail, fromName));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
-					toEmail, toName));
 			msg.setSentDate(new Date());
 			msg.setSubject(subject);
 			if (html) {
@@ -62,7 +65,8 @@ public class EmailSender {
 
 	public void sendHtmlEmail(String host, String port, final String userName,
 			final String password, String toAddress, String subject,
-			String message, boolean asHtml) throws AddressException, MessagingException {
+			String message, boolean asHtml) throws AddressException,
+			MessagingException {
 
 		// sets SMTP server properties
 		Properties properties = new Properties();
