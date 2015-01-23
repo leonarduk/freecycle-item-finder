@@ -1,4 +1,4 @@
-package com.leonarduk.itemfinder;
+package com.leonarduk.itemfinder.query;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -6,8 +6,9 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
+
+import com.leonarduk.itemfinder.html.HtmlParser;
 
 abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	private boolean usePost;

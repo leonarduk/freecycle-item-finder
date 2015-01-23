@@ -37,6 +37,7 @@ import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
+import com.leonarduk.itemfinder.query.CallableQuery;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
@@ -45,11 +46,11 @@ import com.leonarduk.itemfinder.interfaces.Item;
  * @since 1.0
  *
  */
-public final class Main {
+public final class ItemFinder {
 
-	private static final Logger LOGGER = Logger.getLogger(Main.class);
+	private static final Logger LOGGER = Logger.getLogger(ItemFinder.class);
 
-	private Main() {
+	private ItemFinder() {
 
 	}
 
@@ -70,15 +71,39 @@ public final class Main {
 				"stroller", "Pram", "Changing table", "changing station",
 				"Child's bike seat", "toddler bike seat", "Printer table",
 				"Playhouse", "Roof rack", "Food processor", "Microwave",
-				"Flatscreen TV", "LCD TV", "desk", "tiffany lamp"};
+				"Flatscreen TV", "LCD TV", "desk", "tiffany lamp" };
 
 		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
 				.setDateStart(LocalDate.now().minus(3, ChronoUnit.DAYS));
 		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder);
-		sendResults(resultsMap);
+		String specificQueries = convertResultsMapToString(resultsMap);
+
+		StringBuilder emailBody = new StringBuilder(
+				queryBuilder.getSearchCriteria());
+		if (specificQueries.trim().length() > 0) {
+			emailBody.append(specificQueries);
+		} else {
+			emailBody.append("Found nothing");
+		}
+		queryBuilder = new FreecycleQueryBuilder().setDateStart(LocalDate.now()
+				.minus(1, ChronoUnit.DAYS));
+		resultsMap = runQueries(new String[] { "" }, queryBuilder);
+		String fullList = convertResultsMapToString(resultsMap);
+		emailBody.append(queryBuilder.getSearchCriteria());
+		if (fullList.trim().length() > 0) {
+			emailBody.append(fullList);
+		} else {
+			emailBody.append("Found nothing");
+		}
+
+		String toEmail = "steveleonard11@gmail.com";
+		toEmail = "stephen@localhost";
+		EmailSender.sendEmail(toEmail, "Steve",
+				"Matching Freecycle items found", emailBody.toString());
 	}
 
-	public static void sendResults(Map<String, Set<Item>> resultsMap) {
+	public static String convertResultsMapToString(
+			Map<String, Set<Item>> resultsMap) {
 		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		StringBuilder emailBodyBuilder = new StringBuilder();
 		for (Entry<String, Set<Item>> entry : keys) {
@@ -103,14 +128,7 @@ public final class Main {
 				}
 			}
 		}
-
-		if (emailBodyBuilder.length() > 0) {
-			String toEmail = "steveleonard11@gmail.com";
-			toEmail="stephen@localhost";
-			EmailSender.sendEmail(toEmail, "Steve",
-					"Matching Freecycle items found",
-					emailBodyBuilder.toString());
-		}
+		return emailBodyBuilder.toString();
 	}
 
 	public static Map<String, Set<Item>> runQueries(String[] searches,

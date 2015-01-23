@@ -1,12 +1,12 @@
-package com.leonarduk.itemfinder;
+package com.leonarduk.itemfinder.query;
 
 import java.io.IOException;
 import java.time.LocalDate;
 
-import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
+import com.leonarduk.itemfinder.html.HtmlParser;
 
 public interface QueryBuilder {
 
