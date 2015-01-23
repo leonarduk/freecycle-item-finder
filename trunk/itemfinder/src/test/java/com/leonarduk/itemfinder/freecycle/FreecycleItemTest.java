@@ -40,6 +40,7 @@ public class FreecycleItemTest {
 		this.name = "testitem";
 		this.description = "nice item";
 		this.condition = Condition.REFURBISHED;
+		this.location = "somewhere";
 		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
 
 		this.testClass = new FreecycleItem(new FullPost(this.location,
