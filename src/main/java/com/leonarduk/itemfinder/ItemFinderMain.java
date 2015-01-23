@@ -17,6 +17,7 @@ package com.leonarduk.itemfinder;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -46,11 +47,11 @@ import com.leonarduk.itemfinder.query.CallableQuery;
  * @since 1.0
  *
  */
-public final class ItemFinder {
+public final class ItemFinderMain {
 
-	private static final Logger LOGGER = Logger.getLogger(ItemFinder.class);
+	private static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
 
-	private ItemFinder() {
+	private ItemFinderMain() {
 
 	}
 
@@ -78,8 +79,9 @@ public final class ItemFinder {
 		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder);
 		String specificQueries = convertResultsMapToString(resultsMap);
 
-		StringBuilder emailBody = new StringBuilder(
-				queryBuilder.getSearchCriteria());
+		StringBuilder emailBody = new StringBuilder("Searched for:<br/>"
+				+ Arrays.asList(searches) + queryBuilder.getSearchCriteria()
+				+ "<br/>");
 		if (specificQueries.trim().length() > 0) {
 			emailBody.append(specificQueries);
 		} else {
@@ -89,7 +91,7 @@ public final class ItemFinder {
 				.minus(1, ChronoUnit.DAYS));
 		resultsMap = runQueries(new String[] { "" }, queryBuilder);
 		String fullList = convertResultsMapToString(resultsMap);
-		emailBody.append(queryBuilder.getSearchCriteria());
+		emailBody.append(queryBuilder.getSearchCriteria() + "Full search<br/>");
 		if (fullList.trim().length() > 0) {
 			emailBody.append(fullList);
 		} else {
@@ -97,9 +99,9 @@ public final class ItemFinder {
 		}
 
 		String toEmail = "steveleonard11@gmail.com";
-		toEmail = "stephen@localhost";
-		EmailSender.sendEmail(toEmail, "Steve",
-				"Matching Freecycle items found", emailBody.toString());
+		String toEmail2 = "lucyleonard@hotmail.com";
+		EmailSender.sendEmail("Matching Freecycle items found",
+				emailBody.toString(), toEmail, toEmail2);
 	}
 
 	public static String convertResultsMapToString(
@@ -112,19 +114,22 @@ public final class ItemFinder {
 			System.out.println(entries);
 			if (entries.size() > 0) {
 				for (Item item : entries) {
-					emailBodyBuilder.append("\n\r");
+					String spacer = "<br/>";
+					emailBodyBuilder.append(spacer);
 					emailBodyBuilder.append("#############");
-					emailBodyBuilder.append("\n\r");
+					emailBodyBuilder.append(spacer);
 					emailBodyBuilder.append(item.getName());
 					emailBodyBuilder.append(" - ");
 
 					emailBodyBuilder.append(item.getLocation());
-					emailBodyBuilder.append("\n\r");
+					emailBodyBuilder.append(spacer);
+					emailBodyBuilder
+							.append("<a href=\"" + item.getLink() + "\">");
 
 					emailBodyBuilder.append(item.getDescription());
-					emailBodyBuilder.append("\n\r");
-					emailBodyBuilder.append(item.getLink());
 
+					emailBodyBuilder.append("</a>");
+					emailBodyBuilder.append(spacer);
 				}
 			}
 		}
