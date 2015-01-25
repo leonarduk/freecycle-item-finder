@@ -35,11 +35,11 @@ public class FreecycleItemTest {
 	 */
 	@Before
 	public void setUp() throws Exception {
-		this.quantity = 2;
-		this.price = 12.45;
+		this.quantity = 1;
+		this.price = 0;
 		this.name = "testitem";
 		this.description = "nice item";
-		this.condition = Condition.REFURBISHED;
+		this.condition = Condition.USED;
 		this.location = "somewhere";
 		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
 
