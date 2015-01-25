@@ -33,7 +33,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.leonarduk.email.EmailSender;
+import com.leonarduk.core.email.EmailSender;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
@@ -69,7 +69,7 @@ public final class ItemFinderMain {
 
 		String[] searches = new String[] { "Double buggy", "twin buggy",
 				"bugaboo", "twin stroller", "Travel system", "Quinny", "Buggy",
-				"stroller", "Pram", "Changing table", "changing station",
+				"stroller", "pram", "Changing table", "changing station",
 				"Child's bike seat", "toddler bike seat", "Printer table",
 				"Playhouse", "Roof rack", "Food processor", "Microwave",
 				"Flatscreen TV", "LCD TV", "desk", "tiffany lamp" };
@@ -149,7 +149,7 @@ public final class ItemFinderMain {
 
 			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
 			for (FreecycleGroups freecycleGroups : FreecycleGroups.values()) {
-				queryBuilder.setSearchWords(filter).setTown(freecycleGroups);
+				queryBuilder.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
 				CallableQuery query = new CallableQuery(searcher, queryBuilder);
 				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
 				tasks.add(futureTask);
