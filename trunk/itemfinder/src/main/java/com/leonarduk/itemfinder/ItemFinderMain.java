@@ -15,30 +15,18 @@
  */
 package com.leonarduk.itemfinder;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Scanner;
-import java.util.Set;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import com.leonarduk.core.config.Config;
 import com.leonarduk.core.email.EmailSender;
+import com.leonarduk.itemfinder.format.Formatter;
+import com.leonarduk.itemfinder.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
-import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
-import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
-import com.leonarduk.itemfinder.interfaces.Item;
-import com.leonarduk.itemfinder.query.CallableQuery;
+import com.leonarduk.itemfinder.query.QueryReporter;
 
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
@@ -51,119 +39,31 @@ public final class ItemFinderMain {
 
 	private static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
 
-	private ItemFinderMain() {
-
-	}
-
 	public static void main(String[] args) throws ItemFinderException,
 			Exception {
 		// JBidWatch.main(new String[]{});
 
-		/**
-		 * Double buggy or twin buggy/stroller, Travel system, Quinny, Buggy or
-		 * stroller, Pram, Changing table or changing station, Child's bike seat
-		 * or toddler bike seat, Printer table, Playhouse or outdoor playhouse,
-		 * Buggyboard, Roof rack or car roof rack, Food processor, Microwave,
-		 * Flatscreen TV or LCD TV,
-		 */
+		Config config = new Config("itemfinder.properties");
+		String[] searches = config.getArrayProperty("freecycle.search.terms");
 
-		String[] searches = new String[] { "Double buggy", "twin buggy",
-				"bugaboo", "twin stroller", "Travel system", "Quinny", "Buggy",
-				"stroller", "pram", "Changing table", "changing station",
-				"Child's bike seat", "toddler bike seat", "Printer table",
-				"Playhouse", "Roof rack", "Food processor", "Microwave",
-				"Flatscreen TV", "LCD TV", "desk", "tiffany lamp" };
-
-		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
-				.setDateStart(LocalDate.now().minus(3, ChronoUnit.DAYS));
-		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder);
-		String specificQueries = convertResultsMapToString(resultsMap);
-
-		StringBuilder emailBody = new StringBuilder("Searched for:<br/>"
-				+ Arrays.asList(searches) + queryBuilder.getSearchCriteria()
-				+ "<br/>");
-		if (specificQueries.trim().length() > 0) {
-			emailBody.append(specificQueries);
-		} else {
-			emailBody.append("Found nothing");
+		String[] groupNames = config
+				.getArrayProperty("freecycle.search.groups");
+		FreecycleGroups[] groups = new FreecycleGroups[groupNames.length];
+		for (int i = 0; i < groups.length; i++) {
+			groups[i] = FreecycleGroups.valueOf(groupNames[i]);
 		}
-		queryBuilder = new FreecycleQueryBuilder().setDateStart(LocalDate.now()
-				.minus(1, ChronoUnit.DAYS));
-		resultsMap = runQueries(new String[] { "" }, queryBuilder);
-		String fullList = convertResultsMapToString(resultsMap);
-		emailBody.append(queryBuilder.getSearchCriteria() + "Full search<br/>");
-		if (fullList.trim().length() > 0) {
-			emailBody.append(fullList);
-		} else {
-			emailBody.append("Found nothing");
-		}
+		Formatter formatter = new HtmlFormatter();
+		StringBuilder emailBody = new StringBuilder();
+		emailBody
+				.append(QueryReporter.runReport(searches, groups,
+						config.getIntegerProperty("freecycle.search.period"),
+						formatter));
+		emailBody.append(QueryReporter.runReport(new String[] { "" }, groups,
+				1, formatter));
 
-		String toEmail = "steveleonard11@gmail.com";
-		String toEmail2 = "lucyleonard@hotmail.com";
+		String toEmail = config.getProperty("freecycle.email.to");
 		EmailSender.sendEmail("Matching Freecycle items found",
-				emailBody.toString(), toEmail, toEmail2);
-	}
-
-	public static String convertResultsMapToString(
-			Map<String, Set<Item>> resultsMap) {
-		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
-		StringBuilder emailBodyBuilder = new StringBuilder();
-		for (Entry<String, Set<Item>> entry : keys) {
-			System.out.println(entry.getKey());
-			Set<Item> entries = entry.getValue();
-			System.out.println(entries);
-			if (entries.size() > 0) {
-				for (Item item : entries) {
-					String spacer = "<br/>";
-					emailBodyBuilder.append(spacer);
-					emailBodyBuilder.append("#############");
-					emailBodyBuilder.append(spacer);
-					emailBodyBuilder.append("<a href=\"" + item.getLink()
-							+ "\">");
-					emailBodyBuilder.append(item.getName());
-					emailBodyBuilder.append("</a>");
-					emailBodyBuilder.append(" - ");
-
-					emailBodyBuilder.append(item.getLocation());
-					emailBodyBuilder.append(spacer);
-
-					emailBodyBuilder.append(item.getDescription());
-
-					emailBodyBuilder.append(spacer);
-				}
-			}
-		}
-		return emailBodyBuilder.toString();
-	}
-
-	public static Map<String, Set<Item>> runQueries(String[] searches,
-			FreecycleQueryBuilder queryBuilder) throws InterruptedException,
-			ExecutionException {
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
-
-		ExecutorService executor = Executors.newFixedThreadPool(20);
-		Map<String, Set<Item>> resultsMap = new HashMap<>();
-
-		for (String filter : searches) {
-			Set<Item> items = new HashSet<Item>();
-
-			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
-			for (FreecycleGroups freecycleGroups : FreecycleGroups.values()) {
-				queryBuilder.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
-				CallableQuery query = new CallableQuery(searcher, queryBuilder);
-				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
-				tasks.add(futureTask);
-				executor.execute(futureTask);
-			}
-			for (FutureTask<Set<Item>> futureTask : tasks) {
-				items.addAll(futureTask.get());
-			}
-
-			resultsMap.put(filter, items);
-
-		}
-		executor.shutdown();
-		return resultsMap;
+				emailBody.toString(), toEmail);
 	}
 
 	/**
@@ -211,6 +111,10 @@ public final class ItemFinderMain {
 		}
 
 		System.exit(0);
+
+	}
+
+	private ItemFinderMain() {
 
 	}
 }

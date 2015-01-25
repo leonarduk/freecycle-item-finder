@@ -9,6 +9,7 @@ import java.util.Set;
 import org.htmlparser.Parser;
 import org.htmlparser.util.ParserException;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.adamshone.freecycle.Post;
@@ -46,6 +47,7 @@ public class FreecycleItemSearcherTest {
 	 * @throws ItemFinderException
 	 */
 	@Test
+	@Ignore
 	public final void testFindItemsString() throws ItemFinderException {
 		QueryBuilder queryBuilder = new FreecycleQueryBuilder().setTown(
 				FreecycleGroups.kingston).setSearchWords(searchTerm);
