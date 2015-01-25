@@ -1,6 +1,6 @@
 package com.leonarduk.itemfinder.freecycle;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.adamshone.freecycle.Post;
 import com.adamshone.freecycle.PostType;
 import com.leonarduk.freecycle.FreecycleItemScraper;
+import com.leonarduk.freecycle.FullPost;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
@@ -68,6 +69,22 @@ public class FreecycleItemSearcherTest {
 				"https://groups.freecycle.org/group/freecycle-kingston/posts/45010383/leather%203%20seater%20sofa%20");
 		FreecycleItem fullPost = new FreecycleItem(scraper.getFullPost(post));
 		System.out.println(fullPost);
+
+	}
+
+	@Test
+	public void testIncludePost() throws Exception {
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
+		QueryBuilder queryBuilder = new FreecycleQueryBuilder()
+				.setSearchWords("Pram");
+		Post smallpost = new Post(PostType.OFFER, new Date(), "3 wheel pram",
+				"http://");
+		FullPost post = new FullPost(
+				"Thames Ditton",
+				"Mothercare mychoice 3 wheel pram, green, good working order, comes with a rain cover and small handy pump for the tyres, can be used frombirth up to 4 years, Maxicosi car seat can be used with it.",
+				smallpost, "<hr>");
+		FreecycleItem fullPost = new FreecycleItem(post);
+		assertTrue(searcher.includePost(queryBuilder, fullPost));
 
 	}
 }
