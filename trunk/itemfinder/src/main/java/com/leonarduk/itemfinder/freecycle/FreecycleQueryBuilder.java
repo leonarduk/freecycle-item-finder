@@ -40,15 +40,26 @@ public class FreecycleQueryBuilder extends
 	public FreecycleQueryBuilder() {
 	}
 
+	public FreecycleQueryBuilder(FreecycleQueryBuilder that) {
+		this.town = that.town;
+		this.filter = that.filter;
+		this.includeOffered = that.includeOffered;
+		this.includeWanted = that.includeWanted;
+		this.resultsPerPage = that.resultsPerPage;
+		this.pageNumber = that.pageNumber;
+		this.dateEnd = that.dateEnd;
+		this.dateStart = that.dateStart;
+	}
+
 	public String getSearchCriteria() {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Searched for:");
-//		if (null != filter) {
-//			stringBuilder.append(this.filter);
-//		} else {
-//			stringBuilder.append("all items");
-//		}
-//		stringBuilder.append(". ");
+		// if (null != filter) {
+		// stringBuilder.append(this.filter);
+		// } else {
+		// stringBuilder.append("all items");
+		// }
+		// stringBuilder.append(". ");
 
 		if (null != dateStart) {
 			stringBuilder.append("From:");

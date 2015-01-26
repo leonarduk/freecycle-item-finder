@@ -10,4 +10,6 @@ public interface Formatter {
 
 	String formatHeader(String header);
 
+	String formatSubHeader(String header);
+
 }

@@ -59,4 +59,8 @@ public class HtmlParser extends Parser {
 		super.setURL(url);
 	}
 
+	@Override
+	public String toString() {
+		return getURL();
+	}
 }
