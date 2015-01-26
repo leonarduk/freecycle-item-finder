@@ -25,9 +25,10 @@ import com.leonarduk.itemfinder.interfaces.Item;
 public class QueryReporter {
 	static Logger log = Logger.getLogger(QueryReporter.class);
 
-	public static Map<String, Set<Item>> runQueries(String[] searches,
-			FreecycleQueryBuilder queryBuilder, FreecycleGroups[] groups)
-			throws InterruptedException, ExecutionException {
+	public static Map<String, Set<Item>> runQueries(final String[] searches,
+			final FreecycleQueryBuilder queryBuilder,
+			final FreecycleGroups[] groups) throws InterruptedException,
+			ExecutionException {
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
 
 		ExecutorService executor = Executors.newFixedThreadPool(20);
@@ -60,7 +61,7 @@ public class QueryReporter {
 	}
 
 	public static String convertResultsMapToString(
-			Map<String, Set<Item>> resultsMap, Formatter formatter) {
+			final Map<String, Set<Item>> resultsMap, Formatter formatter) {
 		Set<String> uniqueitems = new HashSet<>();
 		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		StringBuilder emailBodyBuilder = new StringBuilder();
@@ -70,7 +71,7 @@ public class QueryReporter {
 			System.out.println(entries);
 			if (entries.size() > 0) {
 				for (Item item : entries) {
-					if (!uniqueitems.contains(item.getLink())) {
+					if (uniqueitems.contains(item.getLink())) {
 						log.info("skip duplicate " + item);
 						continue;
 					}
@@ -94,8 +95,9 @@ public class QueryReporter {
 		return emailBodyBuilder.toString();
 	}
 
-	public static String runReport(String[] searches, FreecycleGroups[] groups,
-			int timeperiod, Formatter formatter) throws InterruptedException,
+	public static String runReport(final String[] searches,
+			final FreecycleGroups[] groups, final int timeperiod,
+			final Formatter formatter) throws InterruptedException,
 			ExecutionException {
 
 		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
