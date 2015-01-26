@@ -39,7 +39,7 @@ public final class ItemFinderMain {
 
 	private static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
 
-	public static void main(String[] args) throws ItemFinderException,
+	public static void main(final String[] args) throws ItemFinderException,
 			Exception {
 		// JBidWatch.main(new String[]{});
 
@@ -61,7 +61,7 @@ public final class ItemFinderMain {
 		emailBody.append(QueryReporter.runReport(new String[] { "" }, groups,
 				1, formatter));
 
-		String toEmail = config.getProperty("freecycle.email.to");
+		String[] toEmail = config.getArrayProperty("freecycle.email.to");
 		EmailSender.sendEmail("Matching Freecycle items found",
 				emailBody.toString(), toEmail);
 	}
