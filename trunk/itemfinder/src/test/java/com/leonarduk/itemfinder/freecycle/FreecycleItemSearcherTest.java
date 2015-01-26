@@ -12,10 +12,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.adamshone.freecycle.Post;
-import com.adamshone.freecycle.PostType;
-import com.leonarduk.freecycle.FreecycleItemScraper;
-import com.leonarduk.freecycle.FullPost;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
@@ -57,6 +53,7 @@ public class FreecycleItemSearcherTest {
 		assertTrue(findItems.size() > 0);
 	}
 
+	@Ignore
 	@Test
 	public final void testFullPost() throws ParserException, IOException {
 		QueryBuilder queryBuilder = new FreecycleQueryBuilder().setTown(

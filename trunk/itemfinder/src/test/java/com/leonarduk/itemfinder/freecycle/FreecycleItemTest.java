@@ -10,9 +10,6 @@ import java.util.Date;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.adamshone.freecycle.Post;
-import com.adamshone.freecycle.PostType;
-import com.leonarduk.freecycle.FullPost;
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 
 /**

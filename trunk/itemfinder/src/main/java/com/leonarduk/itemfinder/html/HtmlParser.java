@@ -26,10 +26,6 @@ public class HtmlParser extends Parser {
 	 */
 	private static final long serialVersionUID = -8969008563666070296L;
 
-	public HtmlParser() {
-		super();
-	}
-
 	public HtmlParser(HttpURLConnection connection) throws ParserException {
 		super(connection);
 	}
