@@ -23,11 +23,6 @@
 
 	<repositories>
 		<repository>
-			<id>repo.springsource.org.milestone</id>
-			<name>Spring Framework Maven Milestone Repository</name>
-			<url>https://repo.springsource.org/milestone</url>
-		</repository>
-		<repository>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
@@ -81,7 +76,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-					<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
+							<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
@@ -139,23 +134,29 @@
 			<artifactId>freecycle-feed</artifactId>
 			<version>0.0.3-SNAPSHOT</version>
 		</dependency>
-
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4</version>
+			<groupId>com.leonarduk</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>1.4.185</version>
 		</dependency>
 		<dependency>
-		<groupId>hsqldb</groupId>
-		<artifactId>hsqldb</artifactId>
-		<version>1.8.0.7</version>
-	</dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.7</version>
+		</dependency>
 	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>leonarduk-ftp</id>
+			<url>ftp://leonarduk.com/public_html/maven2</url>
+		</repository>
+	</distributionManagement>
 	<organization>
 		<name>Leonard UK Ltd</name>
 		<url>http://leonarduk.com</url>
