@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 import com.leonarduk.itemfinder.format.Formatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
-import com.leonarduk.itemfinder.freecycle.FreecycleNewhamScraper;
+import com.leonarduk.itemfinder.freecycle.FreecycleScraper;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 

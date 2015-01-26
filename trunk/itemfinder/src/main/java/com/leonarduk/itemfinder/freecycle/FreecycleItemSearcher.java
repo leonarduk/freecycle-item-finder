@@ -40,18 +40,17 @@ public class FreecycleItemSearcher implements ItemSearcher {
 			return getPosts(parser, queryBuilder);
 		} catch (ParserException | IOException e) {
 			e.printStackTrace();
-			throw new ItemFinderException(e.getMessage(),e);
+			throw new ItemFinderException(e.getMessage(), e);
 		}
 	}
 
 	public Set<Item> getPosts(HtmlParser parser, QueryBuilder queryBuilder)
 			throws ParserException {
 		Set<Item> items = new HashSet<>();
-		FreecycleItemScraper scraper = new FreecycleItemScraper(parser);
+		FreecycleScraper scraper = new FreecycleScraper(parser);
 		List<Post> posts = scraper.getPosts();
 		for (Post post : posts) {
-			FreecycleItem fullPost = new FreecycleItem(
-					scraper.getFullPost(post));
+			FreecycleItem fullPost = scraper.getFullPost(post);
 			if (includePost(queryBuilder, fullPost)) {
 				items.add(fullPost);
 			}
@@ -62,11 +61,8 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	public boolean includePost(QueryBuilder queryBuilder, FreecycleItem fullPost) {
 		return fullPost.getName().toLowerCase()
 				.contains(queryBuilder.getSearchWords().toLowerCase())
-				|| fullPost
-						.getDescription()
-						.toLowerCase()
-						.contains(
-								queryBuilder.getSearchWords().toLowerCase());
+				|| fullPost.getDescription().toLowerCase()
+						.contains(queryBuilder.getSearchWords().toLowerCase());
 	}
 
 }

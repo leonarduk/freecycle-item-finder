@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
-import org.htmlparser.Parser;
 import org.htmlparser.filters.AndFilter;
 import org.htmlparser.filters.HasChildFilter;
 import org.htmlparser.filters.TagNameFilter;
@@ -18,22 +17,67 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
-public class FreecycleNewhamScraper  {
-	Logger log = Logger.getLogger(FreecycleNewhamScraper.class);
+import com.leonarduk.itemfinder.html.HtmlParser;
+
+public class FreecycleScraper {
+
+	static String dateFormat = "EEE MMM dd HH:mm:ss yyyy";
 	private static final NodeFilter tableDataContainingLinkFilter = new AndFilter(
 			new TagNameFilter("td"), new HasChildFilter(new TagNameFilter("a")));
-	private final Parser parser;
+
+	private static Date parseDateFrom(Node typeAndDateNode,
+			SimpleDateFormat dateFormat) throws ParseException {
+		Node dateNode = typeAndDateNode.getChildren().elementAt(4);
+		String dateString = dateNode.toPlainTextString().trim();
+		Date date = dateFormat.parse(dateString);
+		return date;
+	}
+
 	private final SimpleDateFormat freecycleDateFormat;
+	private NodeFilter itemHeaderFilter = new TagNameFilter("div");
+	Logger log = Logger.getLogger(FreecycleScraper.class);
+	private final HtmlParser parser;
+
 	private final List<Post> posts = new ArrayList<Post>();
 
-	public FreecycleNewhamScraper(Parser parser, String dateFormat) {
+	public FreecycleScraper(HtmlParser parser) {
 		log.info(String.format("Instantiated with url=%s, dateFormat=%s",
 				parser.getURL(), dateFormat));
 		this.parser = parser;
 		this.freecycleDateFormat = new SimpleDateFormat(dateFormat);
+
 	}
 
-	protected Parser getParser() {
+	public FreecycleItem getFullPost(Post post) throws ParserException {
+		getParser().setURL(post.getLink());
+		log.info("Extracting details for " + post.getLink());
+		NodeList nodes = getParser().parse(itemHeaderFilter);
+		String location = nodes.elementAt(16).toPlainTextString()
+				.replace("Location :", "");
+		String detail = nodes.elementAt(18).toPlainTextString()
+				.replace("Description  ", "").trim();
+		getParser().setURL(post.getLink());
+
+		NodeList thumbnailNodes = getParser().extractAllNodesThatMatch(
+				new TagNameFilter("img"));
+		SimpleNodeIterator iter = thumbnailNodes.elements();
+		StringBuilder imagesBuilder = new StringBuilder();
+		while (iter.hasMoreNodes()) {
+			imagesBuilder.append(iter.nextNode().toHtml());
+		}
+		FreecycleItem details = new FreecycleItem(post.getLink(), location,
+				post.getText(), imagesBuilder.toString(), detail);
+
+		return details;
+	}
+
+	private NodeList getHTMLNodes() throws ParserException {
+		log.info("Extracting HTML nodes");
+		parser.setURL(parser.getURL());
+		return parser.extractAllNodesThatMatch(tableDataContainingLinkFilter);
+	}
+
+	protected HtmlParser getParser() {
 		return parser;
 	}
 
@@ -64,12 +108,6 @@ public class FreecycleNewhamScraper  {
 		return posts;
 	}
 
-	private NodeList getHTMLNodes() throws ParserException {
-		log.info("Extracting HTML nodes");
-		parser.setURL(parser.getURL());
-		return parser.extractAllNodesThatMatch(tableDataContainingLinkFilter);
-	}
-
 	private Post parsePostFromHTMLNodes(SimpleNodeIterator iterator)
 			throws ParseException {
 		Node typeAndDateNode = iterator.nextNode();
@@ -85,11 +123,4 @@ public class FreecycleNewhamScraper  {
 		return new Post(postType, postDate, description, link);
 	}
 
-	private static Date parseDateFrom(Node typeAndDateNode,
-			SimpleDateFormat dateFormat) throws ParseException {
-		Node dateNode = typeAndDateNode.getChildren().elementAt(4);
-		String dateString = dateNode.toPlainTextString().trim();
-		Date date = dateFormat.parse(dateString);
-		return date;
-	}
 }

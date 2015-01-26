@@ -13,6 +13,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.ItemFinderException;
+import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
@@ -58,15 +59,15 @@ public class FreecycleItemSearcherTest {
 	public final void testFullPost() throws ParserException, IOException {
 		QueryBuilder queryBuilder = new FreecycleQueryBuilder().setTown(
 				FreecycleGroups.kingston).setSearchWords(searchTerm);
-		Parser parser = queryBuilder.build();
+		HtmlParser parser = queryBuilder.build();
 
-		FreecycleItemScraper scraper = new FreecycleItemScraper(parser);
+		FreecycleScraper scraper = new FreecycleScraper(parser);
 		Post post = new Post(
 				PostType.OFFER,
 				new Date(),
 				"sofa",
 				"https://groups.freecycle.org/group/freecycle-kingston/posts/45010383/leather%203%20seater%20sofa%20");
-		FreecycleItem fullPost = new FreecycleItem(scraper.getFullPost(post));
+		FreecycleItem fullPost = scraper.getFullPost(post);
 		System.out.println(fullPost);
 
 	}
@@ -76,13 +77,12 @@ public class FreecycleItemSearcherTest {
 		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
 		QueryBuilder queryBuilder = new FreecycleQueryBuilder()
 				.setSearchWords("Pram");
-		Post smallpost = new Post(PostType.OFFER, new Date(), "3 wheel pram",
-				"http://");
-		FullPost post = new FullPost(
+		FreecycleItem fullPost = new FreecycleItem(
+				"http://",
 				"Thames Ditton",
-				"Mothercare mychoice 3 wheel pram, green, good working order, comes with a rain cover and small handy pump for the tyres, can be used frombirth up to 4 years, Maxicosi car seat can be used with it.",
-				smallpost, "<hr>");
-		FreecycleItem fullPost = new FreecycleItem(post);
+				"3 wheel pram",
+				"<hr>",
+				"Mothercare mychoice 3 wheel pram, green, good working order, comes with a rain cover and small handy pump for the tyres, can be used frombirth up to 4 years, Maxicosi car seat can be used with it.");
 		assertTrue(searcher.includePost(queryBuilder, fullPost));
 
 	}
