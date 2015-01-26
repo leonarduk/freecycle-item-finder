@@ -11,8 +11,6 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
-import com.adamshone.freecycle.Post;
-import com.leonarduk.freecycle.FreecycleItemScraper;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;

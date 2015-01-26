@@ -3,7 +3,6 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
-import com.leonarduk.freecycle.FullPost;
 import com.leonarduk.itemfinder.interfaces.Item;
 
 /**
