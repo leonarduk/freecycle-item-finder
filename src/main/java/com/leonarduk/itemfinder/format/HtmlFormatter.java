@@ -23,6 +23,16 @@ public class HtmlFormatter implements Formatter {
 
 	@Override
 	public String formatHeader(String header) {
-		return "<h1>" + header + "</h1>";
+		return createNode(header, "h1");
+	}
+
+	@Override
+	public String formatSubHeader(String header) {
+		return createNode(header, "h2");
+	}
+
+	private String createNode(String value, String node) {
+		return new StringBuilder("<").append(node).append(">").append(value)
+				.append("</").append(node).append(">").toString();
 	}
 }

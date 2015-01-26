@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import org.apache.log4j.Logger;
+
+import com.adamshone.freecycle.impl.FreecycleNewhamScraper;
 import com.leonarduk.itemfinder.format.Formatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
@@ -20,6 +23,7 @@ import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 
 public class QueryReporter {
+	static Logger log = Logger.getLogger(QueryReporter.class);
 
 	public static Map<String, Set<Item>> runQueries(String[] searches,
 			FreecycleQueryBuilder queryBuilder, FreecycleGroups[] groups)
@@ -34,9 +38,12 @@ public class QueryReporter {
 
 			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
 			for (FreecycleGroups freecycleGroups : groups) {
-				queryBuilder.setSearchWords(filter.toLowerCase()).setTown(
+				FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
+						queryBuilder);
+				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(
 						freecycleGroups);
-				CallableQuery query = new CallableQuery(searcher, queryBuilder);
+				CallableQuery query = new CallableQuery(searcher,
+						queryBuilderCopy);
 				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
 				tasks.add(futureTask);
 				executor.execute(futureTask);
@@ -54,6 +61,7 @@ public class QueryReporter {
 
 	public static String convertResultsMapToString(
 			Map<String, Set<Item>> resultsMap, Formatter formatter) {
+		Set<String> uniqueitems = new HashSet<>();
 		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		StringBuilder emailBodyBuilder = new StringBuilder();
 		for (Entry<String, Set<Item>> entry : keys) {
@@ -62,6 +70,11 @@ public class QueryReporter {
 			System.out.println(entries);
 			if (entries.size() > 0) {
 				for (Item item : entries) {
+					if (!uniqueitems.contains(item.getLink())) {
+						log.info("skip duplicate " + item);
+						continue;
+					}
+					uniqueitems.add(item.getLink());
 					String spacer = formatter.getNewLine();
 					emailBodyBuilder.append(spacer);
 					emailBodyBuilder.append(formatter.getNewSection());
@@ -69,7 +82,7 @@ public class QueryReporter {
 					String header = formatter.formatLink(item.getLink(),
 							item.getName())
 							+ " - " + item.getLocation();
-					emailBodyBuilder.append(formatter.formatHeader(header));
+					emailBodyBuilder.append(formatter.formatSubHeader(header));
 					emailBodyBuilder.append(spacer);
 
 					emailBodyBuilder.append(item.getDescription());
@@ -90,10 +103,11 @@ public class QueryReporter {
 						.minus(timeperiod, ChronoUnit.DAYS));
 		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder,
 				groups);
-		StringBuilder emailBody = new StringBuilder("Searched "
-				+ Arrays.asList(groups) + " for "
+		String heading = "Searched " + Arrays.asList(groups) + " for "
 				+ queryBuilder.getSearchCriteria() + " "
-				+ Arrays.asList(searches));
+				+ Arrays.asList(searches);
+		StringBuilder emailBody = new StringBuilder(
+				formatter.formatHeader(heading));
 		String results = convertResultsMapToString(resultsMap, formatter);
 		emailBody.append(results);
 
