@@ -11,37 +11,60 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public class FreecycleItem implements Item {
 
+	/**
+	 * 
+	 * @param condition
+	 * @param price
+	 * @param link
+	 * @param location
+	 * @param name
+	 * @param quantity
+	 * @param extraHtml
+	 * @param description
+	 */
+	public FreecycleItem(Condition condition, double price, String link,
+			String location, String name, int quantity, String extraHtml,
+			String description) {
+		super();
+		this.condition = condition;
+		this.price = price;
+		this.link = link;
+		this.location = location;
+		this.name = name;
+		this.quantity = quantity;
+		this.extraHtml = extraHtml;
+		this.description = description;
+	}
+
+	/**
+	 * 
+	 * @param link
+	 * @param location
+	 * @param name
+	 * @param extraHtml
+	 * @param description
+	 */
+	public FreecycleItem(String link, String location, String name,
+			String extraHtml, String description) {
+		this(Condition.USED, 0.0, link, location, name, 1, extraHtml,
+				description);
+	}
+
 	final private Condition condition;
-	final private FullPost post;
+	// final private FullPost post;
 
 	final private double price;
 
-	public FreecycleItem(FullPost post) {
-		this.post = post;
-		this.condition = Condition.USED;
-		this.price = 0;
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FreecycleItem other = (FreecycleItem) obj;
-		if (condition != other.condition)
-			return false;
-		if (post == null) {
-			if (other.post != null)
-				return false;
-		} else if (!post.equals(other.post))
-			return false;
-		if (Double.doubleToLongBits(price) != Double
-				.doubleToLongBits(other.price))
-			return false;
-		return true;
-	}
+	final private String link;
+
+	final private String location;
+	final private String name;
+
+	final private int quantity;
+
+	final private String extraHtml;
+
+	final private String description;
 
 	/*
 	 * (non-Javadoc)
@@ -60,16 +83,16 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public String getDescription() {
-		return this.post.getDescription() + post.getExtraHtml();
+		return this.description + this.extraHtml;
 	}
 
 	public String getLink() {
-		return this.post.getLink();
+		return this.link;
 	}
 
 	@Override
 	public String getLocation() {
-		return this.post.getLocation();
+		return this.location;
 	}
 
 	/*
@@ -79,11 +102,7 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public String getName() {
-		return this.post.getText();
-	}
-
-	public FullPost getPost() {
-		return this.post;
+		return this.name;
 	}
 
 	/*
@@ -103,26 +122,7 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public int getQuantity() {
-		return this.post.getQuantity();
+		return this.quantity;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((condition == null) ? 0 : condition.hashCode());
-		result = prime * result + ((post == null) ? 0 : post.hashCode());
-		long temp;
-		temp = Double.doubleToLongBits(price);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "FreecycleItem [name=" + getName() + ", description="
-				+ getDescription() + ", link=" + getLink() + ", location="
-				+ post.getLocation() + "]";
-	}
 }

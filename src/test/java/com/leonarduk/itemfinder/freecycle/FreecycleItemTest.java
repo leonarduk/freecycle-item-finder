@@ -3,9 +3,7 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,9 +38,8 @@ public class FreecycleItemTest {
 		this.location = "somewhere";
 		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
 
-		this.testClass = new FreecycleItem(new FullPost(this.location,
-				this.description, new Post(PostType.OFFER, new Date(),
-						this.name, this.link), ""));
+		this.testClass = new FreecycleItem(this.link, this.location, this.name,
+				"", this.description);
 	}
 
 	/**
