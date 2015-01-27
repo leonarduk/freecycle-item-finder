@@ -3,13 +3,23 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
+import javax.persistence.Basic;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.leonarduk.itemfinder.interfaces.Item;
 
 /**
  * @author stephen
  *
  */
+@Entity
+@Table(name = "FreecycleItem")
 public class FreecycleItem implements Item {
+	public FreecycleItem() {
+		// for JPA
+	}
 
 	/**
 	 * 
@@ -50,21 +60,26 @@ public class FreecycleItem implements Item {
 				description);
 	}
 
-	final private Condition condition;
-	// final private FullPost post;
+	@Basic
+	private Condition condition;
 
-	final private double price;
+	@Basic
+	private double price;
 
-	final private String link;
+	@Id
+	private String link;
 
-	final private String location;
-	final private String name;
+	@Basic
+	private String location;
+	@Basic
+	private String name;
 
-	final private int quantity;
-
-	final private String extraHtml;
-
-	final private String description;
+	@Basic
+	private int quantity;
+	@Basic
+	private String extraHtml;
+	@Basic
+	private String description;
 
 	/*
 	 * (non-Javadoc)
@@ -125,4 +140,11 @@ public class FreecycleItem implements Item {
 		return this.quantity;
 	}
 
+	@Override
+	public String toString() {
+		return "FreecycleItem [condition=" + condition + ", price=" + price
+				+ ", link=" + link + ", location=" + location + ", name="
+				+ name + ", quantity=" + quantity + ", extraHtml=" + extraHtml
+				+ ", description=" + description + "]";
+	}
 }
