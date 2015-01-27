@@ -4,12 +4,11 @@
 
 	<groupId>com.leonarduk</groupId>
 	<artifactId>itemfinder</artifactId>
-	<version>1.0.0.BUILD-SNAPSHOT</version>
+	<version>1.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>itemfinder</name>
-	<url>http://www.springsource.org/spring-integration</url>
-
+	<url>http://leonarduk.com/maven2</url>
 	<prerequisites>
 		<maven>2.2.1</maven>
 	</prerequisites>
@@ -19,6 +18,7 @@
 		<spring.integration.version>2.2.4.RELEASE</spring.integration.version>
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
+		<java.version>1.8</java.version>
 	</properties>
 
 	<repositories>
@@ -36,6 +36,7 @@
 	</repositories>
 
 	<build>
+		<defaultGoal>install</defaultGoal>
 		<plugins>
 			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -56,11 +57,28 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<compilerArgument>-Xlint:all</compilerArgument>
 					<showWarnings>true</showWarnings>
 					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/kit.xml</descriptor>
+					</descriptors>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -86,6 +104,13 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-alpha-6</version>
+			</extension>
+		</extensions>
 	</build>
 
 
@@ -121,34 +146,21 @@
 			<artifactId>log4j</artifactId>
 			<version>${log4j.version}</version>
 		</dependency>
-
 		<!-- Other -->
-
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
 		<dependency>
-			<groupId>com.leonarduk</groupId>
-			<artifactId>freecycle-feed</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<groupId>org.htmlparser</groupId>
+			<artifactId>htmlparser</artifactId>
+			<version>2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.leonarduk</groupId>
 			<artifactId>core</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.4.185</version>
-		</dependency>
-		<dependency>
-			<groupId>hsqldb</groupId>
-			<artifactId>hsqldb</artifactId>
-			<version>1.8.0.7</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
