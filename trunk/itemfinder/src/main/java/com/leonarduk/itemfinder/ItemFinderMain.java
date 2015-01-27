@@ -15,7 +15,10 @@
  */
 package com.leonarduk.itemfinder;
 
+import java.util.Arrays;
 import java.util.Scanner;
+
+import javax.mail.Session;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -23,6 +26,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.leonarduk.core.config.Config;
 import com.leonarduk.core.email.EmailSender;
+import com.leonarduk.core.email.EmailSession;
 import com.leonarduk.itemfinder.format.Formatter;
 import com.leonarduk.itemfinder.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
@@ -62,8 +66,16 @@ public final class ItemFinderMain {
 				1, formatter));
 
 		String[] toEmail = config.getArrayProperty("freecycle.email.to");
-		EmailSender.sendEmail("Matching Freecycle items found",
-				emailBody.toString(), toEmail);
+		final String user = "leonard";
+		String server = "warthog.acenet-inc.net";
+		final String password = "SW179TNKT26LJ";
+		String port = "465";
+		EmailSender emailSender = new EmailSender();
+
+		EmailSession session = new EmailSession(user, password, server, port);
+		emailSender.sendMessage("FreecycleItemFinder@leonarduk.com",
+				"FreecycleItemFinder", "Matching Freecycle items found",
+				emailBody.toString(), true, session, toEmail);
 	}
 
 	/**
