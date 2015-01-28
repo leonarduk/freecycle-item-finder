@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
@@ -7,40 +10,60 @@ import java.util.Map;
 
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.query.AbstractQueryBuilder;
 import com.leonarduk.itemfinder.html.HtmlParser;
+import com.leonarduk.itemfinder.query.AbstractQueryBuilder;
 import com.leonarduk.itemfinder.query.QueryBuilder;
 
 /**
- * use
- * http://www.freemesa.org/post.php?topic=124814&distance=124.27423844747&city
+ * use http://www.freemesa.org/post.php?topic=124814&distance=124.27423844747&city
  * =252713&type=Offer&ret=view&item=&skip=2 instead?
- * 
- * 
  *
  * @author Stephen Leonard
- * @since 21 Jan 2015
- *
  * @version $Author:: $: Author of last commit
  * @version $Rev:: $: Revision of last commit
  * @version $Date:: $: Date of last commit
- *
+ * @since 21 Jan 2015
  */
-public class FreecycleQueryBuilder extends
-		AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
-	private FreecycleGroups town;
-	private String filter;
-	private boolean includeWanted = false;
-	private boolean includeOffered = true;
-	private int resultsPerPage = 50;
-	private int pageNumber = 1;
-	private LocalDate dateStart;
-	private LocalDate dateEnd;
+public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBuilder> implements
+        QueryBuilder {
 
+	/** The town. */
+	private FreecycleGroups	town;
+
+	/** The filter. */
+	private String	        filter;
+
+	/** The include wanted. */
+	private boolean	        includeWanted	= false;
+
+	/** The include offered. */
+	private boolean	        includeOffered	= true;
+
+	/** The results per page. */
+	private int	            resultsPerPage	= 50;
+
+	/** The page number. */
+	private int	            pageNumber	   = 1;
+
+	/** The date start. */
+	private LocalDate	    dateStart;
+
+	/** The date end. */
+	private LocalDate	    dateEnd;
+
+	/**
+	 * Instantiates a new freecycle query builder.
+	 */
 	public FreecycleQueryBuilder() {
 	}
 
-	public FreecycleQueryBuilder(FreecycleQueryBuilder that) {
+	/**
+	 * Instantiates a new freecycle query builder.
+	 *
+	 * @param that
+	 *            the that
+	 */
+	public FreecycleQueryBuilder(final FreecycleQueryBuilder that) {
 		this.town = that.town;
 		this.filter = that.filter;
 		this.includeOffered = that.includeOffered;
@@ -51,8 +74,52 @@ public class FreecycleQueryBuilder extends
 		this.dateStart = that.dateStart;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#build()
+	 */
+	@Override
+	public HtmlParser build() throws ParserException, IOException {
+		final StringBuilder builder = new StringBuilder("https://groups.freecycle.org/group/");
+		builder.append(this.town.url());
+
+		builder.append("/posts/search");
+		final Map<String, String> parameters = new HashMap<String, String>();
+		parameters.put("page", String.valueOf(this.pageNumber));
+		parameters.put("resultsperpage", String.valueOf(this.resultsPerPage));
+		if (this.includeOffered) {
+			parameters.put("include_offers", "on");
+		}
+		if (this.includeWanted) {
+			parameters.put("include_wanteds", "on");
+		}
+		if (null != this.dateStart) {
+			parameters.put("date_start", this.dateStart.toString());
+		}
+		if (null != this.dateEnd) {
+			parameters.put("date_end", this.dateEnd.toString());
+		}
+
+		if (this.filter != null) {
+			parameters.put("search_words", this.filter);
+		}
+		if (this.usesPOSTMethod()) {
+			parameters.put("submit", "Search for Posts");
+			return this.getPOSTConnection(builder.toString(), parameters);
+		}
+		else {
+			return this.getGETConnection(builder.toString(), parameters);
+		}
+	}
+
+	/**
+	 * Gets the search criteria.
+	 *
+	 * @return the search criteria
+	 */
 	public String getSearchCriteria() {
-		StringBuilder stringBuilder = new StringBuilder();
+		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Searched for:");
 		// if (null != filter) {
 		// stringBuilder.append(this.filter);
@@ -61,112 +128,138 @@ public class FreecycleQueryBuilder extends
 		// }
 		// stringBuilder.append(". ");
 
-		if (null != dateStart) {
+		if (null != this.dateStart) {
 			stringBuilder.append("From:");
 			stringBuilder.append(this.dateStart);
 			stringBuilder.append(". ");
 		}
-		if (null != dateEnd) {
+		if (null != this.dateEnd) {
 			stringBuilder.append("From:");
 			stringBuilder.append(this.dateEnd);
 			stringBuilder.append(". ");
 
 		}
-		if (true == includeOffered) {
+		if (this.includeOffered) {
 			stringBuilder.append("Including offers. ");
 		}
-		if (true == includeWanted) {
+		if (this.includeWanted) {
 			stringBuilder.append("Including wanted. ");
 		}
 		return stringBuilder.toString();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#getSearchWords()
+	 */
 	@Override
-	public FreecycleQueryBuilder setDateEnd(int day, int month, int year) {
+	public String getSearchWords() {
+		return this.filter;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
+	 */
+	@Override
+	public FreecycleQueryBuilder setDateEnd(final int day, final int month, final int year) {
 		this.dateEnd = LocalDate.of(year, month, day);
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
+	 */
 	@Override
-	public FreecycleQueryBuilder setDateStart(int day, int month, int year) {
+	public final FreecycleQueryBuilder setDateStart(final int day, final int month, final int year) {
 		this.dateStart = LocalDate.of(year, month, day);
 		return this;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate)
+	 */
 	@Override
-	public FreecycleQueryBuilder setDateStart(LocalDate date) {
+	public final FreecycleQueryBuilder setDateStart(final LocalDate date) {
 		this.dateStart = date;
 		return this;
 	}
 
-	public FreecycleQueryBuilder setPageNumber(int pageNumber) {
+	/**
+	 * Sets the include offered.
+	 *
+	 * @param include
+	 *            the include
+	 * @return the freecycle query builder
+	 */
+	public FreecycleQueryBuilder setIncludeOffered(final boolean include) {
+		this.includeWanted = include;
+		return this;
+	}
+
+	/**
+	 * Sets the include wanted.
+	 *
+	 * @param include
+	 *            the include
+	 * @return the freecycle query builder
+	 */
+	public FreecycleQueryBuilder setIncludeWanted(final boolean include) {
+		this.includeWanted = include;
+		return this;
+	}
+
+	/**
+	 * Sets the page number.
+	 *
+	 * @param pageNumber
+	 *            the page number
+	 * @return the freecycle query builder
+	 */
+	public FreecycleQueryBuilder setPageNumber(final int pageNumber) {
 		this.pageNumber = pageNumber;
 		return this;
 	}
 
-	public FreecycleQueryBuilder setTown(FreecycleGroups town2) {
-		this.town = town2;
-		return this;
-	}
-
-	public FreecycleQueryBuilder setResultsPerPage(int resultsPerPage) {
+	/**
+	 * Sets the results per page.
+	 *
+	 * @param resultsPerPage
+	 *            the results per page
+	 * @return the freecycle query builder
+	 */
+	public FreecycleQueryBuilder setResultsPerPage(final int resultsPerPage) {
 		this.resultsPerPage = resultsPerPage;
 		return this;
 	}
 
-	public FreecycleQueryBuilder setIncludeWanted(boolean include) {
-		this.includeWanted = include;
-		return this;
-	}
-
-	public FreecycleQueryBuilder setIncludeOffered(boolean include) {
-		this.includeWanted = include;
-		return this;
-	}
-
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.String)
+	 */
 	@Override
-	public FreecycleQueryBuilder setSearchWords(String filter) {
+	public FreecycleQueryBuilder setSearchWords(final String filter) {
 		this.filter = filter;
 		return this;
 	}
 
-	@Override
-	public HtmlParser build() throws ParserException, IOException {
-		StringBuilder builder = new StringBuilder(
-				"https://groups.freecycle.org/group/");
-		builder.append(town.url());
-
-		builder.append("/posts/search");
-		Map<String, String> parameters = new HashMap<String, String>();
-		parameters.put("page", String.valueOf(pageNumber));
-		parameters.put("resultsperpage", String.valueOf(resultsPerPage));
-		if (includeOffered) {
-			parameters.put("include_offers", "on");
-		}
-		if (includeWanted) {
-			parameters.put("include_wanteds", "on");
-		}
-		if (null != dateStart) {
-			parameters.put("date_start", dateStart.toString());
-		}
-		if (null != dateEnd) {
-			parameters.put("date_end", dateEnd.toString());
-		}
-
-		if (this.filter != null) {
-			parameters.put("search_words", this.filter);
-		}
-		if (usesPOSTMethod()) {
-			parameters.put("submit", "Search for Posts");
-			return getPOSTConnection(builder.toString(), parameters);
-		} else {
-			return getGETConnection(builder.toString(), parameters);
-		}
-	}
-
-	@Override
-	public String getSearchWords() {
-		return this.filter;
+	/**
+	 * Sets the town.
+	 *
+	 * @param town2
+	 *            the town2
+	 * @return the freecycle query builder
+	 */
+	public FreecycleQueryBuilder setTown(final FreecycleGroups town2) {
+		this.town = town2;
+		return this;
 	}
 
 }
