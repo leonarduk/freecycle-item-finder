@@ -46,12 +46,12 @@ public class HtmlParser extends Parser {
 	}
 
 	@Override
-	public NodeList parse(NodeFilter filter) throws ParserException {
+	public NodeList parse(final NodeFilter filter) throws ParserException {
 		return super.parse(filter);
 	}
 
 	@Override
-	public void setURL(String url) throws ParserException {
+	public void setURL(final String url) throws ParserException {
 		super.setURL(url);
 	}
 

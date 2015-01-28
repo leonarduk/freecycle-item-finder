@@ -1,5 +1,7 @@
 package com.leonarduk.itemfinder.freecycle;
 
+import java.util.Date;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -15,7 +17,7 @@ public class TestClass {
 		FreecycleItem test = em.find(FreecycleItem.class, "Http://local");
 		if (test == null) {
 			test = new FreecycleItem("Http://local", "there", "3 bags full",
-					"", "baa baa black sheep");
+					"", "baa baa black sheep", new Date());
 
 			tx.begin();
 			em.persist(test);

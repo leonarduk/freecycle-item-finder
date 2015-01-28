@@ -1,5 +1,7 @@
 package com.leonarduk.itemfinder.interfaces;
 
+import java.util.Date;
+
 public interface Item {
 	public int getQuantity();
 
@@ -18,4 +20,6 @@ public interface Item {
 	public String getLocation();
 
 	public String getLink();
+
+	Date getPostedDate();
 }
