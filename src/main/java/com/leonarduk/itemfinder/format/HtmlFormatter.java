@@ -1,38 +1,83 @@
+/*
+ *
+ */
 package com.leonarduk.itemfinder.format;
 
+/**
+ * The Class HtmlFormatter.
+ *
+ * @author Stephen Leonard
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ * @since 28 Jan 2015
+ */
 public class HtmlFormatter implements Formatter {
 
-	@Override
-	public String getNewLine() {
-		return "<br/>";
+	/**
+	 * Creates the node.
+	 *
+	 * @param value
+	 *            the value
+	 * @param node
+	 *            the node
+	 * @return the string
+	 */
+	private String createNode(final String value, final String node) {
+		return new StringBuilder("<").append(node).append(">").append(value).append("</")
+				.append(node).append(">").toString();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.leonarduk.itemfinder.format.Formatter#formatHeader(java.lang.String)
+	 */
 	@Override
-	public String getNewSection() {
-		return "<hr/>";
+	public String formatHeader(final String header) {
+		return this.createNode(header, "h1");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.leonarduk.itemfinder.format.Formatter#formatLink(java.lang.String, java.lang.String)
+	 */
 	@Override
-	public String formatLink(String link, String name) {
-		StringBuilder linkBuilder = new StringBuilder("<a href=\"" + link
-				+ "\">");
+	public String formatLink(final String link, final String name) {
+		final StringBuilder linkBuilder = new StringBuilder("<a href=\"" + link + "\">");
 		linkBuilder.append(name);
 		linkBuilder.append("</a>");
 		return linkBuilder.toString();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.leonarduk.itemfinder.format.Formatter#formatSubHeader(java.lang.String)
+	 */
 	@Override
-	public String formatHeader(String header) {
-		return createNode(header, "h1");
+	public String formatSubHeader(final String header) {
+		return this.createNode(header, "h2");
 	}
 
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.leonarduk.itemfinder.format.Formatter#getNewLine()
+	 */
 	@Override
-	public String formatSubHeader(String header) {
-		return createNode(header, "h2");
+	public String getNewLine() {
+		return "<br/>";
 	}
 
-	private String createNode(String value, String node) {
-		return new StringBuilder("<").append(node).append(">").append(value)
-				.append("</").append(node).append(">").toString();
+	/*
+	 * (non-Javadoc)
+	 *
+	 * @see com.leonarduk.itemfinder.format.Formatter#getNewSection()
+	 */
+	@Override
+	public String getNewSection() {
+		return "<hr/>";
 	}
 }
