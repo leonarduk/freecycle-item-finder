@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.leonarduk.itemfinder.html;
 
 import java.net.HttpURLConnection;
@@ -7,56 +10,92 @@ import org.htmlparser.Parser;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 
+// TODO: Auto-generated Javadoc
 /**
  * Decorator class to allow later modifications.
- * 
  *
  * @author Stephen Leonard
- * @since 23 Jan 2015
- *
  * @version $Author:: $: Author of last commit
  * @version $Rev:: $: Revision of last commit
  * @version $Date:: $: Date of last commit
- *
+ * @since 23 Jan 2015
  */
 public class HtmlParser extends Parser {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8969008563666070296L;
+	/** The Constant serialVersionUID. */
+	private static final long	serialVersionUID	= -8969008563666070296L;
 
-	public HtmlParser(HttpURLConnection connection) throws ParserException {
+	/**
+	 * Instantiates a new html parser.
+	 *
+	 * @param connection
+	 *            the connection
+	 * @throws ParserException
+	 *             the parser exception
+	 */
+	public HtmlParser(final HttpURLConnection connection) throws ParserException {
 		super(connection);
 	}
 
-	public HtmlParser(String url) throws ParserException {
+	/**
+	 * Instantiates a new html parser.
+	 *
+	 * @param url
+	 *            the url
+	 * @throws ParserException
+	 *             the parser exception
+	 */
+	public HtmlParser(final String url) throws ParserException {
 		super(url);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.htmlparser.Parser#extractAllNodesThatMatch(org.htmlparser.NodeFilter)
+	 */
 	@Override
-	public NodeList extractAllNodesThatMatch(NodeFilter filter)
-			throws ParserException {
+	public NodeList extractAllNodesThatMatch(final NodeFilter filter) throws ParserException {
 		return super.extractAllNodesThatMatch(filter);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.htmlparser.Parser#getURL()
+	 */
 	@Override
 	public String getURL() {
 		return super.getURL();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.htmlparser.Parser#parse(org.htmlparser.NodeFilter)
+	 */
 	@Override
 	public NodeList parse(final NodeFilter filter) throws ParserException {
 		return super.parse(filter);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.htmlparser.Parser#setURL(java.lang.String)
+	 */
 	@Override
 	public void setURL(final String url) throws ParserException {
 		super.setURL(url);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return getURL();
+		return this.getURL();
 	}
 }

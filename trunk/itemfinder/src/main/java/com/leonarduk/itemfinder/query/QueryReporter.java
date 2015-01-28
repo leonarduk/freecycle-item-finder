@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.leonarduk.itemfinder.query;
 
 import java.time.LocalDate;
@@ -20,36 +23,55 @@ import org.apache.log4j.Logger;
 import com.leonarduk.itemfinder.format.Formatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
-import com.leonarduk.itemfinder.freecycle.FreecycleScraper;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class QueryReporter.
+ *
+ * @author Stephen Leonard
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ * @since 28 Jan 2015
+ */
 public class QueryReporter {
-	static Logger log = Logger.getLogger(QueryReporter.class);
 
-	public static String convertResultsMapToString(
-			final Map<String, Set<Item>> resultsMap, Formatter formatter) {
-		Set<String> uniqueitems = new HashSet<>();
-		Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
-		StringBuilder emailBodyBuilder = new StringBuilder();
-		for (Entry<String, Set<Item>> entry : keys) {
+	/** The log. */
+	static Logger	log	= Logger.getLogger(QueryReporter.class);
+
+	/**
+	 * Convert results map to string.
+	 *
+	 * @param resultsMap
+	 *            the results map
+	 * @param formatter
+	 *            the formatter
+	 * @return the string
+	 */
+	public static String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
+			final Formatter formatter) {
+		final Set<String> uniqueitems = new HashSet<>();
+		final Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
+		final StringBuilder emailBodyBuilder = new StringBuilder();
+		for (final Entry<String, Set<Item>> entry : keys) {
 			System.out.println(entry.getKey());
-			Set<Item> entries = entry.getValue();
+			final Set<Item> entries = entry.getValue();
 			System.out.println(entries);
 			if (entries.size() > 0) {
-				for (Item item : entries) {
+				for (final Item item : entries) {
 					if (uniqueitems.contains(item.getLink())) {
-						log.info("skip duplicate " + item);
+						QueryReporter.log.info("skip duplicate " + item);
 						continue;
 					}
 					uniqueitems.add(item.getLink());
-					String spacer = formatter.getNewLine();
+					final String spacer = formatter.getNewLine();
 					emailBodyBuilder.append(spacer);
 					emailBodyBuilder.append(formatter.getNewSection());
 					emailBodyBuilder.append(spacer);
-					String header = formatter.formatLink(item.getLink(),
-							item.getName())
-							+ " - " + item.getLocation();
+					final String header = formatter.formatLink(item.getLink(), item.getName())
+					        + " - " + item.getLocation();
 					emailBodyBuilder.append(formatter.formatSubHeader(header));
 					emailBodyBuilder.append(spacer);
 
@@ -62,33 +84,46 @@ public class QueryReporter {
 		return emailBodyBuilder.toString();
 	}
 
+	/**
+	 * Run queries.
+	 *
+	 * @param searches
+	 *            the searches
+	 * @param queryBuilder
+	 *            the query builder
+	 * @param groups
+	 *            the groups
+	 * @param em
+	 *            the em
+	 * @return the map
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 * @throws ExecutionException
+	 *             the execution exception
+	 */
 	public static Map<String, Set<Item>> runQueries(final String[] searches,
-			final FreecycleQueryBuilder queryBuilder,
-			final FreecycleGroups[] groups, EntityManager em)
-			throws InterruptedException, ExecutionException {
+			final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
+			final EntityManager em) throws InterruptedException, ExecutionException {
 
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
+		final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 
-		ExecutorService executor = Executors.newFixedThreadPool(20);
-		Map<String, Set<Item>> resultsMap = new HashMap<>();
+		final ExecutorService executor = Executors.newFixedThreadPool(20);
+		final Map<String, Set<Item>> resultsMap = new HashMap<>();
 
-		for (String filter : searches) {
-			Set<Item> items = new HashSet<Item>();
+		for (final String filter : searches) {
+			final Set<Item> items = new HashSet<Item>();
 
-			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
-			for (FreecycleGroups freecycleGroups : groups) {
-				FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
-						queryBuilder);
-				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(
-						freecycleGroups);
-				CallableQuery query = new CallableQuery(searcher,
-						queryBuilderCopy);
-				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
+			final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
+			for (final FreecycleGroups freecycleGroups : groups) {
+				final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
+				        queryBuilder);
+				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
+				final CallableQuery query = new CallableQuery(searcher, queryBuilderCopy);
+				final FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
 				tasks.add(futureTask);
 				executor.execute(futureTask);
 			}
-			executor.shutdown();
-			for (FutureTask<Set<Item>> futureTask : tasks) {
+			for (final FutureTask<Set<Item>> futureTask : tasks) {
 				items.addAll(futureTask.get());
 			}
 
@@ -99,27 +134,43 @@ public class QueryReporter {
 		return resultsMap;
 	}
 
-	public static String runReport(final String[] searches,
-			final FreecycleGroups[] groups, final int timeperiod,
-			final Formatter formatter, EntityManager em)
-			throws InterruptedException, ExecutionException {
+	/**
+	 * Run report.
+	 *
+	 * @param searches
+	 *            the searches
+	 * @param groups
+	 *            the groups
+	 * @param timeperiod
+	 *            the timeperiod
+	 * @param formatter
+	 *            the formatter
+	 * @param em
+	 *            the em
+	 * @return the string
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 * @throws ExecutionException
+	 *             the execution exception
+	 */
+	public static String runReport(final String[] searches, final FreecycleGroups[] groups,
+			final int timeperiod, final Formatter formatter, final EntityManager em)
+					throws InterruptedException, ExecutionException {
 
-		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
-				.setDateStart(LocalDate.now()
-						.minus(timeperiod, ChronoUnit.DAYS));
-		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder,
-				groups, em);
-		String heading = "Searched " + Arrays.asList(groups) + " for "
-				+ queryBuilder.getSearchCriteria() + " "
-				+ Arrays.asList(searches);
-		StringBuilder emailBody = new StringBuilder(
-				formatter.formatHeader(heading));
-		String results = convertResultsMapToString(resultsMap, formatter);
+		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
+		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
+		final Map<String, Set<Item>> resultsMap = QueryReporter.runQueries(searches, queryBuilder,
+		        groups, em);
+		final String heading = "Searched " + Arrays.asList(groups) + " for "
+				+ queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
+		final StringBuilder emailBody = new StringBuilder(formatter.formatHeader(heading));
+		final String results = QueryReporter.convertResultsMapToString(resultsMap, formatter);
 		emailBody.append(results);
 
 		if (results.trim().length() > 0) {
 			emailBody.append(results);
-		} else {
+		}
+		else {
 			emailBody.append("Found nothing");
 		}
 		return emailBody.toString();
