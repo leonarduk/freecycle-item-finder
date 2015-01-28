@@ -1,12 +1,14 @@
 package com.leonarduk.itemfinder.freecycle;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
 
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
-import org.htmlparser.Parser;
+import javax.persistence.EntityManager;
+
 import org.htmlparser.util.ParserException;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -33,7 +35,8 @@ public class FreecycleItemSearcherTest {
 	@Before
 	public void setUp() throws Exception {
 		this.searchTerm = "";
-		testClass = new FreecycleItemSearcher();
+		EntityManager em = mock(EntityManager.class);
+		testClass = new FreecycleItemSearcher(em);
 	}
 
 	/**
@@ -74,7 +77,9 @@ public class FreecycleItemSearcherTest {
 
 	@Test
 	public void testIncludePost() throws Exception {
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
+		EntityManager em = mock(EntityManager.class);
+
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 		QueryBuilder queryBuilder = new FreecycleQueryBuilder()
 				.setSearchWords("Pram");
 		FreecycleItem fullPost = new FreecycleItem(
@@ -82,7 +87,8 @@ public class FreecycleItemSearcherTest {
 				"Thames Ditton",
 				"3 wheel pram",
 				"<hr>",
-				"Mothercare mychoice 3 wheel pram, green, good working order, comes with a rain cover and small handy pump for the tyres, can be used frombirth up to 4 years, Maxicosi car seat can be used with it.");
+				"Mothercare mychoice 3 wheel pram, green, good working order, comes with a rain cover and small handy pump for the tyres, can be used frombirth up to 4 years, Maxicosi car seat can be used with it.",
+				new Date());
 		assertTrue(searcher.includePost(queryBuilder, fullPost));
 
 	}

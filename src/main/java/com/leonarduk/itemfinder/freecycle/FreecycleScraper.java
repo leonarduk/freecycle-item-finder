@@ -19,106 +19,126 @@ import org.htmlparser.util.SimpleNodeIterator;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
 
+/**
+ *
+ *
+ * @author Stephen Leonard
+ * @since 28 Jan 2015
+ *
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ *
+ */
 public class FreecycleScraper {
 
-	static String dateFormat = "EEE MMM dd HH:mm:ss yyyy";
-	private static final NodeFilter tableDataContainingLinkFilter = new AndFilter(
-			new TagNameFilter("td"), new HasChildFilter(new TagNameFilter("a")));
+	static String	                dateFormat	                  = "EEE MMM dd HH:mm:ss yyyy";
+	private static final NodeFilter	tableDataContainingLinkFilter	= new AndFilter(
+	                                                                      new TagNameFilter("td"),
+	                                                                      new HasChildFilter(
+	                                                                              new TagNameFilter(
+	                                                                                      "a")));
 
-	private static Date parseDateFrom(Node typeAndDateNode,
-			SimpleDateFormat dateFormat) throws ParseException {
-		Node dateNode = typeAndDateNode.getChildren().elementAt(4);
-		String dateString = dateNode.toPlainTextString().trim();
-		Date date = dateFormat.parse(dateString);
+	private static Date parseDateFrom(final Node typeAndDateNode, final SimpleDateFormat dateFormat)
+	        throws ParseException {
+		final Node dateNode = typeAndDateNode.getChildren().elementAt(4);
+		final String dateString = dateNode.toPlainTextString().trim();
+		final Date date = dateFormat.parse(dateString);
 		return date;
 	}
 
-	private final SimpleDateFormat freecycleDateFormat;
-	private NodeFilter itemHeaderFilter = new TagNameFilter("div");
-	Logger log = Logger.getLogger(FreecycleScraper.class);
-	private final HtmlParser parser;
+	private final SimpleDateFormat	freecycleDateFormat;
+	private final NodeFilter	   itemHeaderFilter	= new TagNameFilter("div");
+	Logger	                       log	            = Logger.getLogger(FreecycleScraper.class);
+	private final HtmlParser	   parser;
 
-	private final List<Post> posts = new ArrayList<Post>();
+	private final List<Post>	   posts	        = new ArrayList<Post>();
 
-	public FreecycleScraper(HtmlParser parser) {
-		log.info(String.format("Instantiated with url=%s, dateFormat=%s",
-				parser.getURL(), dateFormat));
+	public FreecycleScraper(final HtmlParser parser) {
+		this.log.info(String.format("Instantiated with url=%s, dateFormat=%s", parser.getURL(),
+		        FreecycleScraper.dateFormat));
 		this.parser = parser;
-		this.freecycleDateFormat = new SimpleDateFormat(dateFormat);
+		this.freecycleDateFormat = new SimpleDateFormat(FreecycleScraper.dateFormat);
 
 	}
 
-	public FreecycleItem getFullPost(Post post) throws ParserException {
-		getParser().setURL(post.getLink());
-		log.info("Extracting details for " + post.getLink());
-		NodeList nodes = getParser().parse(itemHeaderFilter);
-		String location = nodes.elementAt(16).toPlainTextString()
-				.replace("Location :", "");
-		String detail = nodes.elementAt(18).toPlainTextString()
-				.replace("Description  ", "").trim();
-		getParser().setURL(post.getLink());
+	public FreecycleItem getFullPost(final Post post) throws ParserException {
+		this.getParser().setURL(post.getLink());
+		this.log.info("Extracting details for " + post.getLink());
+		final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
+		final String location = nodes.elementAt(16).toPlainTextString().replace("Location :", "");
+		final String detail = nodes.elementAt(18).toPlainTextString().replace("Description  ", "")
+		        .trim();
+		this.getParser().setURL(post.getLink());
 
-		NodeList thumbnailNodes = getParser().extractAllNodesThatMatch(
-				new TagNameFilter("img"));
-		SimpleNodeIterator iter = thumbnailNodes.elements();
-		StringBuilder imagesBuilder = new StringBuilder();
+		final NodeList thumbnailNodes = this.getParser().extractAllNodesThatMatch(
+		        new TagNameFilter("img"));
+		final SimpleNodeIterator iter = thumbnailNodes.elements();
+		final StringBuilder imagesBuilder = new StringBuilder();
 		while (iter.hasMoreNodes()) {
 			imagesBuilder.append(iter.nextNode().toHtml());
 		}
-		FreecycleItem details = new FreecycleItem(post.getLink(), location,
-				post.getText(), imagesBuilder.toString(), detail);
+		final FreecycleItem details = new FreecycleItem(post.getLink(), location, post.getText(),
+		        imagesBuilder.toString(), detail, post.getDate());
 
 		return details;
 	}
 
+	/**
+	 *
+	 * @return
+	 * @throws ParserException
+	 */
 	private NodeList getHTMLNodes() throws ParserException {
-		log.info("Extracting HTML nodes");
-		parser.setURL(parser.getURL());
-		return parser.extractAllNodesThatMatch(tableDataContainingLinkFilter);
+		this.log.info("Extracting HTML nodes");
+		this.parser.setURL(this.parser.getURL());
+		return this.parser.extractAllNodesThatMatch(FreecycleScraper.tableDataContainingLinkFilter);
 	}
 
 	protected HtmlParser getParser() {
-		return parser;
+		return this.parser;
 	}
 
 	public List<Post> getPosts() {
 
-		log.info(String.format("Fetching posts"));
-		posts.clear();
+		this.log.info(String.format("Fetching posts"));
+		this.posts.clear();
 
 		try {
-			NodeList list = getHTMLNodes();
-			log.info(String.format("Parsed %s matching HTML nodes", list.size()));
+			final NodeList list = this.getHTMLNodes();
+			this.log.info(String.format("Parsed %s matching HTML nodes", list.size()));
 
-			SimpleNodeIterator iterator = list.elements();
+			final SimpleNodeIterator iterator = list.elements();
 			while (iterator.hasMoreNodes()) {
 				try {
-					Post post = parsePostFromHTMLNodes(iterator);
-					log.debug(post.toString());
-					posts.add(0, post);
-				} catch (ParseException e) {
-					log.error("Unable to parse HTML node into a post", e);
+					final Post post = this.parsePostFromHTMLNodes(iterator);
+					this.log.debug(post.toString());
+					this.posts.add(0, post);
+				}
+				catch (final ParseException e) {
+					this.log.error("Unable to parse HTML node into a post", e);
 				}
 			}
-		} catch (ParserException e) {
-			log.error("Unable to retrieve HTML nodes", e);
+		}
+		catch (final ParserException e) {
+			this.log.error("Unable to retrieve HTML nodes", e);
 		}
 
-		log.info(String.format("Returning %s posts", posts.size()));
-		return posts;
+		this.log.info(String.format("Returning %s posts", this.posts.size()));
+		return this.posts;
 	}
 
-	private Post parsePostFromHTMLNodes(SimpleNodeIterator iterator)
-			throws ParseException {
-		Node typeAndDateNode = iterator.nextNode();
-		PostType postType = PostType.parse(typeAndDateNode);
-		Date postDate = parseDateFrom(typeAndDateNode, freecycleDateFormat);
+	private Post parsePostFromHTMLNodes(final SimpleNodeIterator iterator) throws ParseException {
+		final Node typeAndDateNode = iterator.nextNode();
+		final PostType postType = PostType.parse(typeAndDateNode);
+		final Date postDate = FreecycleScraper.parseDateFrom(typeAndDateNode,
+		        this.freecycleDateFormat);
 
-		Node linkAndDescriptionNode = iterator.nextNode();
-		String description = linkAndDescriptionNode.getChildren().elementAt(1)
-				.toPlainTextString();
-		String link = ((TagNode) linkAndDescriptionNode.getChildren()
-				.elementAt(1)).getAttribute("href");
+		final Node linkAndDescriptionNode = iterator.nextNode();
+		final String description = linkAndDescriptionNode.getChildren().elementAt(1)
+		        .toPlainTextString();
+		final String link = ((TagNode) linkAndDescriptionNode.getChildren().elementAt(1))
+		        .getAttribute("href");
 
 		return new Post(postType, postDate, description, link);
 	}

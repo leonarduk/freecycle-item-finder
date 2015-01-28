@@ -3,6 +3,8 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
+import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,7 +19,7 @@ import com.leonarduk.itemfinder.interfaces.Item;
 @Entity
 @Table(name = "FreecycleItem")
 public class FreecycleItem implements Item {
-	public FreecycleItem() {
+	protected FreecycleItem() {
 		// for JPA
 	}
 
@@ -34,8 +36,9 @@ public class FreecycleItem implements Item {
 	 */
 	public FreecycleItem(Condition condition, double price, String link,
 			String location, String name, int quantity, String extraHtml,
-			String description) {
+			String description, Date createdDate) {
 		super();
+		this.createdDate = createdDate;
 		this.condition = condition;
 		this.price = price;
 		this.link = link;
@@ -55,9 +58,9 @@ public class FreecycleItem implements Item {
 	 * @param description
 	 */
 	public FreecycleItem(String link, String location, String name,
-			String extraHtml, String description) {
+			String extraHtml, String description, Date date) {
 		this(Condition.USED, 0.0, link, location, name, 1, extraHtml,
-				description);
+				description, date);
 	}
 
 	@Basic
@@ -66,6 +69,8 @@ public class FreecycleItem implements Item {
 	@Basic
 	private double price;
 
+	@Basic
+	private Date createdDate;
 	@Id
 	private String link;
 
@@ -138,6 +143,11 @@ public class FreecycleItem implements Item {
 	@Override
 	public int getQuantity() {
 		return this.quantity;
+	}
+
+	@Override
+	public Date getPostedDate() {
+		return this.createdDate;
 	}
 
 	@Override

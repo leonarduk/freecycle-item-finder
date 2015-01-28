@@ -4,9 +4,15 @@
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
@@ -23,6 +29,11 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  */
 public class FreecycleItemSearcher implements ItemSearcher {
 	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
+	private EntityManager em;
+
+	public FreecycleItemSearcher(EntityManager em) {
+		this.em = em;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -58,11 +69,34 @@ public class FreecycleItemSearcher implements ItemSearcher {
 		return items;
 	}
 
+	/**
+	 * This will query if this is included in the search terms and if an entry
+	 * has been created on the DB or not, creating a {@link ReportableItem}
+	 * entry if we are to send this one out.
+	 * 
+	 * @param queryBuilder
+	 * @param fullPost
+	 * @return
+	 */
 	public boolean includePost(QueryBuilder queryBuilder, FreecycleItem fullPost) {
-		return fullPost.getName().toLowerCase()
+		boolean inSearch = fullPost.getName().toLowerCase()
 				.contains(queryBuilder.getSearchWords().toLowerCase())
 				|| fullPost.getDescription().toLowerCase()
 						.contains(queryBuilder.getSearchWords().toLowerCase());
+		if (inSearch) {
+			EntityTransaction tx = em.getTransaction();
+
+			ReportableItem test = em.find(ReportableItem.class,
+					fullPost.getLink());
+			if (test == null) {
+				test = new ReportableItem(fullPost.getLink(), false);
+				tx.begin();
+				em.persist(test);
+				tx.commit();
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

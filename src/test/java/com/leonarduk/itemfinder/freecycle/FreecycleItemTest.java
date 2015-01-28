@@ -5,6 +5,8 @@ package com.leonarduk.itemfinder.freecycle;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +26,7 @@ public class FreecycleItemTest {
 	private Condition condition;
 	private String link;
 	private String location;
+	private Date date;
 
 	/**
 	 * @throws java.lang.Exception
@@ -37,9 +40,10 @@ public class FreecycleItemTest {
 		this.condition = Condition.USED;
 		this.location = "somewhere";
 		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
+		this.date = new Date();
 
 		this.testClass = new FreecycleItem(this.link, this.location, this.name,
-				"", this.description);
+				"", this.description, this.date);
 	}
 
 	/**

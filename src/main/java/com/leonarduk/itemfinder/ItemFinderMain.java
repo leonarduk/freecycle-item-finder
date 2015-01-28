@@ -15,10 +15,11 @@
  */
 package com.leonarduk.itemfinder;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
-import javax.mail.Session;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.support.AbstractApplicationContext;
@@ -58,24 +59,30 @@ public final class ItemFinderMain {
 		}
 		Formatter formatter = new HtmlFormatter();
 		StringBuilder emailBody = new StringBuilder();
-		emailBody
-				.append(QueryReporter.runReport(searches, groups,
-						config.getIntegerProperty("freecycle.search.period"),
-						formatter));
+
+		EntityManagerFactory emf = Persistence
+				.createEntityManagerFactory("ReportableItem");
+		EntityManager em = emf.createEntityManager();
+		emailBody.append(QueryReporter.runReport(searches, groups,
+				config.getIntegerProperty("freecycle.search.period"),
+				formatter, em));
 		emailBody.append(QueryReporter.runReport(new String[] { "" }, groups,
-				1, formatter));
+				1, formatter, em));
 
 		String[] toEmail = config.getArrayProperty("freecycle.email.to");
-		final String user = "leonard";
-		String server = "warthog.acenet-inc.net";
-		final String password = "SW179TNKT26LJ";
-		String port = "465";
+		final String user = config.getProperty("freecycle.email.user");
+		String server = config.getProperty("freecycle.email.server");
+		final String password = config.getProperty("freecycle.email.password");
+		String port = config.getProperty("freecycle.email.port");
+
 		EmailSender emailSender = new EmailSender();
 
 		EmailSession session = new EmailSession(user, password, server, port);
-		emailSender.sendMessage("FreecycleItemFinder@leonarduk.com",
-				"FreecycleItemFinder", "Matching Freecycle items found",
-				emailBody.toString(), true, session, toEmail);
+		emailSender.sendMessage(
+				config.getProperty("freecycle.email.from.email"),
+				config.getProperty("freecycle.email.from.name"),
+				"Matching Freecycle items found", emailBody.toString(), true,
+				session, toEmail);
 	}
 
 	/**

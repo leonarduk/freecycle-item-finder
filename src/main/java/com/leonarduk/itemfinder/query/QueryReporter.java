@@ -13,6 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+import javax.persistence.EntityManager;
+
 import org.apache.log4j.Logger;
 
 import com.leonarduk.itemfinder.format.Formatter;
@@ -24,41 +26,6 @@ import com.leonarduk.itemfinder.interfaces.Item;
 
 public class QueryReporter {
 	static Logger log = Logger.getLogger(QueryReporter.class);
-
-	public static Map<String, Set<Item>> runQueries(final String[] searches,
-			final FreecycleQueryBuilder queryBuilder,
-			final FreecycleGroups[] groups) throws InterruptedException,
-			ExecutionException {
-		FreecycleItemSearcher searcher = new FreecycleItemSearcher();
-
-		ExecutorService executor = Executors.newFixedThreadPool(20);
-		Map<String, Set<Item>> resultsMap = new HashMap<>();
-
-		for (String filter : searches) {
-			Set<Item> items = new HashSet<Item>();
-
-			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
-			for (FreecycleGroups freecycleGroups : groups) {
-				FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
-						queryBuilder);
-				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(
-						freecycleGroups);
-				CallableQuery query = new CallableQuery(searcher,
-						queryBuilderCopy);
-				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
-				tasks.add(futureTask);
-				executor.execute(futureTask);
-			}
-			for (FutureTask<Set<Item>> futureTask : tasks) {
-				items.addAll(futureTask.get());
-			}
-
-			resultsMap.put(filter, items);
-
-		}
-		executor.shutdown();
-		return resultsMap;
-	}
 
 	public static String convertResultsMapToString(
 			final Map<String, Set<Item>> resultsMap, Formatter formatter) {
@@ -95,16 +62,53 @@ public class QueryReporter {
 		return emailBodyBuilder.toString();
 	}
 
+	public static Map<String, Set<Item>> runQueries(final String[] searches,
+			final FreecycleQueryBuilder queryBuilder,
+			final FreecycleGroups[] groups, EntityManager em)
+			throws InterruptedException, ExecutionException {
+
+		FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
+
+		ExecutorService executor = Executors.newFixedThreadPool(20);
+		Map<String, Set<Item>> resultsMap = new HashMap<>();
+
+		for (String filter : searches) {
+			Set<Item> items = new HashSet<Item>();
+
+			Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
+			for (FreecycleGroups freecycleGroups : groups) {
+				FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
+						queryBuilder);
+				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(
+						freecycleGroups);
+				CallableQuery query = new CallableQuery(searcher,
+						queryBuilderCopy);
+				FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
+				tasks.add(futureTask);
+				executor.execute(futureTask);
+			}
+			executor.shutdown();
+			for (FutureTask<Set<Item>> futureTask : tasks) {
+				items.addAll(futureTask.get());
+			}
+
+			resultsMap.put(filter, items);
+
+		}
+		executor.shutdown();
+		return resultsMap;
+	}
+
 	public static String runReport(final String[] searches,
 			final FreecycleGroups[] groups, final int timeperiod,
-			final Formatter formatter) throws InterruptedException,
-			ExecutionException {
+			final Formatter formatter, EntityManager em)
+			throws InterruptedException, ExecutionException {
 
 		FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
 				.setDateStart(LocalDate.now()
 						.minus(timeperiod, ChronoUnit.DAYS));
 		Map<String, Set<Item>> resultsMap = runQueries(searches, queryBuilder,
-				groups);
+				groups, em);
 		String heading = "Searched " + Arrays.asList(groups) + " for "
 				+ queryBuilder.getSearchCriteria() + " "
 				+ Arrays.asList(searches);
