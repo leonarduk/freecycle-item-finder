@@ -1,3 +1,6 @@
+/**
+ *
+ */
 package com.leonarduk.itemfinder.query;
 
 import java.io.IOException;
@@ -10,39 +13,64 @@ import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
 
+/**
+ * The Class AbstractQueryBuilder.
+ *
+ * @author Stephen Leonard
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ * @param <T>
+ *            the generic type
+ * @since 28 Jan 2015
+ */
 abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
-	private boolean usePost;
 
-	public T usePost() {
-		this.usePost = false;
-		return (T) this;
-	}
+	/** The use post. */
+	private boolean	usePost;
 
-	public T useGet() {
-		this.usePost = false;
-		return (T) this;
-	}
-
-	public boolean usesPOSTMethod() {
-		return this.usePost;
-	}
-
-	protected HtmlParser getGETConnection(String urlString,
-			Map<String, String> parameters) throws IOException, ParserException {
-		StringBuilder builder = new StringBuilder(urlString + "?");
-		for (Entry<String, String> entry : parameters.entrySet()) {
+	/**
+	 * Gets the gets the connection.
+	 *
+	 * @param urlString
+	 *            the url string
+	 * @param parameters
+	 *            the parameters
+	 * @return the gets the connection
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws ParserException
+	 *             the parser exception
+	 */
+	protected HtmlParser getGETConnection(final String urlString,
+			final Map<String, String> parameters) throws IOException, ParserException {
+		final StringBuilder builder = new StringBuilder(urlString + "?");
+		for (final Entry<String, String> entry : parameters.entrySet()) {
 			builder.append(entry.getKey() + "=");
 			builder.append(entry.getValue() + "&");
 		}
-		String url = builder.toString();
+		final String url = builder.toString();
 		System.out.println("URL:" + url);
 		return new HtmlParser(url);
 	}
 
-	protected HtmlParser getPOSTConnection(String urlString,
-			Map<String, String> parameters) throws IOException, ParserException {
-		URL url = new URL(urlString);
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	/**
+	 * Gets the POST connection.
+	 *
+	 * @param urlString
+	 *            the url string
+	 * @param parameters
+	 *            the parameters
+	 * @return the POST connection
+	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
+	 * @throws ParserException
+	 *             the parser exception
+	 */
+	protected HtmlParser getPOSTConnection(final String urlString,
+			final Map<String, String> parameters) throws IOException, ParserException {
+		final URL url = new URL(urlString);
+		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
 
 		connection.setDoOutput(true);
@@ -54,10 +82,10 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 		connection.setRequestProperty("Accept-Charset", "*");
 		connection.setRequestProperty("Referer", urlString);
 		connection.setRequestProperty("User-Agent", "WhoIs.java/1.0");
-		StringBuffer buffer = new StringBuffer(1024);
+		final StringBuffer buffer = new StringBuffer(1024);
 		// 'input' fields separated by ampersands (&)
 
-		for (Entry<String, String> entry : parameters.entrySet()) {
+		for (final Entry<String, String> entry : parameters.entrySet()) {
 			buffer.append(entry.getKey() + "=");
 			buffer.append(entry.getValue());
 		}
@@ -67,6 +95,35 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 		// PrintWriter out = new PrintWriter(connection.getOutputStream());
 		// out.print(buffer);
 		// out.close();
+	}
+
+	/**
+	 * Use get.
+	 *
+	 * @return the t
+	 */
+	public T useGet() {
+		this.usePost = false;
+		return (T) this;
+	}
+
+	/**
+	 * Use post.
+	 *
+	 * @return the t
+	 */
+	public T usePost() {
+		this.usePost = false;
+		return (T) this;
+	}
+
+	/**
+	 * Uses post method.
+	 *
+	 * @return true, if successful
+	 */
+	public boolean usesPOSTMethod() {
+		return this.usePost;
 	}
 
 }
