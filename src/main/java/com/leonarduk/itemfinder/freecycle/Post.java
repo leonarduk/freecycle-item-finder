@@ -1,85 +1,165 @@
+/**
+ *
+ */
 package com.leonarduk.itemfinder.freecycle;
 
 import java.util.Date;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Post.
+ */
 public class Post {
-	private final String link;
 
-	private final Date postDate;
+	/** The link. */
+	private final String	link;
 
-	private final PostType postType;
-	private final String title;
-	public Post(Post post) {
+	/** The post date. */
+	private final Date	   postDate;
+
+	/** The post type. */
+	private final PostType	postType;
+
+	/** The title. */
+	private final String	title;
+
+	/**
+	 * Instantiates a new post.
+	 *
+	 * @param post
+	 *            the post
+	 */
+	public Post(final Post post) {
 		this(post.postType, post.postDate, post.title, post.link);
 	}
-	public Post(PostType postType, Date postDate, String title,
-			String link) {
+
+	/**
+	 * Instantiates a new post.
+	 *
+	 * @param postType
+	 *            the post type
+	 * @param postDate
+	 *            the post date
+	 * @param title
+	 *            the title
+	 * @param link
+	 *            the link
+	 */
+	public Post(final PostType postType, final Date postDate, final String title, final String link) {
 		this.postType = postType;
 		this.postDate = postDate;
 		this.title = title;
 		this.link = link;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
+	public boolean equals(final Object obj) {
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (this.getClass() != obj.getClass()) {
 			return false;
-		Post other = (Post) obj;
-		if (link == null) {
-			if (other.link != null)
+		}
+		final Post other = (Post) obj;
+		if (this.link == null) {
+			if (other.link != null) {
 				return false;
-		} else if (!link.equals(other.link))
+			}
+		}
+		else if (!this.link.equals(other.link)) {
 			return false;
-		if (postType != other.postType)
+		}
+		if (this.postType != other.postType) {
 			return false;
-		if (title == null) {
-			if (other.title != null)
+		}
+		if (this.title == null) {
+			if (other.title != null) {
 				return false;
-		} else if (!title.equals(other.title))
+			}
+		}
+		else if (!this.title.equals(other.title)) {
 			return false;
+		}
 		return true;
 	}
 
+	/**
+	 * Gets the date.
+	 *
+	 * @return the date
+	 */
 	public Date getDate() {
-		return postDate;
+		return this.postDate;
 	}
 
+	/**
+	 * Gets the link.
+	 *
+	 * @return the link
+	 */
 	public String getLink() {
-		return link;
+		return this.link;
 	}
 
+	/**
+	 * Gets the post type.
+	 *
+	 * @return the post type
+	 */
 	public PostType getPostType() {
-		return postType;
+		return this.postType;
 	}
 
+	/**
+	 * Gets the text.
+	 *
+	 * @return the text
+	 */
 	public String getText() {
-		return title;
+		return this.title;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((link == null) ? 0 : link.hashCode());
-		result = prime * result
-				+ ((postDate == null) ? 0 : postDate.hashCode());
-		result = prime * result
-				+ ((postType == null) ? 0 : postType.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
+		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
+		result = (prime * result) + ((this.postDate == null) ? 0 : this.postDate.hashCode());
+		result = (prime * result) + ((this.postType == null) ? 0 : this.postType.hashCode());
+		result = (prime * result) + ((this.title == null) ? 0 : this.title.hashCode());
 		return result;
 	}
 
+	/**
+	 * To post.
+	 *
+	 * @return the string
+	 */
 	public String toPost() {
-		return String.format("%s: %s (%s)", postType, title, link);
+		return String.format("%s: %s (%s)", this.postType, this.title, this.link);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		return String.format("%s: %s: %s (%s)", postDate, postType,
-				title, link);
+		return String
+		        .format("%s: %s: %s (%s)", this.postDate, this.postType, this.title, this.link);
 	}
 }

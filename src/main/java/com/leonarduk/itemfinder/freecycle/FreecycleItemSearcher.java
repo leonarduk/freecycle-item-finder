@@ -1,18 +1,15 @@
 /**
- * 
+ *
  */
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
@@ -24,76 +21,115 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
 
 /**
- * @author stephen
+ * The Class FreecycleItemSearcher.
  *
+ * @author stephen
  */
 public class FreecycleItemSearcher implements ItemSearcher {
-	Logger log = Logger.getLogger(FreecycleItemSearcher.class);
-	private EntityManager em;
 
-	public FreecycleItemSearcher(EntityManager em) {
+	/** The log. */
+	Logger	                    log	= Logger.getLogger(FreecycleItemSearcher.class);
+
+	/** The em. */
+	private final EntityManager	em;
+
+	/**
+	 * Instantiates a new freecycle item searcher.
+	 *
+	 * @param em
+	 *            the em
+	 */
+	public FreecycleItemSearcher(final EntityManager em) {
 		this.em = em;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
-	 * String)
+	 *
+	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang. String)
 	 */
 	@Override
-	public Set<Item> findItems(QueryBuilder queryBuilder)
-			throws ItemFinderException {
+	public Set<Item> findItems(final QueryBuilder queryBuilder) throws ItemFinderException {
 		try {
-			HtmlParser parser = queryBuilder.build();
-			log.info("Connect to " + parser);
-			return getPosts(parser, queryBuilder);
-		} catch (ParserException | IOException e) {
+			final HtmlParser parser = queryBuilder.build();
+			this.log.info("Connect to " + parser);
+			return this.getPosts(parser, queryBuilder);
+		}
+		catch (ParserException | IOException e) {
 			e.printStackTrace();
 			throw new ItemFinderException(e.getMessage(), e);
 		}
 	}
 
-	public Set<Item> getPosts(HtmlParser parser, QueryBuilder queryBuilder)
+	/**
+	 * Gets the posts.
+	 *
+	 * @param parser
+	 *            the parser
+	 * @param queryBuilder
+	 *            the query builder
+	 * @return the posts
+	 * @throws ParserException
+	 *             the parser exception
+	 */
+	public Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
 			throws ParserException {
-		Set<Item> items = new HashSet<>();
-		FreecycleScraper scraper = new FreecycleScraper(parser);
-		List<Post> posts = scraper.getPosts();
-		for (Post post : posts) {
-			FreecycleItem fullPost = scraper.getFullPost(post);
-			if (includePost(queryBuilder, fullPost)) {
-				items.add(fullPost);
+		final Set<Item> items = new HashSet<>();
+		final FreecycleScraper scraper = new FreecycleScraper(parser);
+		final List<Post> posts = scraper.getPosts();
+		for (final Post post : posts) {
+			if (this.shouldBeReported(post.getLink())) {
+				final FreecycleItem fullPost = scraper.getFullPost(post);
+				if (this.includePost(queryBuilder, fullPost)) {
+					items.add(fullPost);
+				}
 			}
 		}
 		return items;
 	}
 
 	/**
-	 * This will query if this is included in the search terms and if an entry
-	 * has been created on the DB or not, creating a {@link ReportableItem}
-	 * entry if we are to send this one out.
-	 * 
+	 * This will query if this is included in the search terms and if an entry has been created on
+	 * the DB or not, creating a {@link ReportableItem} entry if we are to send this one out.
+	 *
 	 * @param queryBuilder
+	 *            the query builder
 	 * @param fullPost
-	 * @return
+	 *            the full post
+	 * @return true, if successful
 	 */
-	public boolean includePost(QueryBuilder queryBuilder, FreecycleItem fullPost) {
-		boolean inSearch = fullPost.getName().toLowerCase()
+	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem fullPost) {
+		return fullPost.getName().toLowerCase()
 				.contains(queryBuilder.getSearchWords().toLowerCase())
 				|| fullPost.getDescription().toLowerCase()
-						.contains(queryBuilder.getSearchWords().toLowerCase());
-		if (inSearch) {
-			EntityTransaction tx = em.getTransaction();
+				.contains(queryBuilder.getSearchWords().toLowerCase());
+	}
 
-			ReportableItem test = em.find(ReportableItem.class,
-					fullPost.getLink());
-			if (test == null) {
-				test = new ReportableItem(fullPost.getLink(), false);
+	/**
+	 * Should be reported.
+	 *
+	 * @param link
+	 *            the link
+	 * @return true, if successful
+	 */
+	public boolean shouldBeReported(final String link) {
+		final EntityTransaction tx = this.em.getTransaction();
+		ReportableItem test = this.em.find(ReportableItem.class, link);
+		if (test == null) {
+			try {
 				tx.begin();
-				em.persist(test);
+				test = new ReportableItem(link, false);
+				this.em.persist(test);
 				tx.commit();
+				this.log.debug("persist successful");
 				return true;
+			}
+			catch (final RuntimeException re) {
+				this.log.error("persist failed", re);
+				if (tx.isActive()) {
+					tx.rollback();
+				}
+				throw re;
 			}
 		}
 		return false;
