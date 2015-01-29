@@ -28,12 +28,11 @@ public class QueryReporterTest {
 	@Test
 	public final void testAddPostDetails() {
 		final Item item = new FreecycleItem("http://localhost/page1", "Here", "3 wheel pram",
-				"<a href=\"http://localhost/page1\">3 wheel pram</a>"
-						+ " - Here Posted: Thu Jan 01 01:00:00 GMT 1970", "old pram", new Date(0));
+				"<hr>", "old pram", new Date(0));
 		new QueryReporter();
 		final String post = new QueryReporter().addPostDetails(new HtmlFormatter(), item);
 		Assert.assertEquals("<a href=\"http://localhost/page1\">3 wheel pram</a>"
-				+ " - Here Posted: 1970-01-01", post);
+				+ " - Here Posted: Thu Jan 01 01:00:00 GMT 1970", post);
 	}
 
 	/**

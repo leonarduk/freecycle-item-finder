@@ -4,8 +4,6 @@
 package com.leonarduk.itemfinder.query;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -64,10 +62,8 @@ public class QueryReporter {
 		emailBodyBuilder.append(formatter.getNewSection());
 		emailBodyBuilder.append(spacer);
 
-		final LocalDate res = LocalDateTime.ofInstant(item.getPostedDate().toInstant(),
-		        ZoneId.systemDefault()).toLocalDate();
 		final String header = formatter.formatLink(item.getLink(), item.getName()) + " - "
-		        + item.getLocation() + " Posted: " + res.toString();
+				+ item.getLocation() + " Posted: " + item.getPostedDate().toString();
 
 		emailBodyBuilder.append(formatter.formatSubHeader(header));
 		emailBodyBuilder.append(spacer);
@@ -88,7 +84,7 @@ public class QueryReporter {
 	 * @return the string
 	 */
 	public String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
-	        final Formatter formatter) {
+			final Formatter formatter) {
 		final Set<String> uniqueitems = new HashSet<>();
 		final Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		final StringBuilder emailBodyBuilder = new StringBuilder();
@@ -126,10 +122,10 @@ public class QueryReporter {
 	 * @return the email body
 	 */
 	public final String getEmailBody(final String[] searches, final FreecycleGroups[] groups,
-	        final Formatter formatter, final FreecycleQueryBuilder queryBuilder,
-	        final Map<String, Set<Item>> resultsMap) {
+			final Formatter formatter, final FreecycleQueryBuilder queryBuilder,
+			final Map<String, Set<Item>> resultsMap) {
 		final String heading = "Searched " + Arrays.asList(groups) + " for "
-		        + queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
+				+ queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
 		final StringBuilder emailBody = new StringBuilder(formatter.formatHeader(heading));
 		final String results = this.convertResultsMapToString(resultsMap, formatter);
 		emailBody.append(results);
@@ -161,8 +157,8 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public Map<String, Set<Item>> runQueries(final String[] searches,
-	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
-	        final EntityManager em) throws InterruptedException, ExecutionException {
+			final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
+			final EntityManager em) throws InterruptedException, ExecutionException {
 
 		final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 
@@ -175,7 +171,7 @@ public class QueryReporter {
 			final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
 			for (final FreecycleGroups freecycleGroups : groups) {
 				final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
-				        queryBuilder);
+						queryBuilder);
 				queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
 				final CallableQuery query = new CallableQuery(searcher, queryBuilderCopy);
 				final FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
@@ -213,13 +209,13 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public String runReport(final String[] searches, final FreecycleGroups[] groups,
-	        final int timeperiod, final Formatter formatter, final EntityManager em)
-	        throws InterruptedException, ExecutionException {
+			final int timeperiod, final Formatter formatter, final EntityManager em)
+					throws InterruptedException, ExecutionException {
 
 		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
-		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
+		.setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
 		final Map<String, Set<Item>> resultsMap = this.runQueries(searches, queryBuilder, groups,
-		        em);
+				em);
 		return this.getEmailBody(searches, groups, formatter, queryBuilder, resultsMap);
 	}
 
