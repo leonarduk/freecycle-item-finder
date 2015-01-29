@@ -51,51 +51,51 @@ public class HtmlParser extends Parser {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.htmlparser.Parser#extractAllNodesThatMatch(org.htmlparser.NodeFilter)
 	 */
 	@Override
-	public NodeList extractAllNodesThatMatch(final NodeFilter filter) throws ParserException {
+	public final NodeList extractAllNodesThatMatch(final NodeFilter filter) throws ParserException {
 		return super.extractAllNodesThatMatch(filter);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.htmlparser.Parser#getURL()
 	 */
 	@Override
-	public String getURL() {
+	public final String getURL() {
 		return super.getURL();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.htmlparser.Parser#parse(org.htmlparser.NodeFilter)
 	 */
 	@Override
-	public NodeList parse(final NodeFilter filter) throws ParserException {
+	public final NodeList parse(final NodeFilter filter) throws ParserException {
 		return super.parse(filter);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.htmlparser.Parser#setURL(java.lang.String)
 	 */
 	@Override
-	public void setURL(final String url) throws ParserException {
+	public final void setURL(final String url) throws ParserException {
 		super.setURL(url);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		return this.getURL();
 	}
 }

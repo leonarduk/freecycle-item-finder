@@ -22,7 +22,7 @@ public interface Item {
 	/**
 	 * The Enum Condition.
 	 */
-	public enum Condition {
+	enum Condition {
 
 		/** The new. */
 		NEW,
@@ -41,35 +41,35 @@ public interface Item {
 	 *
 	 * @return the condition
 	 */
-	public Condition getCondition();
+	Condition getCondition();
 
 	/**
 	 * Gets the description.
 	 *
 	 * @return the description
 	 */
-	public String getDescription();
+	String getDescription();
 
 	/**
 	 * Gets the link.
 	 *
 	 * @return the link
 	 */
-	public String getLink();
+	String getLink();
 
 	/**
 	 * Gets the location.
 	 *
 	 * @return the location
 	 */
-	public String getLocation();
+	String getLocation();
 
 	/**
 	 * Gets the name.
 	 *
 	 * @return the name
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * Gets the posted date.
@@ -83,12 +83,12 @@ public interface Item {
 	 *
 	 * @return the price
 	 */
-	public double getPrice();
+	double getPrice();
 
 	/**
 	 * Gets the quantity.
 	 *
 	 * @return the quantity
 	 */
-	public int getQuantity();
+	int getQuantity();
 }

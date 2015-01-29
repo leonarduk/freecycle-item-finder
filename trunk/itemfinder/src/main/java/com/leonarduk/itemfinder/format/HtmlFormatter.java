@@ -34,7 +34,7 @@ public class HtmlFormatter implements Formatter {
 	 * @see com.leonarduk.itemfinder.format.Formatter#formatHeader(java.lang.String)
 	 */
 	@Override
-	public String formatHeader(final String header) {
+	public final String formatHeader(final String header) {
 		return this.createNode(header, "h1");
 	}
 
@@ -44,7 +44,7 @@ public class HtmlFormatter implements Formatter {
 	 * @see com.leonarduk.itemfinder.format.Formatter#formatLink(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public String formatLink(final String link, final String name) {
+	public final String formatLink(final String link, final String name) {
 		final StringBuilder linkBuilder = new StringBuilder("<a href=\"" + link + "\">");
 		linkBuilder.append(name);
 		linkBuilder.append("</a>");
@@ -57,7 +57,7 @@ public class HtmlFormatter implements Formatter {
 	 * @see com.leonarduk.itemfinder.format.Formatter#formatSubHeader(java.lang.String)
 	 */
 	@Override
-	public String formatSubHeader(final String header) {
+	public final String formatSubHeader(final String header) {
 		return this.createNode(header, "h2");
 	}
 
@@ -67,7 +67,7 @@ public class HtmlFormatter implements Formatter {
 	 * @see com.leonarduk.itemfinder.format.Formatter#getNewLine()
 	 */
 	@Override
-	public String getNewLine() {
+	public final String getNewLine() {
 		return "<br/>";
 	}
 
@@ -77,7 +77,7 @@ public class HtmlFormatter implements Formatter {
 	 * @see com.leonarduk.itemfinder.format.Formatter#getNewSection()
 	 */
 	@Override
-	public String getNewSection() {
+	public final String getNewSection() {
 		return "<hr/>";
 	}
 }

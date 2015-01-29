@@ -40,15 +40,15 @@ public class ReportableItem {
 	/**
 	 * Instantiates a new reportable item.
 	 *
-	 * @param link
+	 * @param linkValue
 	 *            the link
-	 * @param sent
+	 * @param sentFlag
 	 *            the sent
 	 */
-	public ReportableItem(final String link, final boolean sent) {
+	public ReportableItem(final String linkValue, final boolean sentFlag) {
 		super();
-		this.link = link;
-		this.sent = sent;
+		this.link = linkValue;
+		this.sent = sentFlag;
 	}
 
 	/*
@@ -57,7 +57,7 @@ public class ReportableItem {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -88,11 +88,13 @@ public class ReportableItem {
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
-		result = (prime * result) + (this.sent ? 1231 : 1237);
+		final int seed = 1231;
+		final int seed2 = 1237;
+		result = (prime * result) + (this.sent ? seed : seed2);
 		return result;
 	}
 
@@ -102,7 +104,7 @@ public class ReportableItem {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		return "ReportableItem [link=" + this.link + ", sent=" + this.sent + "]";
 	}
 

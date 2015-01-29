@@ -1,17 +1,15 @@
 /*
  * Copyright 2002-2013 the original author or authors.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.leonarduk.itemfinder;
@@ -38,26 +36,29 @@ import org.springframework.integration.file.FileWritingMessageHandler;
  */
 public final class SpringIntegrationUtils {
 
-	private static final Log logger = LogFactory.getLog(SpringIntegrationUtils.class);
-
-	private SpringIntegrationUtils() { }
+	/** The Constant logger. */
+	private static final Log	LOGGER	= LogFactory.getLog(SpringIntegrationUtils.class);
 
 	/**
-	 * Helper Method to dynamically determine and display input and output
-	 * directories as defined in the Spring Integration context.
+	 * Helper Method to dynamically determine and display input and output directories as defined in
+	 * the Spring Integration context.
 	 *
-	 * @param context Spring Application Context
+	 * @param context
+	 *            Spring Application Context
 	 */
 	public static void displayDirectories(final ApplicationContext context) {
 
-		final File inDir = (File) new DirectFieldAccessor(context.getBean(FileReadingMessageSource.class)).getPropertyValue("directory");
+		final File inDir = (File) new DirectFieldAccessor(
+				context.getBean(FileReadingMessageSource.class)).getPropertyValue("directory");
 
-		final Map<String, FileWritingMessageHandler> fileWritingMessageHandlers = context.getBeansOfType(FileWritingMessageHandler.class);
+		final Map<String, FileWritingMessageHandler> fileWritingMessageHandlers = context
+				.getBeansOfType(FileWritingMessageHandler.class);
 
 		final List<String> outputDirectories = new ArrayList<String>();
 
 		for (final FileWritingMessageHandler messageHandler : fileWritingMessageHandlers.values()) {
-			final Expression outDir = (Expression) new DirectFieldAccessor(messageHandler).getPropertyValue("destinationDirectoryExpression");
+			final Expression outDir = (Expression) new DirectFieldAccessor(messageHandler)
+			.getPropertyValue("destinationDirectoryExpression");
 			outputDirectories.add(outDir.getExpressionString());
 		}
 
@@ -73,8 +74,14 @@ public final class SpringIntegrationUtils {
 
 		stringBuilder.append("\n\n=========================================================");
 
-		logger.info(stringBuilder.toString());
+		SpringIntegrationUtils.LOGGER.info(stringBuilder.toString());
 
+	}
+
+	/**
+	 * Instantiates a new spring integration utils.
+	 */
+	private SpringIntegrationUtils() {
 	}
 
 }

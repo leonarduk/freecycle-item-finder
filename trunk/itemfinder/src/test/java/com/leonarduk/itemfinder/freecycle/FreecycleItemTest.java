@@ -1,38 +1,62 @@
 /**
- * 
+ *
  */
 package com.leonarduk.itemfinder.freecycle;
 
-import static org.junit.Assert.assertEquals;
-
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 
 /**
- * @author stephen
+ * The Class FreecycleItemTest.
  *
+ * @author Stephen Leonard
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ * @since 28 Jan 2015
  */
 public class FreecycleItemTest {
 
-	private FreecycleItem testClass;
-	private int quantity;
-	private double price;
-	private String name;
-	private String description;
-	private Condition condition;
-	private String link;
-	private String location;
-	private Date date;
+	/** The test class. */
+	private FreecycleItem	testClass;
+
+	/** The quantity. */
+	private int	          quantity;
+
+	/** The price. */
+	private double	      price;
+
+	/** The name. */
+	private String	      name;
+
+	/** The description. */
+	private String	      description;
+
+	/** The condition. */
+	private Condition	  condition;
+
+	/** The link. */
+	private String	      link;
+
+	/** The location. */
+	private String	      location;
+
+	/** The date. */
+	private Date	      date;
 
 	/**
-	 * @throws java.lang.Exception
+	 * Sets the up.
+	 *
+	 * @throws Exception
+	 *             the exception
 	 */
 	@Before
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		this.quantity = 1;
 		this.price = 0;
 		this.name = "testitem";
@@ -42,54 +66,48 @@ public class FreecycleItemTest {
 		this.link = "https://groups.freecycle.org/group/freecycle-kingston/posts/44926473";
 		this.date = new Date();
 
-		this.testClass = new FreecycleItem(this.link, this.location, this.name,
-				"", this.description, this.date);
+		this.testClass = new FreecycleItem(this.link, this.location, this.name, "",
+				this.description, this.date);
 	}
 
 	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getQuantity()}.
-	 */
-	@Test
-	public final void testGetQuantity() {
-		assertEquals(this.quantity, this.testClass.getQuantity());
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getPrice()}.
-	 */
-	@Test
-	public final void testGetPrice() {
-		assertEquals(this.price, this.testClass.getPrice(), 0);
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getName()}.
-	 */
-	@Test
-	public final void testGetName() {
-		assertEquals(this.name, this.testClass.getName());
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getDescription()}
-	 * .
-	 */
-	@Test
-	public final void testGetDescription() {
-		assertEquals(this.description, this.testClass.getDescription());
-	}
-
-	/**
-	 * Test method for
-	 * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getCondition()}.
+	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getCondition()}.
 	 */
 	@Test
 	public final void testGetCondition() {
-		assertEquals(this.condition, this.testClass.getCondition());
+		Assert.assertEquals(this.condition, this.testClass.getCondition());
+	}
+
+	/**
+	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getDescription()} .
+	 */
+	@Test
+	public final void testGetDescription() {
+		Assert.assertEquals(this.description, this.testClass.getDescription());
+	}
+
+	/**
+	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getName()}.
+	 */
+	@Test
+	public final void testGetName() {
+		Assert.assertEquals(this.name, this.testClass.getName());
+	}
+
+	/**
+	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getPrice()}.
+	 */
+	@Test
+	public final void testGetPrice() {
+		Assert.assertEquals(this.price, this.testClass.getPrice(), 0);
+	}
+
+	/**
+	 * Test method for {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getQuantity()}.
+	 */
+	@Test
+	public final void testGetQuantity() {
+		Assert.assertEquals(this.quantity, this.testClass.getQuantity());
 	}
 
 }

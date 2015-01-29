@@ -31,24 +31,25 @@ public class CallableQuery implements Callable<Set<Item>> {
 	/**
 	 * Instantiates a new callable query.
 	 *
-	 * @param itemSearcher
+	 * @param itemSearcherValue
 	 *            the item searcher
-	 * @param queryBuilder
+	 * @param queryBuilderInstance
 	 *            the query builder
 	 */
-	public CallableQuery(final ItemSearcher itemSearcher, final QueryBuilder queryBuilder) {
+	public CallableQuery(final ItemSearcher itemSearcherValue,
+			final QueryBuilder queryBuilderInstance) {
 		super();
-		this.itemSearcher = itemSearcher;
-		this.queryBuilder = queryBuilder;
+		this.itemSearcher = itemSearcherValue;
+		this.queryBuilder = queryBuilderInstance;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override
-	public Set<Item> call() throws Exception {
+	public final Set<Item> call() throws Exception {
 		return this.itemSearcher.findItems(this.queryBuilder);
 	}
 }
