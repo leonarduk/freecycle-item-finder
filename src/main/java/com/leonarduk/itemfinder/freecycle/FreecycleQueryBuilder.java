@@ -25,31 +25,34 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  * @since 21 Jan 2015
  */
 public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBuilder> implements
-QueryBuilder {
+        QueryBuilder {
+
+	/** The Constant DEFAULT_ITEMS_PER_PAGE. */
+	private static final int DEFAULT_ITEMS_PER_PAGE = 50;
 
 	/** The town. */
-	private FreecycleGroups	town;
+	private FreecycleGroups town;
 
 	/** The filter. */
-	private String	        filter;
+	private String filter;
 
 	/** The include wanted. */
-	private boolean	        includeWanted	= false;
+	private boolean includeWanted = false;
 
 	/** The include offered. */
-	private boolean	        includeOffered	= true;
+	private boolean includeOffered = true;
 
 	/** The results per page. */
-	private int	            resultsPerPage	= 50;
+	private int resultsPerPage = FreecycleQueryBuilder.DEFAULT_ITEMS_PER_PAGE;
 
 	/** The page number. */
-	private int	            pageNumber	   = 1;
+	private int pageNumber = 1;
 
 	/** The date start. */
-	private LocalDate	    dateStart;
+	private LocalDate dateStart;
 
 	/** The date end. */
-	private LocalDate	    dateEnd;
+	private LocalDate dateEnd;
 
 	/**
 	 * Instantiates a new freecycle query builder.
@@ -76,7 +79,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#build()
 	 */
 	@Override
@@ -150,7 +153,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#getSearchWords()
 	 */
 	@Override
@@ -160,7 +163,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
 	 */
 	@Override
@@ -171,7 +174,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
 	 */
 	@Override
@@ -182,7 +185,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate)
 	 */
 	@Override
@@ -241,7 +244,7 @@ QueryBuilder {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.String)
 	 */
 	@Override
