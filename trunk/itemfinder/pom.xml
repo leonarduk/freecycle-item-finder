@@ -4,7 +4,7 @@
 
 	<groupId>com.leonarduk</groupId>
 	<artifactId>itemfinder</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.1.0</version>
 	<packaging>jar</packaging>
 
 	<name>itemfinder</name>
@@ -19,7 +19,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<core.version>0.0.3-SNAPSHOT</core.version>
+		<core.version>0.0.2</core.version>
 
 	</properties>
 
