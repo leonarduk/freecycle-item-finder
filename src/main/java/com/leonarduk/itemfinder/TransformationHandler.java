@@ -1,17 +1,15 @@
 /*
  * Copyright 2002-2013 the original author or authors.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+ * in compliance with the License. You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under the License
+ * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+ * or implied. See the License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.leonarduk.itemfinder;
@@ -28,9 +26,9 @@ import org.springframework.integration.file.FileHeaders;
 import org.springframework.integration.support.MessageBuilder;
 
 /**
- * This Spring Integration transformation handler takes the input file, converts
- * the file into a string, converts the file contents into an upper-case string
- * and then sets a few Spring Integration message headers.
+ * This Spring Integration transformation handler takes the input file, converts the file into a
+ * string, converts the file contents into an upper-case string and then sets a few Spring
+ * Integration message headers.
  *
  * @author Stephen Leonard
  * @since 1.0
@@ -40,11 +38,12 @@ public class TransformationHandler {
 	/**
 	 * Actual Spring Integration transformation handler.
 	 *
-	 * @param inputMessage Spring Integration input message
+	 * @param inputMessage
+	 *            Spring Integration input message
 	 * @return New Spring Integration message with updated headers
 	 */
 	@Transformer
-	public Message<String> handleFile(final Message<File> inputMessage) {
+	public final Message<String> handleFile(final Message<File> inputMessage) {
 
 		final File inputFile = inputMessage.getPayload();
 		final String filename = inputFile.getName();
@@ -54,16 +53,17 @@ public class TransformationHandler {
 
 		try {
 			inputAsString = FileUtils.readFileToString(inputFile);
-		} catch (IOException e) {
+		}
+		catch (final IOException e) {
 			throw new IllegalStateException(e);
 		}
 
-		final Message<String> message = MessageBuilder.withPayload(inputAsString.toUpperCase(Locale.ENGLISH))
-					.setHeader(FileHeaders.FILENAME,      filename)
-					.setHeader(FileHeaders.ORIGINAL_FILE, inputFile)
-					.setHeader("file_size", inputFile.length())
-					.setHeader("file_extension", fileExtension)
-					.build();
+		final Message<String> message = MessageBuilder
+		        .withPayload(inputAsString.toUpperCase(Locale.ENGLISH))
+		        .setHeader(FileHeaders.FILENAME, filename)
+		        .setHeader(FileHeaders.ORIGINAL_FILE, inputFile)
+		        .setHeader("file_size", inputFile.length())
+		        .setHeader("file_extension", fileExtension).build();
 
 		return message;
 	}

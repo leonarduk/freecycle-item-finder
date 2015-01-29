@@ -39,7 +39,7 @@ import com.leonarduk.itemfinder.interfaces.Item;
 public class QueryReporter {
 
 	/** The log. */
-	static Logger	log	= Logger.getLogger(QueryReporter.class);
+	private static final Logger	LOG	= Logger.getLogger(QueryReporter.class);
 
 	/**
 	 * Convert results map to string.
@@ -51,7 +51,7 @@ public class QueryReporter {
 	 * @return the string
 	 */
 	public static String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
-			final Formatter formatter) {
+	        final Formatter formatter) {
 		final Set<String> uniqueitems = new HashSet<>();
 		final Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		final StringBuilder emailBodyBuilder = new StringBuilder();
@@ -62,7 +62,7 @@ public class QueryReporter {
 			if (entries.size() > 0) {
 				for (final Item item : entries) {
 					if (uniqueitems.contains(item.getLink())) {
-						QueryReporter.log.info("skip duplicate " + item);
+						QueryReporter.LOG.info("skip duplicate " + item);
 						continue;
 					}
 					uniqueitems.add(item.getLink());
@@ -102,8 +102,8 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public static Map<String, Set<Item>> runQueries(final String[] searches,
-			final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
-			final EntityManager em) throws InterruptedException, ExecutionException {
+	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
+	        final EntityManager em) throws InterruptedException, ExecutionException {
 
 		final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 
@@ -154,15 +154,15 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public static String runReport(final String[] searches, final FreecycleGroups[] groups,
-			final int timeperiod, final Formatter formatter, final EntityManager em)
-					throws InterruptedException, ExecutionException {
+	        final int timeperiod, final Formatter formatter, final EntityManager em)
+	        throws InterruptedException, ExecutionException {
 
 		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
 		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
 		final Map<String, Set<Item>> resultsMap = QueryReporter.runQueries(searches, queryBuilder,
 		        groups, em);
 		final String heading = "Searched " + Arrays.asList(groups) + " for "
-				+ queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
+		        + queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
 		final StringBuilder emailBody = new StringBuilder(formatter.formatHeader(heading));
 		final String results = QueryReporter.convertResultsMapToString(resultsMap, formatter);
 		emailBody.append(results);
@@ -174,6 +174,12 @@ public class QueryReporter {
 			emailBody.append("Found nothing");
 		}
 		return emailBody.toString();
+	}
+
+	/**
+	 * Instantiates a new query reporter.
+	 */
+	protected QueryReporter() {
 	}
 
 }

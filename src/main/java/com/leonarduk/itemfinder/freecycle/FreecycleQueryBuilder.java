@@ -25,7 +25,7 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  * @since 21 Jan 2015
  */
 public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBuilder> implements
-        QueryBuilder {
+QueryBuilder {
 
 	/** The town. */
 	private FreecycleGroups	town;
@@ -76,11 +76,11 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#build()
 	 */
 	@Override
-	public HtmlParser build() throws ParserException, IOException {
+	public final HtmlParser build() throws ParserException, IOException {
 		final StringBuilder builder = new StringBuilder("https://groups.freecycle.org/group/");
 		builder.append(this.town.url());
 
@@ -118,7 +118,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 *
 	 * @return the search criteria
 	 */
-	public String getSearchCriteria() {
+	public final String getSearchCriteria() {
 		final StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append("Searched for:");
 		// if (null != filter) {
@@ -150,28 +150,28 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#getSearchWords()
 	 */
 	@Override
-	public String getSearchWords() {
+	public final String getSearchWords() {
 		return this.filter;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
 	 */
 	@Override
-	public FreecycleQueryBuilder setDateEnd(final int day, final int month, final int year) {
+	public final FreecycleQueryBuilder setDateEnd(final int day, final int month, final int year) {
 		this.dateEnd = LocalDate.of(year, month, day);
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
 	 */
 	@Override
@@ -182,7 +182,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate)
 	 */
 	@Override
@@ -198,7 +198,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 *            the include
 	 * @return the freecycle query builder
 	 */
-	public FreecycleQueryBuilder setIncludeOffered(final boolean include) {
+	public final FreecycleQueryBuilder setIncludeOffered(final boolean include) {
 		this.includeWanted = include;
 		return this;
 	}
@@ -210,7 +210,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 *            the include
 	 * @return the freecycle query builder
 	 */
-	public FreecycleQueryBuilder setIncludeWanted(final boolean include) {
+	public final FreecycleQueryBuilder setIncludeWanted(final boolean include) {
 		this.includeWanted = include;
 		return this;
 	}
@@ -218,35 +218,35 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	/**
 	 * Sets the page number.
 	 *
-	 * @param pageNumber
+	 * @param pageNumberValue
 	 *            the page number
 	 * @return the freecycle query builder
 	 */
-	public FreecycleQueryBuilder setPageNumber(final int pageNumber) {
-		this.pageNumber = pageNumber;
+	public final FreecycleQueryBuilder setPageNumber(final int pageNumberValue) {
+		this.pageNumber = pageNumberValue;
 		return this;
 	}
 
 	/**
 	 * Sets the results per page.
 	 *
-	 * @param resultsPerPage
+	 * @param resultsPerPageNumber
 	 *            the results per page
 	 * @return the freecycle query builder
 	 */
-	public FreecycleQueryBuilder setResultsPerPage(final int resultsPerPage) {
-		this.resultsPerPage = resultsPerPage;
+	public final FreecycleQueryBuilder setResultsPerPage(final int resultsPerPageNumber) {
+		this.resultsPerPage = resultsPerPageNumber;
 		return this;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.String)
 	 */
 	@Override
-	public FreecycleQueryBuilder setSearchWords(final String filter) {
-		this.filter = filter;
+	public final FreecycleQueryBuilder setSearchWords(final String filterValue) {
+		this.filter = filterValue;
 		return this;
 	}
 
@@ -257,7 +257,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 *            the town2
 	 * @return the freecycle query builder
 	 */
-	public FreecycleQueryBuilder setTown(final FreecycleGroups town2) {
+	public final FreecycleQueryBuilder setTown(final FreecycleGroups town2) {
 		this.town = town2;
 		return this;
 	}

@@ -3,6 +3,7 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Enum FreecycleGroups.
  */
@@ -31,11 +32,11 @@ public enum FreecycleGroups {
 	/**
 	 * Instantiates a new freecycle groups.
 	 *
-	 * @param url
-	 *            the url
+	 * @param aUrl
+	 *            the a url
 	 */
-	private FreecycleGroups(final String url) {
-		this.url = url;
+	private FreecycleGroups(final String aUrl) {
+		this.url = aUrl;
 	}
 
 	/**

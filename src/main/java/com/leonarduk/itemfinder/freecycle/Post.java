@@ -5,7 +5,6 @@ package com.leonarduk.itemfinder.freecycle;
 
 import java.util.Date;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class Post.
  */
@@ -36,29 +35,30 @@ public class Post {
 	/**
 	 * Instantiates a new post.
 	 *
-	 * @param postType
+	 * @param postTypeValue
 	 *            the post type
-	 * @param postDate
+	 * @param postDateValue
 	 *            the post date
-	 * @param title
+	 * @param titleValue
 	 *            the title
-	 * @param link
+	 * @param linkValue
 	 *            the link
 	 */
-	public Post(final PostType postType, final Date postDate, final String title, final String link) {
-		this.postType = postType;
-		this.postDate = postDate;
-		this.title = title;
-		this.link = link;
+	public Post(final PostType postTypeValue, final Date postDateValue, final String titleValue,
+			final String linkValue) {
+		this.postType = postTypeValue;
+		this.postDate = postDateValue;
+		this.title = titleValue;
+		this.link = linkValue;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
-	public boolean equals(final Object obj) {
+	public final boolean equals(final Object obj) {
 		if (this == obj) {
 			return true;
 		}
@@ -96,7 +96,7 @@ public class Post {
 	 *
 	 * @return the date
 	 */
-	public Date getDate() {
+	public final Date getDate() {
 		return this.postDate;
 	}
 
@@ -105,7 +105,7 @@ public class Post {
 	 *
 	 * @return the link
 	 */
-	public String getLink() {
+	public final String getLink() {
 		return this.link;
 	}
 
@@ -114,7 +114,7 @@ public class Post {
 	 *
 	 * @return the post type
 	 */
-	public PostType getPostType() {
+	public final PostType getPostType() {
 		return this.postType;
 	}
 
@@ -123,17 +123,17 @@ public class Post {
 	 *
 	 * @return the text
 	 */
-	public String getText() {
+	public final String getText() {
 		return this.title;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
-	public int hashCode() {
+	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
@@ -148,18 +148,18 @@ public class Post {
 	 *
 	 * @return the string
 	 */
-	public String toPost() {
+	public final String toPost() {
 		return String.format("%s: %s (%s)", this.postType, this.title, this.link);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public final String toString() {
 		return String
-		        .format("%s: %s: %s (%s)", this.postDate, this.postType, this.title, this.link);
+				.format("%s: %s: %s (%s)", this.postDate, this.postType, this.title, this.link);
 	}
 }

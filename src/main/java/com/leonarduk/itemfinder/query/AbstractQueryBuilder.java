@@ -24,7 +24,7 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  *            the generic type
  * @since 28 Jan 2015
  */
-abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
+public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 
 	/** The use post. */
 	private boolean	usePost;
@@ -42,8 +42,8 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 * @throws ParserException
 	 *             the parser exception
 	 */
-	protected HtmlParser getGETConnection(final String urlString,
-			final Map<String, String> parameters) throws IOException, ParserException {
+	protected final HtmlParser getGETConnection(final String urlString,
+	        final Map<String, String> parameters) throws IOException, ParserException {
 		final StringBuilder builder = new StringBuilder(urlString + "?");
 		for (final Entry<String, String> entry : parameters.entrySet()) {
 			builder.append(entry.getKey() + "=");
@@ -67,8 +67,8 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 * @throws ParserException
 	 *             the parser exception
 	 */
-	protected HtmlParser getPOSTConnection(final String urlString,
-			final Map<String, String> parameters) throws IOException, ParserException {
+	protected final HtmlParser getPOSTConnection(final String urlString,
+	        final Map<String, String> parameters) throws IOException, ParserException {
 		final URL url = new URL(urlString);
 		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
@@ -102,9 +102,9 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
-	public T useGet() {
+	public final AbstractQueryBuilder<T> useGet() {
 		this.usePost = false;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -112,9 +112,9 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
-	public T usePost() {
+	public final AbstractQueryBuilder<T> usePost() {
 		this.usePost = false;
-		return (T) this;
+		return this;
 	}
 
 	/**
@@ -122,7 +122,7 @@ abstract public class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return true, if successful
 	 */
-	public boolean usesPOSTMethod() {
+	public final boolean usesPOSTMethod() {
 		return this.usePost;
 	}
 

@@ -23,12 +23,16 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
 /**
  * The Class FreecycleItemSearcher.
  *
- * @author stephen
+ * @author Stephen Leonard
+ * @version $Author:: $: Author of last commit
+ * @version $Rev:: $: Revision of last commit
+ * @version $Date:: $: Date of last commit
+ * @since 29 Jan 2015
  */
 public class FreecycleItemSearcher implements ItemSearcher {
 
 	/** The log. */
-	Logger	                    log	= Logger.getLogger(FreecycleItemSearcher.class);
+	private final Logger	    log	= Logger.getLogger(FreecycleItemSearcher.class);
 
 	/** The em. */
 	private final EntityManager	em;
@@ -36,11 +40,11 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	/**
 	 * Instantiates a new freecycle item searcher.
 	 *
-	 * @param em
-	 *            the em
+	 * @param entityManager
+	 *            the entity manager
 	 */
-	public FreecycleItemSearcher(final EntityManager em) {
-		this.em = em;
+	public FreecycleItemSearcher(final EntityManager entityManager) {
+		this.em = entityManager;
 	}
 
 	/*
@@ -49,7 +53,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang. String)
 	 */
 	@Override
-	public Set<Item> findItems(final QueryBuilder queryBuilder) throws ItemFinderException {
+	public final Set<Item> findItems(final QueryBuilder queryBuilder) throws ItemFinderException {
 		try {
 			final HtmlParser parser = queryBuilder.build();
 			this.log.info("Connect to " + parser);
@@ -72,7 +76,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * @throws ParserException
 	 *             the parser exception
 	 */
-	public Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
+	public final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
 			throws ParserException {
 		final Set<Item> items = new HashSet<>();
 		final FreecycleScraper scraper = new FreecycleScraper(parser);
@@ -94,14 +98,13 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *
 	 * @param queryBuilder
 	 *            the query builder
-	 * @param fullPost
+	 * @param post
 	 *            the full post
 	 * @return true, if successful
 	 */
-	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem fullPost) {
-		return fullPost.getName().toLowerCase()
-				.contains(queryBuilder.getSearchWords().toLowerCase())
-				|| fullPost.getDescription().toLowerCase()
+	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
+		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
+				|| post.getDescription().toLowerCase()
 				.contains(queryBuilder.getSearchWords().toLowerCase());
 	}
 
@@ -112,7 +115,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the link
 	 * @return true, if successful
 	 */
-	public boolean shouldBeReported(final String link) {
+	public final synchronized boolean shouldBeReported(final String link) {
 		final EntityTransaction tx = this.em.getTransaction();
 		ReportableItem test = this.em.find(ReportableItem.class, link);
 		if (test == null) {

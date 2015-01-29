@@ -1,11 +1,11 @@
 /*
  * Copyright 2002-2013 the original author or authors.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -53,12 +53,10 @@ public final class ItemFinderMain {
 	 *
 	 * @param args
 	 *            the arguments
-	 * @throws ItemFinderException
-	 *             the item finder exception
 	 * @throws Exception
 	 *             the exception
 	 */
-	public static void main(final String[] args) throws ItemFinderException, Exception {
+	public static void main(final String[] args) throws Exception {
 		// JBidWatch.main(new String[]{});
 
 		final Config config = new Config("itemfinder.properties");
@@ -75,7 +73,7 @@ public final class ItemFinderMain {
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		final EntityManager em = emf.createEntityManager();
 		emailBody.append(QueryReporter.runReport(searches, groups,
-				config.getIntegerProperty("freecycle.search.period"), formatter, em));
+		        config.getIntegerProperty("freecycle.search.period"), formatter, em));
 		emailBody.append(QueryReporter.runReport(new String[] { "" }, groups, 1, formatter, em));
 
 		final String[] toEmail = config.getArrayProperty("freecycle.email.to");
@@ -88,8 +86,8 @@ public final class ItemFinderMain {
 
 		final EmailSession session = new EmailSession(user, password, server, port);
 		emailSender.sendMessage(config.getProperty("freecycle.email.from.email"),
-				config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
-				emailBody.toString(), true, session, toEmail);
+		        config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
+		        emailBody.toString(), true, session, toEmail);
 	}
 
 	/**
@@ -102,18 +100,18 @@ public final class ItemFinderMain {
 
 		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
 			ItemFinderMain.LOGGER
-			.info("\n========================================================="
-					+ "\n                                                         "
-					+ "\n          Welcome to Spring Integration!                 "
-					+ "\n                                                         "
-					+ "\n    For more information please visit:                   "
-					+ "\n    http://www.springsource.org/spring-integration       "
-					+ "\n                                                         "
-					+ "\n=========================================================");
+			        .info("\n========================================================="
+			                + "\n                                                         "
+			                + "\n          Welcome to Spring Integration!                 "
+			                + "\n                                                         "
+			                + "\n    For more information please visit:                   "
+			                + "\n    http://www.springsource.org/spring-integration       "
+			                + "\n                                                         "
+			                + "\n=========================================================");
 		}
 
 		final AbstractApplicationContext context = new ClassPathXmlApplicationContext(
-				"classpath:META-INF/spring/integration/*-context.xml");
+		        "classpath:META-INF/spring/integration/*-context.xml");
 
 		context.registerShutdownHook();
 
@@ -123,21 +121,28 @@ public final class ItemFinderMain {
 
 		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
 			ItemFinderMain.LOGGER
-			.info("\n========================================================="
-					+ "\n                                                         "
-					+ "\n    Please press 'q + Enter' to quit the application.    "
-					+ "\n                                                         "
-					+ "\n=========================================================");
+			        .info("\n========================================================="
+			                + "\n                                                         "
+			                + "\n    Please press 'q + Enter' to quit the application.    "
+			                + "\n                                                         "
+			                + "\n=========================================================");
 		}
 
 		while (!scanner.hasNext("q")) {
 			// Do nothing unless user presses 'q' to quit.
+			try {
+				final int onesecond = 1000;
+				Thread.sleep(onesecond);
+			}
+			catch (final InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
 		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
 			ItemFinderMain.LOGGER.info("Exiting application...bye.");
 		}
-
+		scanner.close();
 		System.exit(0);
 
 	}

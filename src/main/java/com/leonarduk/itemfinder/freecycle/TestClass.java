@@ -41,4 +41,10 @@ public class TestClass {
 		em.close();
 		emf.close();
 	}
+
+	/**
+	 * Instantiates a new test class.
+	 */
+	protected TestClass() {
+	}
 }
