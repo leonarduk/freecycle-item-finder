@@ -46,7 +46,7 @@ import com.leonarduk.itemfinder.query.QueryReporter;
 public final class ItemFinderMain {
 
 	/** The Constant LOGGER. */
-	private static final Logger	LOGGER	= Logger.getLogger(ItemFinderMain.class);
+	private static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
 
 	/**
 	 * The main method.
@@ -68,13 +68,15 @@ public final class ItemFinderMain {
 			groups[i] = FreecycleGroups.valueOf(groupNames[i]);
 		}
 		final Formatter formatter = new HtmlFormatter();
-		final StringBuilder emailBody = new StringBuilder();
 
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		final EntityManager em = emf.createEntityManager();
-		emailBody.append(QueryReporter.runReport(searches, groups,
+		final QueryReporter reporter = new QueryReporter();
+
+		final StringBuilder emailBody = new StringBuilder();
+		emailBody.append(reporter.runReport(searches, groups,
 		        config.getIntegerProperty("freecycle.search.period"), formatter, em));
-		emailBody.append(QueryReporter.runReport(new String[] { "" }, groups, 1, formatter, em));
+		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em));
 
 		final String[] toEmail = config.getArrayProperty("freecycle.email.to");
 		final String user = config.getProperty("freecycle.email.user");

@@ -4,6 +4,8 @@
 package com.leonarduk.itemfinder.query;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,7 +41,42 @@ import com.leonarduk.itemfinder.interfaces.Item;
 public class QueryReporter {
 
 	/** The log. */
-	private static final Logger	LOG	= Logger.getLogger(QueryReporter.class);
+	private static final Logger LOG = Logger.getLogger(QueryReporter.class);
+
+	/**
+	 * Instantiates a new query reporter.
+	 */
+	public QueryReporter() {
+	}
+
+	/**
+	 * Adds the post details.
+	 *
+	 * @param formatter
+	 *            the formatter
+	 * @param item
+	 *            the item
+	 * @return the string
+	 */
+	public String addPostDetails(final Formatter formatter, final Item item) {
+		final String spacer = formatter.getNewLine();
+		final StringBuilder emailBodyBuilder = new StringBuilder(spacer);
+		emailBodyBuilder.append(formatter.getNewSection());
+		emailBodyBuilder.append(spacer);
+
+		final LocalDate res = LocalDateTime.ofInstant(item.getPostedDate().toInstant(),
+		        ZoneId.systemDefault()).toLocalDate();
+		final String header = formatter.formatLink(item.getLink(), item.getName()) + " - "
+		        + item.getLocation() + " Posted: " + res.toString();
+
+		emailBodyBuilder.append(formatter.formatSubHeader(header));
+		emailBodyBuilder.append(spacer);
+
+		emailBodyBuilder.append(item.getDescription());
+
+		emailBodyBuilder.append(spacer);
+		return header;
+	}
 
 	/**
 	 * Convert results map to string.
@@ -50,7 +87,7 @@ public class QueryReporter {
 	 *            the formatter
 	 * @return the string
 	 */
-	public static String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
+	public String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
 	        final Formatter formatter) {
 		final Set<String> uniqueitems = new HashSet<>();
 		final Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
@@ -66,22 +103,44 @@ public class QueryReporter {
 						continue;
 					}
 					uniqueitems.add(item.getLink());
-					final String spacer = formatter.getNewLine();
-					emailBodyBuilder.append(spacer);
-					emailBodyBuilder.append(formatter.getNewSection());
-					emailBodyBuilder.append(spacer);
-					final String header = formatter.formatLink(item.getLink(), item.getName())
-					        + " - " + item.getLocation();
-					emailBodyBuilder.append(formatter.formatSubHeader(header));
-					emailBodyBuilder.append(spacer);
-
-					emailBodyBuilder.append(item.getDescription());
-
-					emailBodyBuilder.append(spacer);
+					emailBodyBuilder.append(this.addPostDetails(formatter, item));
 				}
 			}
 		}
 		return emailBodyBuilder.toString();
+	}
+
+	/**
+	 * Gets the email body.
+	 *
+	 * @param searches
+	 *            the searches
+	 * @param groups
+	 *            the groups
+	 * @param formatter
+	 *            the formatter
+	 * @param queryBuilder
+	 *            the query builder
+	 * @param resultsMap
+	 *            the results map
+	 * @return the email body
+	 */
+	public final String getEmailBody(final String[] searches, final FreecycleGroups[] groups,
+	        final Formatter formatter, final FreecycleQueryBuilder queryBuilder,
+	        final Map<String, Set<Item>> resultsMap) {
+		final String heading = "Searched " + Arrays.asList(groups) + " for "
+		        + queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
+		final StringBuilder emailBody = new StringBuilder(formatter.formatHeader(heading));
+		final String results = this.convertResultsMapToString(resultsMap, formatter);
+		emailBody.append(results);
+
+		if (results.trim().length() > 0) {
+			emailBody.append(results);
+		}
+		else {
+			emailBody.append("Found nothing");
+		}
+		return emailBody.toString();
 	}
 
 	/**
@@ -101,7 +160,7 @@ public class QueryReporter {
 	 * @throws ExecutionException
 	 *             the execution exception
 	 */
-	public static Map<String, Set<Item>> runQueries(final String[] searches,
+	public Map<String, Set<Item>> runQueries(final String[] searches,
 	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
 	        final EntityManager em) throws InterruptedException, ExecutionException {
 
@@ -153,33 +212,15 @@ public class QueryReporter {
 	 * @throws ExecutionException
 	 *             the execution exception
 	 */
-	public static String runReport(final String[] searches, final FreecycleGroups[] groups,
+	public String runReport(final String[] searches, final FreecycleGroups[] groups,
 	        final int timeperiod, final Formatter formatter, final EntityManager em)
 	        throws InterruptedException, ExecutionException {
 
 		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
 		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
-		final Map<String, Set<Item>> resultsMap = QueryReporter.runQueries(searches, queryBuilder,
-		        groups, em);
-		final String heading = "Searched " + Arrays.asList(groups) + " for "
-		        + queryBuilder.getSearchCriteria() + " " + Arrays.asList(searches);
-		final StringBuilder emailBody = new StringBuilder(formatter.formatHeader(heading));
-		final String results = QueryReporter.convertResultsMapToString(resultsMap, formatter);
-		emailBody.append(results);
-
-		if (results.trim().length() > 0) {
-			emailBody.append(results);
-		}
-		else {
-			emailBody.append("Found nothing");
-		}
-		return emailBody.toString();
-	}
-
-	/**
-	 * Instantiates a new query reporter.
-	 */
-	protected QueryReporter() {
+		final Map<String, Set<Item>> resultsMap = this.runQueries(searches, queryBuilder, groups,
+		        em);
+		return this.getEmailBody(searches, groups, formatter, queryBuilder, resultsMap);
 	}
 
 }
