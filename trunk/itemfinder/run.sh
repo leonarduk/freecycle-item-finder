@@ -1,3 +1,2 @@
-DIR=/home/stephen/workspace/luk/trunk/itemfinder/target/
+java -jar target/itemfinder-1.1.0-jar-with-dependencies.jar
 
-java -jar $DIR/itemfinder-1.0.0.BUILD-SNAPSHOT-jar-with-dependencies.jar 
