@@ -53,7 +53,7 @@ public class ReportableItem {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -84,23 +84,43 @@ public class ReportableItem {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
+		result = (prime * result) + this.hashcodeHelper(this.link);
 		final int seed = 1231;
 		final int seed2 = 1237;
-		result = (prime * result) + (this.sent ? seed : seed2);
+		if (this.sent) {
+			result += seed;
+		}
+		else {
+			result += seed2;
+		}
+		result = prime * result;
 		return result;
+	}
+
+	/**
+	 * Hashcode helper.
+	 *
+	 * @param object
+	 *            the object
+	 * @return the int
+	 */
+	private int hashcodeHelper(final Object object) {
+		if (object == null) {
+			return 0;
+		}
+		return object.hashCode();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

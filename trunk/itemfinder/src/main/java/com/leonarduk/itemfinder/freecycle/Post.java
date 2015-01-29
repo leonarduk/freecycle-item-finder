@@ -45,7 +45,7 @@ public class Post {
 	 *            the link
 	 */
 	public Post(final PostType postTypeValue, final Date postDateValue, final String titleValue,
-			final String linkValue) {
+	        final String linkValue) {
 		this.postType = postTypeValue;
 		this.postDate = postDateValue;
 		this.title = titleValue;
@@ -54,7 +54,7 @@ public class Post {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -129,18 +129,32 @@ public class Post {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
 	public final int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
-		result = (prime * result) + ((this.postDate == null) ? 0 : this.postDate.hashCode());
-		result = (prime * result) + ((this.postType == null) ? 0 : this.postType.hashCode());
-		result = (prime * result) + ((this.title == null) ? 0 : this.title.hashCode());
+		result = (prime * result) + this.hashcodeHelper(this.link);
+		result = (prime * result) + this.hashcodeHelper(this.postDate);
+		result = (prime * result) + this.hashcodeHelper(this.postType);
+		result = (prime * result) + this.hashcodeHelper(this.title);
 		return result;
+	}
+
+	/**
+	 * Hashcode helper.
+	 *
+	 * @param object
+	 *            the object
+	 * @return the int
+	 */
+	private int hashcodeHelper(final Object object) {
+		if (object == null) {
+			return 0;
+		}
+		return object.hashCode();
 	}
 
 	/**
@@ -154,12 +168,12 @@ public class Post {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public final String toString() {
 		return String
-				.format("%s: %s: %s (%s)", this.postDate, this.postType, this.title, this.link);
+		        .format("%s: %s: %s (%s)", this.postDate, this.postType, this.title, this.link);
 	}
 }
