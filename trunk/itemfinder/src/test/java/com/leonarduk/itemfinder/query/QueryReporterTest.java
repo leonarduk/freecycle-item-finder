@@ -12,9 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.format.HtmlFormatter;
-import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.freecycle.FreecycleItem;
-import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 
 /**
@@ -31,8 +29,9 @@ public class QueryReporterTest {
 				"<hr>", "old pram", new Date(0));
 		new QueryReporter();
 		final String post = new QueryReporter().addPostDetails(new HtmlFormatter(), item);
-		Assert.assertEquals("<a href=\"http://localhost/page1\">3 wheel pram</a>"
-				+ " - Here Posted: Thu Jan 01 01:00:00 GMT 1970", post);
+		Assert.assertEquals("<br/><hr/><br/><h2><a href=\"http://localhost/page1\">"
+				+ "3 wheel pram</a> - Here Posted: Thu Jan 01 01:00:00 GMT 1970</h2>"
+				+ "<br/>old pram<hr><br/>", post);
 	}
 
 	/**
@@ -43,11 +42,7 @@ public class QueryReporterTest {
 	 */
 	@Test
 	public void testGetEmailBody() throws Exception {
-		final String[] searches = new String[] { "pram", "desk" };
-		final FreecycleGroups[] groups = FreecycleGroups.values();
-		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder();
 		final Map<String, Set<Item>> resultsMap = new HashMap<>();
-		new QueryReporter().getEmailBody(searches, groups, new HtmlFormatter(), queryBuilder,
-				resultsMap);
+		new QueryReporter().convertResultsMapToString(resultsMap, new HtmlFormatter());
 	}
 }

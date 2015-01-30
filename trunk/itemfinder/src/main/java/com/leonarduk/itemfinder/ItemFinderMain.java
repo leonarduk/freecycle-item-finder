@@ -13,7 +13,9 @@
  */
 package com.leonarduk.itemfinder;
 
+import java.util.Arrays;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -34,19 +36,98 @@ import com.leonarduk.itemfinder.query.QueryReporter;
 /**
  * Starts the Spring Context and will initialize the Spring Integration routes.
  *
- *
  * @author Stephen Leonard
- * @since 28 Jan 2015
- *
  * @version $Author:: $: Author of last commit
  * @version $Rev:: $: Revision of last commit
  * @version $Date:: $: Date of last commit
- *
+ * @since 28 Jan 2015
  */
 public final class ItemFinderMain {
 
 	/** The Constant LOGGER. */
 	private static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
+
+	/**
+	 * Generate report.
+	 *
+	 * @param config
+	 *            the config
+	 * @param searches
+	 *            the searches
+	 * @param groups
+	 *            the groups
+	 * @param formatter
+	 *            the formatter
+	 * @param em
+	 *            the em
+	 * @param reporter
+	 *            the reporter
+	 * @return the string
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 * @throws ExecutionException
+	 *             the execution exception
+	 * @throws ItemFinderException
+	 */
+	public static String generateReport(final Config config, final String[] searches,
+	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
+	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
+	        ExecutionException, ItemFinderException {
+		final StringBuilder emailBody = new StringBuilder();
+
+		final String runReport = reporter.runReport(searches, groups,
+		        config.getIntegerProperty("freecycle.search.period"), formatter, em);
+		if (failIfEmpty && runReport.equals(QueryReporter.NO_RESULTS)) {
+			throw new ItemFinderException("No results found for " + searches);
+		}
+		final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
+		        + Arrays.asList(searches);
+		emailBody.append(formatter.formatHeader(heading));
+		emailBody.append(runReport);
+		emailBody.append("<hr/>");
+		emailBody.append(formatter.formatHeader("Searched " + Arrays.asList(groups)
+		        + " for everything"));
+		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em));
+		return emailBody.toString();
+	}
+
+	/**
+	 * Generate search.
+	 *
+	 * @param config
+	 *            the config
+	 * @param searches
+	 *            the searches
+	 * @param groups
+	 *            the groups
+	 * @param formatter
+	 *            the formatter
+	 * @param em
+	 *            the em
+	 * @param reporter
+	 *            the reporter
+	 * @param failIfEmpty
+	 *            the fail if empty
+	 * @throws InterruptedException
+	 *             the interrupted exception
+	 * @throws ExecutionException
+	 *             the execution exception
+	 */
+	public static void generateSearch(final Config config, final String[] searches,
+	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
+	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
+	        ExecutionException {
+		ItemFinderMain.LOGGER.info("generateSearch:" + Arrays.asList(searches) + " - "
+		        + Arrays.asList(groups));
+		try {
+			final String text = ItemFinderMain.generateReport(config, searches, groups, formatter,
+			        em, reporter, failIfEmpty);
+			ItemFinderMain.sendReport(config, text);
+		}
+		catch (final ItemFinderException e) {
+			ItemFinderMain.LOGGER.info("No results - not sending message");
+		}
+	}
 
 	/**
 	 * The main method.
@@ -72,24 +153,24 @@ public final class ItemFinderMain {
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		final EntityManager em = emf.createEntityManager();
 		final QueryReporter reporter = new QueryReporter();
+		boolean failIfEmpty = true;
+		ItemFinderMain.generateSearch(config, searches, groups, formatter, em, reporter,
+		        failIfEmpty);
 
-		final StringBuilder emailBody = new StringBuilder();
-		emailBody.append(reporter.runReport(searches, groups,
-		        config.getIntegerProperty("freecycle.search.period"), formatter, em));
-		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em));
+		while (true) {
 
-		final String[] toEmail = config.getArrayProperty("freecycle.email.to");
-		final String user = config.getProperty("freecycle.email.user");
-		final String server = config.getProperty("freecycle.email.server");
-		final String password = config.getProperty("freecycle.email.password");
-		final String port = config.getProperty("freecycle.email.port");
+			final int millisecondsPerSecond = 1000;
+			final int secondsPerMinute = 60;
+			final int minutesToWait = config.getIntegerProperty("freecycle.search.interval");
 
-		final EmailSender emailSender = new EmailSender();
+			final long time = millisecondsPerSecond * secondsPerMinute * minutesToWait;
+			ItemFinderMain.LOGGER.info("Waiting " + minutesToWait + " minutes.");
 
-		final EmailSession session = new EmailSession(user, password, server, port);
-		emailSender.sendMessage(config.getProperty("freecycle.email.from.email"),
-		        config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
-		        emailBody.toString(), true, session, toEmail);
+			Thread.sleep(time);
+			failIfEmpty = true;
+			ItemFinderMain.generateSearch(config, searches, groups, formatter, em, reporter,
+			        failIfEmpty);
+		}
 	}
 
 	/**
@@ -147,6 +228,29 @@ public final class ItemFinderMain {
 		scanner.close();
 		System.exit(0);
 
+	}
+
+	/**
+	 * Send report.
+	 *
+	 * @param config
+	 *            the config
+	 * @param emailBody
+	 *            the email body
+	 */
+	public static void sendReport(final Config config, final String emailBody) {
+		final String[] toEmail = config.getArrayProperty("freecycle.email.to");
+		final String user = config.getProperty("freecycle.email.user");
+		final String server = config.getProperty("freecycle.email.server");
+		final String password = config.getProperty("freecycle.email.password");
+		final String port = config.getProperty("freecycle.email.port");
+
+		final EmailSender emailSender = new EmailSender();
+
+		final EmailSession session = new EmailSession(user, password, server, port);
+		emailSender.sendMessage(config.getProperty("freecycle.email.from.email"),
+		        config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
+		        emailBody.toString(), true, session, toEmail);
 	}
 
 	/**
