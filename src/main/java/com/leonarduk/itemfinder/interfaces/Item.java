@@ -50,6 +50,8 @@ public interface Item {
 	 */
 	String getDescription();
 
+	String getExtraHtml();
+
 	/**
 	 * Gets the link.
 	 *

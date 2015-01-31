@@ -28,10 +28,10 @@ import org.junit.Test;
 public class ReportableItemTest {
 
 	/** The em. */
-	private EntityManager	  em;
+	private EntityManager em;
 
 	/** The tx. */
-	private EntityTransaction	tx;
+	private EntityTransaction tx;
 
 	/**
 	 * Sets the up.
@@ -66,7 +66,7 @@ public class ReportableItemTest {
 	 *             the exception
 	 */
 	@Test
-	public final void test() throws Exception {
+	public final void testFindall() throws Exception {
 		final String link = "Http://localhost/1";
 
 		final ReportableItem test = new ReportableItem(link, false);

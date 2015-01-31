@@ -4,13 +4,22 @@
 package com.leonarduk.itemfinder.freecycle;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class FreecycleItemTest.
  *
@@ -23,31 +32,37 @@ import com.leonarduk.itemfinder.interfaces.Item.Condition;
 public class FreecycleItemTest {
 
 	/** The test class. */
-	private FreecycleItem	testClass;
+	private FreecycleItem testClass;
 
 	/** The quantity. */
-	private int	          quantity;
+	private int quantity;
 
 	/** The price. */
-	private double	      price;
+	private double price;
 
 	/** The name. */
-	private String	      name;
+	private String name;
 
 	/** The description. */
-	private String	      description;
+	private String description;
 
 	/** The condition. */
-	private Condition	  condition;
+	private Condition condition;
 
 	/** The link. */
-	private String	      link;
+	private String link;
 
 	/** The location. */
-	private String	      location;
+	private String location;
 
 	/** The date. */
-	private Date	      date;
+	private Date date;
+
+	/** The em. */
+	private EntityManager em;
+
+	/** The tx. */
+	private EntityTransaction tx;
 
 	/**
 	 * Sets the up.
@@ -67,7 +82,43 @@ public class FreecycleItemTest {
 		this.date = new Date();
 
 		this.testClass = new FreecycleItem(this.link, this.location, this.name, "",
-				this.description, this.date);
+		        this.description, this.date);
+
+		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
+		this.em = emf.createEntityManager();
+		this.tx = this.em.getTransaction();
+		this.tx.begin();
+
+	}
+
+	/**
+	 * Tear down.
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@After
+	public final void tearDown() throws Exception {
+		this.tx.rollback();
+	}
+
+	/**
+	 * Test find all.
+	 *
+	 * @throws Exception
+	 *             the exception
+	 */
+	@Test
+	public final void testFindAll() throws Exception {
+		final String sql = "select r from " + FreecycleItem.class.getSimpleName() + " r";
+		final Query findall = this.em.createQuery(sql, FreecycleItem.class);
+		final List<FreecycleItem> results = findall.getResultList();
+
+		System.out.println(results.get(0));
+		Assert.assertEquals(
+		        "<img src=\"//static.freecycle.org/images/freecycle_logo.jpg\"\n"
+		                + "        alt=\"The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\" /><img src=\"//ssl.gstatic.com/images/icons/gplus-32.png\" alt=\"Google+\" style=\"border:0;width:32px;height:32px;\"/>",
+		        results.get(0).getExtraHtml());
 	}
 
 	/**
@@ -109,5 +160,4 @@ public class FreecycleItemTest {
 	public final void testGetQuantity() {
 		Assert.assertEquals(this.quantity, this.testClass.getQuantity());
 	}
-
 }
