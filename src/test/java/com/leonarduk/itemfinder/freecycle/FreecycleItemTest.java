@@ -82,7 +82,7 @@ public class FreecycleItemTest {
 		this.date = new Date();
 
 		this.testClass = new FreecycleItem(this.link, this.location, this.name, "",
-		        this.description, this.date);
+				this.description, this.date);
 
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		this.em = emf.createEntityManager();
@@ -114,7 +114,7 @@ public class FreecycleItemTest {
 		final Query findall = this.em.createQuery(sql, FreecycleItem.class);
 		final List<FreecycleItem> results = findall.getResultList();
 
-		System.out.println(results.get(0));
+		// System.out.println(results.get(0));
 	}
 
 	/**
