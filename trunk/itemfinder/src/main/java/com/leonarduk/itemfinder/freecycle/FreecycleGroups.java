@@ -3,7 +3,6 @@
  */
 package com.leonarduk.itemfinder.freecycle;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Enum FreecycleGroups.
  */
@@ -24,10 +23,12 @@ public enum FreecycleGroups {
 	/** The epsom. */
 	epsom("Epsom"),
 	/** The ealing. */
-	ealing("EalingUK");
+	ealing("EalingUK"),
+	/** The lambeth. */
+	lambeth("LambethUK");
 
 	/** The url. */
-	private String	url;
+	private String url;
 
 	/**
 	 * Instantiates a new freecycle groups.

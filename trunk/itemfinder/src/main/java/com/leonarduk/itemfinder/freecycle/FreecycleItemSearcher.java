@@ -32,10 +32,10 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
 public class FreecycleItemSearcher implements ItemSearcher {
 
 	/** The log. */
-	private final Logger	    log	= Logger.getLogger(FreecycleItemSearcher.class);
+	private final Logger log = Logger.getLogger(FreecycleItemSearcher.class);
 
 	/** The em. */
-	private final EntityManager	em;
+	private final EntityManager em;
 
 	/**
 	 * Instantiates a new freecycle item searcher.
@@ -85,7 +85,11 @@ public class FreecycleItemSearcher implements ItemSearcher {
 			if (this.shouldBeReported(post.getLink())) {
 				final FreecycleItem fullPost = scraper.getFullPost(post);
 				if (this.includePost(queryBuilder, fullPost)) {
+					final EntityTransaction tx = this.em.getTransaction();
+					tx.begin();
+					this.em.persist(fullPost);
 					items.add(fullPost);
+					tx.commit();
 				}
 			}
 		}

@@ -6,6 +6,7 @@ package com.leonarduk.itemfinder.freecycle;
 import java.util.Date;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -27,39 +28,39 @@ public class FreecycleItem implements Item {
 
 	/** The condition. */
 	@Basic
-	private Condition	condition;
-
-	/** The price. */
-	@Basic
-	private double	  price;
+	private Condition condition;
 
 	/** The created date. */
 	@Basic
-	private Date	  createdDate;
+	private Date createdDate;
+
+	/** The description. */
+	@Column(columnDefinition = "character varying (500) not null", length = 500, nullable = false)
+	private String description;
+
+	/** The extra html. */
+	@Column(columnDefinition = "character varying (500) not null", length = 500, nullable = false)
+	private String extraHtml;
 
 	/** The link. */
 	@Id
-	private String	  link;
+	private String link;
 
 	/** The location. */
 	@Basic
-	private String	  location;
+	private String location;
 
 	/** The name. */
 	@Basic
-	private String	  name;
+	private String name;
+
+	/** The price. */
+	@Basic
+	private double price;
 
 	/** The quantity. */
 	@Basic
-	private int	      quantity;
-
-	/** The extra html. */
-	@Basic
-	private String	  extraHtml;
-
-	/** The description. */
-	@Basic
-	private String	  description;
+	private int quantity;
 
 	/**
 	 * Instantiates a new freecycle item.
@@ -87,8 +88,8 @@ public class FreecycleItem implements Item {
 	 *            the created date
 	 */
 	public FreecycleItem(final String linkValue, final String locationValue,
-	        final String nameValue, final int quantityValue, final String extraHtmlValue,
-	        final String descriptionValue, final Date createdDateValue) {
+			final String nameValue, final int quantityValue, final String extraHtmlValue,
+			final String descriptionValue, final Date createdDateValue) {
 		super();
 		this.createdDate = createdDateValue;
 		this.condition = Condition.USED;
@@ -118,14 +119,14 @@ public class FreecycleItem implements Item {
 	 *            the date
 	 */
 	public FreecycleItem(final String linkValue, final String locationValue,
-	        final String nameValue, final String extraHtmlValue, final String descriptionValue,
-	        final Date date) {
+			final String nameValue, final String extraHtmlValue, final String descriptionValue,
+			final Date date) {
 		this(linkValue, locationValue, nameValue, 1, extraHtmlValue, descriptionValue, date);
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getCondition()
 	 */
 	@Override
@@ -133,19 +134,38 @@ public class FreecycleItem implements Item {
 		return this.condition;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getDescription()
+	/**
+	 * Gets the created date.
+	 *
+	 * @return the created date
 	 */
-	@Override
-	public final String getDescription() {
-		return this.description + this.extraHtml;
+	public final Date getCreatedDate() {
+		return this.createdDate;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getDescription()
+	 */
+	@Override
+	public final String getDescription() {
+		return this.description;
+	}
+
+	/**
+	 * Gets the extra html.
+	 *
+	 * @return the extra html
+	 */
+	@Override
+	public final String getExtraHtml() {
+		return this.extraHtml;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getLink()
 	 */
 	@Override
@@ -155,7 +175,7 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getLocation()
 	 */
 	@Override
@@ -165,7 +185,7 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getName()
 	 */
 	@Override
@@ -175,7 +195,7 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getPostedDate()
 	 */
 	@Override
@@ -185,7 +205,7 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getPrice()
 	 */
 	@Override
@@ -195,7 +215,7 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.Item#getQuantity()
 	 */
 	@Override
@@ -205,14 +225,14 @@ public class FreecycleItem implements Item {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public final String toString() {
 		return "FreecycleItem [condition=" + this.condition + ", price=" + this.price + ", link="
-		        + this.link + ", location=" + this.location + ", name=" + this.name + ", quantity="
-		        + this.quantity + ", extraHtml=" + this.extraHtml + ", description="
-		        + this.description + "]";
+				+ this.link + ", location=" + this.location + ", name=" + this.name + ", quantity="
+				+ this.quantity + ", extraHtml=" + this.extraHtml + ", description="
+				+ this.description + "]";
 	}
 }

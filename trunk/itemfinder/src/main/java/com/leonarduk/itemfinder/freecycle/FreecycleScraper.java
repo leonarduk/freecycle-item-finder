@@ -13,7 +13,9 @@ import org.apache.log4j.Logger;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.filters.AndFilter;
+import org.htmlparser.filters.HasAttributeFilter;
 import org.htmlparser.filters.HasChildFilter;
+import org.htmlparser.filters.NotFilter;
 import org.htmlparser.filters.TagNameFilter;
 import org.htmlparser.nodes.TagNode;
 import org.htmlparser.util.NodeList;
@@ -35,12 +37,11 @@ import com.leonarduk.itemfinder.html.HtmlParser;
 public class FreecycleScraper {
 
 	/** The date format. */
-	public static final String	    DATE_FORMAT	      = "EEE MMM dd HH:mm:ss yyyy";
+	public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss yyyy";
 
 	/** The Constant tableDataContainingLinkFilter. */
-	private static final NodeFilter	TABLE_LINK_FILTER	= new AndFilter(new TagNameFilter("td"),
-	                                                          new HasChildFilter(new TagNameFilter(
-	                                                                  "a")));
+	private static final NodeFilter TABLE_LINK_FILTER = new AndFilter(new TagNameFilter("td"),
+			new HasChildFilter(new TagNameFilter("a")));
 
 	/**
 	 * Parses the date from.
@@ -54,7 +55,7 @@ public class FreecycleScraper {
 	 *             the parse exception
 	 */
 	private static Date parseDateFrom(final Node typeAndDateNode,
-	        final SimpleDateFormat dateFormatValue) throws ParseException {
+			final SimpleDateFormat dateFormatValue) throws ParseException {
 		final Node dateNode = typeAndDateNode.getChildren().elementAt(4);
 		final String dateString = dateNode.toPlainTextString().trim();
 		final Date date = dateFormatValue.parse(dateString);
@@ -62,19 +63,19 @@ public class FreecycleScraper {
 	}
 
 	/** The freecycle date format. */
-	private final SimpleDateFormat	freecycleDateFormat;
+	private final SimpleDateFormat freecycleDateFormat;
 
 	/** The item header filter. */
-	private final NodeFilter	   itemHeaderFilter	= new TagNameFilter("div");
+	private final NodeFilter itemHeaderFilter = new TagNameFilter("div");
 
 	/** The log. */
-	private static final Logger	   LOG	            = Logger.getLogger(FreecycleScraper.class);
+	private static final Logger LOG = Logger.getLogger(FreecycleScraper.class);
 
 	/** The parser. */
-	private final HtmlParser	   parser;
+	private final HtmlParser parser;
 
 	/** The posts. */
-	private final List<Post>	   posts	        = new ArrayList<Post>();
+	private final List<Post> posts = new ArrayList<Post>();
 
 	/**
 	 * Instantiates a new freecycle scraper.
@@ -84,7 +85,7 @@ public class FreecycleScraper {
 	 */
 	public FreecycleScraper(final HtmlParser parserInstance) {
 		FreecycleScraper.LOG.info(String.format("Instantiated with url=%s, dateFormat=%s",
-		        parserInstance.getURL(), FreecycleScraper.DATE_FORMAT));
+				parserInstance.getURL(), FreecycleScraper.DATE_FORMAT));
 		this.parser = parserInstance;
 		this.freecycleDateFormat = new SimpleDateFormat(FreecycleScraper.DATE_FORMAT);
 
@@ -107,23 +108,24 @@ public class FreecycleScraper {
 		final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
 
 		final String location = nodes.elementAt(locationNode).toPlainTextString()
-		        .replace("Location :", "");
+				.replace("Location :", "");
 		final String detail = nodes.elementAt(detailsNode).toPlainTextString()
-		        .replace("Description  ", "").trim();
+				.replace("Description  ", "").trim();
 		this.getParser().setURL(post.getLink());
 
 		final NodeList thumbnailNodes = this.getParser().extractAllNodesThatMatch(
-		        new TagNameFilter("img"));
+				new AndFilter(new NodeFilter[] { new TagNameFilter("img"),
+						new NotFilter(new HasAttributeFilter("alt", "The Freecycle Network")),
+						new NotFilter(new HasAttributeFilter("alt", "Google+"))
+
+				}));
 		final SimpleNodeIterator iter = thumbnailNodes.elements();
 		final StringBuilder imagesBuilder = new StringBuilder();
 		while (iter.hasMoreNodes()) {
 			imagesBuilder.append(iter.nextNode().toHtml());
 		}
-		final String htmlToSkip = "<img src=\"\" alt=\"The Freecycle Network\""
-		        + " title=\"The Freecycle Network\" height=\"169\" width=\"360\" class=\"CToWUd\">";
-
 		final FreecycleItem details = new FreecycleItem(post.getLink(), location, post.getText(),
-		        imagesBuilder.toString().replaceAll(htmlToSkip, ""), detail, post.getDate());
+				imagesBuilder.toString(), detail, post.getDate());
 
 		return details;
 	}
@@ -197,13 +199,13 @@ public class FreecycleScraper {
 		final Node typeAndDateNode = iterator.nextNode();
 		final PostType postType = PostType.parse(typeAndDateNode);
 		final Date postDate = FreecycleScraper.parseDateFrom(typeAndDateNode,
-		        this.freecycleDateFormat);
+				this.freecycleDateFormat);
 
 		final Node linkAndDescriptionNode = iterator.nextNode();
 		final String description = linkAndDescriptionNode.getChildren().elementAt(1)
-		        .toPlainTextString();
+				.toPlainTextString();
 		final String link = ((TagNode) linkAndDescriptionNode.getChildren().elementAt(1))
-		        .getAttribute("href");
+				.getAttribute("href");
 
 		return new Post(postType, postDate, description, link);
 	}
