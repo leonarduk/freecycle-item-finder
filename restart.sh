@@ -8,5 +8,5 @@ else
 echo "Not Running - will start"
 fi
 cd /home/stephen/workspace/luk/trunk/itemfinder
-nohup java -jar target/itemfinder-1.1.0-jar-with-dependencies.jar & >/dev/null
+nohup java -jar target/itemfinder-1.1.1-jar-with-dependencies.jar & >/dev/null
 
