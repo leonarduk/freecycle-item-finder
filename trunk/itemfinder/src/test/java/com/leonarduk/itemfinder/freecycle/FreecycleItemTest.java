@@ -82,7 +82,7 @@ public class FreecycleItemTest {
 		this.date = new Date();
 
 		this.testClass = new FreecycleItem(this.link, this.location, this.name, "",
-		        this.description, this.date);
+				this.description, this.date);
 
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		this.em = emf.createEntityManager();
@@ -115,10 +115,7 @@ public class FreecycleItemTest {
 		final List<FreecycleItem> results = findall.getResultList();
 
 		System.out.println(results.get(0));
-		Assert.assertEquals(
-		        "<img src=\"//static.freecycle.org/images/freecycle_logo.jpg\"\n"
-		                + "        alt=\"The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\" /><img src=\"//ssl.gstatic.com/images/icons/gplus-32.png\" alt=\"Google+\" style=\"border:0;width:32px;height:32px;\"/>",
-		        results.get(0).getExtraHtml());
+		Assert.assertEquals("", results.get(0).getExtraHtml());
 	}
 
 	/**
