@@ -98,8 +98,8 @@ public class FreecycleItem implements Item {
 		this.location = locationValue;
 		this.name = nameValue;
 		this.quantity = quantityValue;
-		this.extraHtml = extraHtmlValue;
-		this.description = descriptionValue;
+		this.extraHtml = this.enforceMaxLength(extraHtmlValue, 500);
+		this.description = this.enforceMaxLength(descriptionValue, 500);
 	}
 
 	/**
@@ -122,6 +122,13 @@ public class FreecycleItem implements Item {
 			final String nameValue, final String extraHtmlValue, final String descriptionValue,
 			final Date date) {
 		this(linkValue, locationValue, nameValue, 1, extraHtmlValue, descriptionValue, date);
+	}
+
+	private String enforceMaxLength(final String value, final int length) {
+		if (value.length() <= length) {
+			return value;
+		}
+		return value.substring(0, length - 1);
 	}
 
 	/*
