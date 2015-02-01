@@ -138,28 +138,27 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * @return true, if successful
 	 */
 	public final boolean shouldBeReported(final String link) {
-		final EntityTransaction tx = this.em.getTransaction();
 		ReportableItem test = this.em.find(ReportableItem.class, link);
 		if (test == null) {
-			try {
-				synchronized (this.dbLock) {
+			synchronized (this.dbLock) {
+				final EntityTransaction tx = this.em.getTransaction();
+				try {
 					tx.begin();
 					test = new ReportableItem(link, false);
 					this.em.persist(test);
 					tx.commit();
 				}
-				this.log.debug("persist successful");
-				return true;
-			}
-			catch (final RuntimeException re) {
-				this.log.error("persist failed", re);
-				if (tx.isActive()) {
-					tx.rollback();
+				catch (final RuntimeException re) {
+					this.log.error("persist failed", re);
+					if (tx.isActive()) {
+						tx.rollback();
+					}
+					throw re;
 				}
-				throw re;
 			}
+			this.log.debug("persist successful");
+			return true;
 		}
 		return false;
 	}
-
 }
