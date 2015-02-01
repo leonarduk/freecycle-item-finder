@@ -37,6 +37,9 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	/** The em. */
 	private final EntityManager em;
 
+	/** The monitor. */
+	private final Object dbLock = new Object();
+
 	/**
 	 * Instantiates a new freecycle item searcher.
 	 *
@@ -49,7 +52,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang. String)
 	 */
 	@Override
@@ -77,7 +80,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *             the parser exception
 	 */
 	public final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
-	        throws ParserException {
+			throws ParserException {
 		final Set<Item> items = new HashSet<>();
 		final FreecycleScraper scraper = new FreecycleScraper(parser);
 		final List<Post> posts = scraper.getPosts();
@@ -85,8 +88,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 			if (this.shouldBeReported(post.getLink())) {
 				final FreecycleItem fullPost = scraper.getFullPost(post);
 				if (this.includePost(queryBuilder, fullPost)) {
-					final EntityTransaction tx = this.persistPost(items, fullPost);
-					tx.commit();
+					this.persistPost(items, fullPost);
 				}
 			}
 		}
@@ -105,8 +107,8 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 */
 	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
 		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
-		        || post.getDescription().toLowerCase()
-		                .contains(queryBuilder.getSearchWords().toLowerCase());
+				|| post.getDescription().toLowerCase()
+				.contains(queryBuilder.getSearchWords().toLowerCase());
 	}
 
 	/**
@@ -118,13 +120,14 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the full post
 	 * @return the entity transaction
 	 */
-	private synchronized EntityTransaction persistPost(final Set<Item> items,
-	        final FreecycleItem fullPost) {
-		final EntityTransaction tx = this.em.getTransaction();
-		tx.begin();
-		this.em.persist(fullPost);
-		items.add(fullPost);
-		return tx;
+	private synchronized void persistPost(final Set<Item> items, final FreecycleItem fullPost) {
+		synchronized (this.dbLock) {
+			final EntityTransaction tx = this.em.getTransaction();
+			tx.begin();
+			this.em.persist(fullPost);
+			items.add(fullPost);
+			tx.commit();
+		}
 	}
 
 	/**
@@ -134,15 +137,17 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the link
 	 * @return true, if successful
 	 */
-	public final synchronized boolean shouldBeReported(final String link) {
+	public final boolean shouldBeReported(final String link) {
 		final EntityTransaction tx = this.em.getTransaction();
 		ReportableItem test = this.em.find(ReportableItem.class, link);
 		if (test == null) {
 			try {
-				tx.begin();
-				test = new ReportableItem(link, false);
-				this.em.persist(test);
-				tx.commit();
+				synchronized (this.dbLock) {
+					tx.begin();
+					test = new ReportableItem(link, false);
+					this.em.persist(test);
+					tx.commit();
+				}
 				this.log.debug("persist successful");
 				return true;
 			}
