@@ -57,23 +57,23 @@ public class SearchReporter {
 	 *             the item finder exception
 	 */
 	public static String generateReport(final Config config, final String[] searches,
-			final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
-			final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
-			ExecutionException, ItemFinderException {
+	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
+	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
+	        ExecutionException, ItemFinderException {
 		final StringBuilder emailBody = new StringBuilder();
 
 		final String runReport = reporter.runReport(searches, groups,
-				config.getIntegerProperty("freecycle.search.period"), formatter, em);
+		        config.getIntegerProperty("freecycle.search.period"), formatter, em);
 		if (failIfEmpty && runReport.equals(QueryReporter.NO_RESULTS)) {
 			throw new ItemFinderException("No results found for " + searches);
 		}
 		final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
-				+ Arrays.asList(searches);
-		emailBody.append(formatter.formatHeader(heading));
+		        + Arrays.asList(searches);
+		emailBody.append(formatter.formatSubHeader(heading));
 		emailBody.append(runReport);
 		emailBody.append("<hr/>");
-		emailBody.append(formatter.formatHeader("Searched " + Arrays.asList(groups)
-				+ " for everything"));
+		emailBody.append(formatter.formatSubHeader("Searched " + Arrays.asList(groups)
+		        + " for everything"));
 		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em));
 		return emailBody.toString();
 	}
@@ -101,14 +101,14 @@ public class SearchReporter {
 	 *             the execution exception
 	 */
 	public static void generateSearch(final Config config, final String[] searches,
-			final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
-			final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
-			ExecutionException {
+	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
+	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
+	        ExecutionException {
 		SearchReporter.LOGGER.info("generateSearch:" + Arrays.asList(searches) + " - "
-		        + Arrays.asList(groups));
+				+ Arrays.asList(groups));
 		try {
 			final String text = SearchReporter.generateReport(config, searches, groups, formatter,
-					em, reporter, failIfEmpty);
+			        em, reporter, failIfEmpty);
 			SearchReporter.sendReport(config, text);
 		}
 		catch (final ItemFinderException e) {
@@ -135,8 +135,8 @@ public class SearchReporter {
 
 		final EmailSession session = new EmailSession(user, password, server, port);
 		emailSender.sendMessage(config.getProperty("freecycle.email.from.email"),
-				config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
-				emailBody.toString(), true, session, toEmail);
+		        config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
+		        emailBody.toString(), true, session, toEmail);
 	}
 
 }
