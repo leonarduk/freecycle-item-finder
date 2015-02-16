@@ -19,7 +19,6 @@ import org.junit.Test;
 
 import com.leonarduk.itemfinder.interfaces.Item.Condition;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FreecycleItemTest.
  *
@@ -82,7 +81,7 @@ public class FreecycleItemTest {
 		this.date = new Date();
 
 		this.testClass = new FreecycleItem(this.link, this.location, this.name, "",
-				this.description, this.date);
+		        this.description, this.date);
 
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
 		this.em = emf.createEntityManager();

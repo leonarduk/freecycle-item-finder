@@ -27,7 +27,15 @@ import com.leonarduk.itemfinder.html.HtmlParser;
 public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 
 	/** The use post. */
-	private boolean	usePost;
+	private boolean usePost;
+
+	public AbstractQueryBuilder() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public AbstractQueryBuilder(final T that) {
+		this.usePost = that.usesPOSTMethod();
+	}
 
 	/**
 	 * Gets the gets the connection.
@@ -43,7 +51,7 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *             the parser exception
 	 */
 	protected final HtmlParser getGETConnection(final String urlString,
-	        final Map<String, String> parameters) throws IOException, ParserException {
+			final Map<String, String> parameters) throws IOException, ParserException {
 		final StringBuilder builder = new StringBuilder(urlString + "?");
 		for (final Entry<String, String> entry : parameters.entrySet()) {
 			builder.append(entry.getKey() + "=");
@@ -68,7 +76,7 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *             the parser exception
 	 */
 	protected final HtmlParser getPOSTConnection(final String urlString,
-	        final Map<String, String> parameters) throws IOException, ParserException {
+			final Map<String, String> parameters) throws IOException, ParserException {
 		final URL url = new URL(urlString);
 		final HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		connection.setRequestMethod("POST");
@@ -102,9 +110,9 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
-	public final AbstractQueryBuilder<T> useGet() {
+	public final T useGet() {
 		this.usePost = false;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -112,9 +120,9 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
-	public final AbstractQueryBuilder<T> usePost() {
-		this.usePost = false;
-		return this;
+	public final T usePost() {
+		this.usePost = true;
+		return (T) this;
 	}
 
 	/**

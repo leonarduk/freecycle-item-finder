@@ -25,7 +25,7 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  * @since 21 Jan 2015
  */
 public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBuilder> implements
-        QueryBuilder {
+QueryBuilder {
 
 	/** The Constant DEFAULT_ITEMS_PER_PAGE. */
 	private static final int DEFAULT_ITEMS_PER_PAGE = 50;
@@ -67,6 +67,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 *            the that
 	 */
 	public FreecycleQueryBuilder(final FreecycleQueryBuilder that) {
+		super(that);
 		this.town = that.town;
 		this.filter = that.filter;
 		this.includeOffered = that.includeOffered;
@@ -79,7 +80,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#build()
 	 */
 	@Override
@@ -153,7 +154,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#getSearchWords()
 	 */
 	@Override
@@ -163,7 +164,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
 	 */
 	@Override
@@ -174,7 +175,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
 	 */
 	@Override
@@ -185,7 +186,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate)
 	 */
 	@Override
@@ -244,7 +245,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.String)
 	 */
 	@Override

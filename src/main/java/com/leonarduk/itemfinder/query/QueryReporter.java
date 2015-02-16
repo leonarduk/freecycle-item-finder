@@ -185,8 +185,8 @@ public class QueryReporter {
 			final int timeperiod, final Formatter formatter, final EntityManager em)
 					throws InterruptedException, ExecutionException {
 
-		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
-		.setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS));
+		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder().setDateStart(
+		        LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost();
 		final Map<String, Set<Item>> resultsMap = this.runQueries(searches, queryBuilder, groups,
 				em);
 		final String emailBody = this.convertResultsMapToString(resultsMap, formatter);
