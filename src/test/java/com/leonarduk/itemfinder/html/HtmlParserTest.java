@@ -25,20 +25,19 @@ import org.junit.Test;
 public class HtmlParserTest {
 
 	/** The Constant FILE_PATH_PREFIX. */
-	private static final String	FILE_PATH_PREFIX	= "file://localhost/home/stephen/workspace"
-			+ "/luk/trunk/itemfinder/";
+	private static String FILE_PATH_PREFIX;
 
 	/** The full post. */
-	private String	            fullPost;
+	private String fullPost;
 
 	/** The list. */
-	private String	            list;
+	private String list;
 
 	/** The listparser. */
-	private HtmlParser	        listparser;
+	private HtmlParser listparser;
 
 	/** The fullpostparser. */
-	private HtmlParser	        fullpostparser;
+	private HtmlParser fullpostparser;
 
 	/**
 	 * Sets the up.
@@ -52,6 +51,7 @@ public class HtmlParserTest {
 		this.listparser = new HtmlParser(this.list);
 		this.fullPost = ClassLoader.getSystemResource("sofa.html").getPath();
 		this.fullpostparser = new HtmlParser(this.fullPost);
+		HtmlParserTest.FILE_PATH_PREFIX = "file://localhost" + System.getProperty("user.dir") + "/";
 	}
 
 	/**
