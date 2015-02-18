@@ -124,6 +124,15 @@ public class FreecycleItem implements Item {
 		this(linkValue, locationValue, nameValue, 1, extraHtmlValue, descriptionValue, date);
 	}
 
+	/**
+	 * Enforce max length.
+	 *
+	 * @param value
+	 *            the value
+	 * @param length
+	 *            the length
+	 * @return the string
+	 */
 	private String enforceMaxLength(final String value, final int length) {
 		if (value.length() <= length) {
 			return value;
@@ -160,10 +169,10 @@ public class FreecycleItem implements Item {
 		return this.description;
 	}
 
-	/**
-	 * Gets the extra html.
-	 *
-	 * @return the extra html
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.leonarduk.itemfinder.interfaces.Item#getExtraHtml()
 	 */
 	@Override
 	public final String getExtraHtml() {
