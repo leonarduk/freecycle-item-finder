@@ -50,6 +50,11 @@ public interface Item {
 	 */
 	String getDescription();
 
+	/**
+	 * Gets the extra html.
+	 *
+	 * @return the extra html
+	 */
 	String getExtraHtml();
 
 	/**
