@@ -1,11 +1,11 @@
 /*
  * Copyright 2002-2013 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -13,15 +13,11 @@
  */
 package com.leonarduk.itemfinder;
 
-import java.util.Scanner;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
-import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.leonarduk.core.config.Config;
 import com.leonarduk.itemfinder.format.Formatter;
@@ -70,7 +66,7 @@ public final class ItemFinderMain {
 		final QueryReporter reporter = new QueryReporter();
 		boolean failIfEmpty = true;
 		SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-		        failIfEmpty);
+				failIfEmpty);
 
 		while (true) {
 
@@ -84,65 +80,8 @@ public final class ItemFinderMain {
 			Thread.sleep(time);
 			failIfEmpty = true;
 			SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-			        failIfEmpty);
+					failIfEmpty);
 		}
-	}
-
-	/**
-	 * Load the Spring Integration Application Context.
-	 *
-	 * @param args
-	 *            - command line arguments
-	 */
-	public static void main2(final String... args) {
-
-		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
-			ItemFinderMain.LOGGER
-			        .info("\n========================================================="
-			                + "\n                                                         "
-			                + "\n          Welcome to Spring Integration!                 "
-			                + "\n                                                         "
-			                + "\n    For more information please visit:                   "
-			                + "\n    http://www.springsource.org/spring-integration       "
-			                + "\n                                                         "
-			                + "\n=========================================================");
-		}
-
-		final AbstractApplicationContext context = new ClassPathXmlApplicationContext(
-		        "classpath:META-INF/spring/integration/*-context.xml");
-
-		context.registerShutdownHook();
-
-		SpringIntegrationUtils.displayDirectories(context);
-
-		final Scanner scanner = new Scanner(System.in);
-
-		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
-			ItemFinderMain.LOGGER
-			        .info("\n========================================================="
-			                + "\n                                                         "
-			                + "\n    Please press 'q + Enter' to quit the application.    "
-			                + "\n                                                         "
-			                + "\n=========================================================");
-		}
-
-		while (!scanner.hasNext("q")) {
-			// Do nothing unless user presses 'q' to quit.
-			try {
-				final int onesecond = 1000;
-				Thread.sleep(onesecond);
-			}
-			catch (final InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if (ItemFinderMain.LOGGER.isInfoEnabled()) {
-			ItemFinderMain.LOGGER.info("Exiting application...bye.");
-		}
-		scanner.close();
-		System.exit(0);
-
 	}
 
 	/**
