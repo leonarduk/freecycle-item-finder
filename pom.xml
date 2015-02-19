@@ -66,6 +66,7 @@
 					<showDeprecation>true</showDeprecation>
 				</configuration>
 			</plugin>
+			<!-- Build an executable JAR -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.2-beta-4</version>
@@ -78,6 +79,7 @@
 							<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
 						</manifest>
 					</archive>
+					<skipTests>${skipTests}</skipTests>
 				</configuration>
 				<executions>
 					<execution>
@@ -94,20 +96,6 @@
 				<version>1.2.1</version>
 				<configuration>
 					<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
-				</configuration>
-			</plugin><!-- Build an executable JAR -->
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<skipTests>${skipTests}</skipTests>
 				</configuration>
 			</plugin>
 		</plugins>
