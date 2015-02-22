@@ -32,10 +32,10 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
 public class FreecycleItemSearcherTest {
 
 	/** The test class. */
-	private ItemSearcher	testClass;
+	private ItemSearcher testClass;
 
 	/** The search term. */
-	private String	     searchTerm;
+	private String searchTerm;
 
 	/**
 	 * Sets the up.
@@ -45,7 +45,7 @@ public class FreecycleItemSearcherTest {
 	 */
 	@Before
 	public final void setUp() throws Exception {
-		this.searchTerm = "";
+		this.searchTerm = "bed";
 		final EntityManager em = Mockito.mock(EntityManager.class);
 		this.testClass = new FreecycleItemSearcher(em);
 	}
@@ -60,7 +60,7 @@ public class FreecycleItemSearcherTest {
 	@Ignore
 	public final void testFindItemsString() throws ItemFinderException {
 		final QueryBuilder queryBuilder = new FreecycleQueryBuilder().setTown(
-		        FreecycleGroups.kingston).setSearchWords(this.searchTerm);
+				FreecycleGroups.kingston).setSearchWords(this.searchTerm);
 
 		final Set<Item> findItems = this.testClass.findItems(queryBuilder);
 		System.out.println(findItems);
@@ -79,13 +79,13 @@ public class FreecycleItemSearcherTest {
 	@Test
 	public final void testFullPost() throws ParserException, IOException {
 		final QueryBuilder queryBuilder = new FreecycleQueryBuilder().setTown(
-		        FreecycleGroups.kingston).setSearchWords(this.searchTerm);
+				FreecycleGroups.kingston).setSearchWords(this.searchTerm);
 		final HtmlParser parser = queryBuilder.build();
 
 		final FreecycleScraper scraper = new FreecycleScraper(parser);
 		final Post post = new Post(PostType.OFFER, new Date(), "sofa",
-		        "https://groups.freecycle.org/group/freecycle-kingston/posts/"
-						+ "45010383/leather%203%20seater%20sofa%20");
+				"https://groups.freecycle.org/group/freecycle-kingston/posts/"
+		                + "45010383/leather%203%20seater%20sofa%20");
 		final FreecycleItem fullPost = scraper.getFullPost(post);
 		System.out.println(fullPost);
 
@@ -104,12 +104,12 @@ public class FreecycleItemSearcherTest {
 		final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 		final QueryBuilder queryBuilder = new FreecycleQueryBuilder().setSearchWords("Pram");
 		final FreecycleItem fullPost = new FreecycleItem("http://", "Thames Ditton",
-		        "3 wheel pram", "<hr>",
+				"3 wheel pram", "<hr>",
 
-		        "Mothercare mychoice 3 wheel pram, green, good working order, "
-		                + "comes with a rain cover and small handy pump for the tyres,"
-		                + " can be used frombirth"
-		                + " up to 4 years, Maxicosi car seat can be used with it.", new Date());
+				"Mothercare mychoice 3 wheel pram, green, good working order, "
+						+ "comes with a rain cover and small handy pump for the tyres,"
+						+ " can be used frombirth"
+						+ " up to 4 years, Maxicosi car seat can be used with it.", new Date());
 		Assert.assertTrue(searcher.includePost(queryBuilder, fullPost));
 
 	}

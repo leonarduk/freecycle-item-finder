@@ -5,10 +5,7 @@ package com.leonarduk.itemfinder.query;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -79,31 +76,25 @@ public class QueryReporter {
 	/**
 	 * Convert results map to string.
 	 *
-	 * @param resultsMap
+	 * @param resultsSet
 	 *            the results map
 	 * @param formatter
 	 *            the formatter
 	 * @return the string
 	 */
-	public final String convertResultsMapToString(final Map<String, Set<Item>> resultsMap,
+	public final String convertResultsSetToString(final Set<Item> resultsSet,
 	        final Formatter formatter) {
+
 		final Set<String> uniqueitems = new HashSet<>();
-		final Set<Entry<String, Set<Item>>> keys = resultsMap.entrySet();
 		final StringBuilder emailBodyBuilder = new StringBuilder();
-		for (final Entry<String, Set<Item>> entry : keys) {
-			System.out.println(entry.getKey());
-			final Set<Item> entries = entry.getValue();
-			System.out.println(entries);
-			if (entries.size() > 0) {
-				for (final Item item : entries) {
-					if (uniqueitems.contains(item.getLink())) {
-						QueryReporter.LOG.info("skip duplicate " + item);
-						continue;
-					}
-					uniqueitems.add(item.getLink());
-					emailBodyBuilder.append(this.addPostDetails(formatter, item));
-				}
+
+		for (final Item item : resultsSet) {
+			if (uniqueitems.contains(item.getLink())) {
+				QueryReporter.LOG.info("skip duplicate " + item);
+				continue;
 			}
+			uniqueitems.add(item.getLink());
+			emailBodyBuilder.append(this.addPostDetails(formatter, item));
 		}
 		return emailBodyBuilder.toString();
 	}
@@ -125,16 +116,15 @@ public class QueryReporter {
 	 * @throws ExecutionException
 	 *             the execution exception
 	 */
-	public final Map<String, Set<Item>> runQueries(final String[] searches,
+	public final Set<Item> runQueries(final String[] searches,
 	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
 	        final EntityManager em) throws InterruptedException, ExecutionException {
 		final ExecutorService executor = Executors.newFixedThreadPool(20);
-		final Map<String, Set<Item>> resultsMap = new HashMap<>();
+		final Set<Item> resultsSet = new HashSet<>();
 		try {
 			final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
 
 			for (final String filter : searches) {
-				final Set<Item> items = new HashSet<Item>();
 
 				final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
 				for (final FreecycleGroups freecycleGroups : groups) {
@@ -147,10 +137,8 @@ public class QueryReporter {
 					executor.execute(futureTask);
 				}
 				for (final FutureTask<Set<Item>> futureTask : tasks) {
-					items.addAll(futureTask.get());
+					resultsSet.addAll(futureTask.get());
 				}
-
-				resultsMap.put(filter, items);
 
 			}
 		}
@@ -160,7 +148,7 @@ public class QueryReporter {
 		finally {
 			executor.shutdown();
 		}
-		return resultsMap;
+		return resultsSet;
 	}
 
 	/**
@@ -187,10 +175,9 @@ public class QueryReporter {
 	        throws InterruptedException, ExecutionException {
 
 		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder().setDateStart(
-				LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost();
-		final Map<String, Set<Item>> resultsMap = this.runQueries(searches, queryBuilder, groups,
-		        em);
-		final String emailBody = this.convertResultsMapToString(resultsMap, formatter);
+		        LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost();
+		final Set<Item> resultsSet = this.runQueries(searches, queryBuilder, groups, em);
+		final String emailBody = this.convertResultsSetToString(resultsSet, formatter);
 		if (emailBody.trim().isEmpty()) {
 			return QueryReporter.NO_RESULTS;
 		}
