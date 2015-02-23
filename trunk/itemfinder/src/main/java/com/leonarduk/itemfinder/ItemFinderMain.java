@@ -1,11 +1,11 @@
 /*
  * Copyright 2002-2013 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -19,9 +19,9 @@ import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 
-import com.leonarduk.core.config.Config;
 import com.leonarduk.itemfinder.format.Formatter;
 import com.leonarduk.itemfinder.format.HtmlFormatter;
+import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 import com.leonarduk.itemfinder.query.QueryReporter;
 import com.leonarduk.itemfinder.query.SearchReporter;
@@ -53,7 +53,7 @@ public final class ItemFinderMain {
 	public static void main(final String[] args) throws Exception {
 		// JBidWatch.main(new String[]{});
 
-		final Config config = new Config("itemfinder.properties");
+		final FreecycleConfig config = new FreecycleConfig("itemfinder.properties");
 		final String[] searches = config.getArrayProperty(ItemFinderMain.FREECYCLE_SEARCH_TERMS);
 
 		final String[] groupNames = config.getArrayProperty("freecycle.search.groups");
@@ -68,7 +68,7 @@ public final class ItemFinderMain {
 		final QueryReporter reporter = new QueryReporter();
 		boolean failIfEmpty = true;
 		SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-		        failIfEmpty);
+				failIfEmpty);
 
 		while (true) {
 
@@ -82,7 +82,7 @@ public final class ItemFinderMain {
 			Thread.sleep(time);
 			failIfEmpty = true;
 			SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-			        failIfEmpty);
+					failIfEmpty);
 		}
 	}
 
