@@ -164,6 +164,8 @@ public class QueryReporter {
 	 *            the formatter
 	 * @param em
 	 *            the em
+	 * @param resultsPerPageNumber
+	 *            the results per page number
 	 * @return the string
 	 * @throws InterruptedException
 	 *             the interrupted exception
@@ -171,11 +173,12 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public final String runReport(final String[] searches, final FreecycleGroups[] groups,
-	        final int timeperiod, final Formatter formatter, final EntityManager em)
-	        throws InterruptedException, ExecutionException {
+	        final int timeperiod, final Formatter formatter, final EntityManager em,
+			final int resultsPerPageNumber) throws InterruptedException, ExecutionException {
 
-		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder().setDateStart(
-		        LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost();
+		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
+		.setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost()
+		        .setResultsPerPage(resultsPerPageNumber);
 		final Set<Item> resultsSet = this.runQueries(searches, queryBuilder, groups, em);
 		final String emailBody = this.convertResultsSetToString(resultsSet, formatter);
 		if (emailBody.trim().isEmpty()) {

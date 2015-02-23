@@ -52,7 +52,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 
 	/*
 	 * (non-Javadoc)
-	 *
+	 * 
 	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang. String)
 	 */
 	@Override
@@ -80,7 +80,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *             the parser exception
 	 */
 	public final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
-			throws ParserException {
+	        throws ParserException {
 		final Set<Item> items = new HashSet<>();
 		final FreecycleScraper scraper = new FreecycleScraper(parser);
 		final List<Post> posts = scraper.getPosts();
@@ -107,8 +107,8 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 */
 	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
 		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
-				|| post.getDescription().toLowerCase()
-				.contains(queryBuilder.getSearchWords().toLowerCase());
+		        || post.getDescription().toLowerCase()
+		                .contains(queryBuilder.getSearchWords().toLowerCase());
 	}
 
 	/**
@@ -118,7 +118,6 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the items
 	 * @param fullPost
 	 *            the full post
-	 * @return the entity transaction
 	 */
 	private synchronized void persistPost(final Set<Item> items, final FreecycleItem fullPost) {
 		synchronized (this.dbLock) {

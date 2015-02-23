@@ -24,8 +24,8 @@ import org.junit.Test;
  */
 public class HtmlParserTest {
 
-	/** The Constant FILE_PATH_PREFIX. */
-	private static String FILE_PATH_PREFIX;
+	/** The file path prefix. */
+	private static String filePathPrefix;
 
 	/** The full post. */
 	private String fullPost;
@@ -51,7 +51,7 @@ public class HtmlParserTest {
 		this.listparser = new HtmlParser(this.list);
 		this.fullPost = ClassLoader.getSystemResource("sofa.html").getPath();
 		this.fullpostparser = new HtmlParser(this.fullPost);
-		HtmlParserTest.FILE_PATH_PREFIX = "file://localhost" + System.getProperty("user.dir") + "/";
+		HtmlParserTest.filePathPrefix = "file://localhost" + System.getProperty("user.dir") + "/";
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class HtmlParserTest {
 	 */
 	@Test
 	public final void testGetURL() {
-		Assert.assertEquals(HtmlParserTest.FILE_PATH_PREFIX + "target/test-classes/sofa.html",
+		Assert.assertEquals(HtmlParserTest.filePathPrefix + "target/test-classes/sofa.html",
 				this.fullpostparser.getURL());
 	}
 
@@ -117,7 +117,7 @@ public class HtmlParserTest {
 	@Test
 	public final void testSetURLString() throws ParserException {
 		this.fullpostparser.setURL(this.list);
-		Assert.assertEquals(HtmlParserTest.FILE_PATH_PREFIX + "target/test-classes/list.html",
+		Assert.assertEquals(HtmlParserTest.filePathPrefix + "target/test-classes/list.html",
 				this.fullpostparser.getURL());
 	}
 
@@ -126,7 +126,7 @@ public class HtmlParserTest {
 	 */
 	@Test
 	public final void testToString() {
-		Assert.assertEquals(HtmlParserTest.FILE_PATH_PREFIX + "target/test-classes/list.html",
+		Assert.assertEquals(HtmlParserTest.filePathPrefix + "target/test-classes/list.html",
 				this.listparser.toString());
 	}
 
