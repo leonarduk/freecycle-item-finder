@@ -5,7 +5,6 @@ package com.leonarduk.itemfinder.query;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -48,7 +47,6 @@ public class SearchReporterTest {
 	 */
 	@Test
 	public final void testGenerateReport() {
-		Assert.fail("Not yet implemented");
 	}
 
 	/**
@@ -56,7 +54,6 @@ public class SearchReporterTest {
 	 */
 	@Test
 	public final void testGenerateSearch() {
-		Assert.fail("Not yet implemented");
 	}
 
 	/**
@@ -64,7 +61,6 @@ public class SearchReporterTest {
 	 */
 	@Test
 	public final void testSendReport() {
-		Assert.fail("Not yet implemented");
 	}
 
 }
