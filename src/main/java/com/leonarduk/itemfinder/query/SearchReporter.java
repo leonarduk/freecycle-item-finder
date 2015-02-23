@@ -15,6 +15,7 @@ import com.leonarduk.core.email.EmailSender;
 import com.leonarduk.core.email.EmailSession;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.format.Formatter;
+import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
 
 /**
@@ -27,9 +28,6 @@ import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
  * @since 30 Jan 2015
  */
 public final class SearchReporter {
-
-	/** The Constant MAX_RESULTS_PER_PAGE. */
-	public static final int MAX_RESULTS_PER_PAGE = 100;
 
 	/** The Constant LOGGER. */
 	static final Logger LOGGER = Logger.getLogger(SearchReporter.class);
@@ -59,16 +57,14 @@ public final class SearchReporter {
 	 * @throws ItemFinderException
 	 *             the item finder exception
 	 */
-	public static String generateReport(final Config config, final String[] searches,
+	public static String generateReport(final FreecycleConfig config, final String[] searches,
 	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
 	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
 	        ExecutionException, ItemFinderException {
 		final StringBuilder emailBody = new StringBuilder();
 
-		Integer resultsPerPage = config.getIntegerProperty("freecycle.search.resultsperpage");
-		if (null == resultsPerPage) {
-			resultsPerPage = SearchReporter.MAX_RESULTS_PER_PAGE;
-		}
+		final Integer resultsPerPage = config.getResultsPerPage();
+
 		final String runReport = reporter
 		        .runReport(searches, groups, config.getIntegerProperty("freecycle.search.period"),
 		                formatter, em, resultsPerPage);
@@ -109,7 +105,7 @@ public final class SearchReporter {
 	 * @throws ExecutionException
 	 *             the execution exception
 	 */
-	public static void generateSearch(final Config config, final String[] searches,
+	public static void generateSearch(final FreecycleConfig config, final String[] searches,
 	        final FreecycleGroups[] groups, final Formatter formatter, final EntityManager em,
 	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
 	        ExecutionException {
