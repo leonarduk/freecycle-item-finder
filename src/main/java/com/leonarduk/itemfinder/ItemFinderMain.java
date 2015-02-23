@@ -1,11 +1,11 @@
 /*
  * Copyright 2002-2013 the original author or authors.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
  * in compliance with the License. You may obtain a copy of the License at
- *
+ * 
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software distributed under the License
  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
  * or implied. See the License for the specific language governing permissions and limitations under
@@ -37,6 +37,8 @@ import com.leonarduk.itemfinder.query.SearchReporter;
  */
 public final class ItemFinderMain {
 
+	/** The Constant FREECYCLE_SEARCH_TERMS. */
+	public static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 	/** The Constant LOGGER. */
 	static final Logger LOGGER = Logger.getLogger(ItemFinderMain.class);
 
@@ -52,7 +54,7 @@ public final class ItemFinderMain {
 		// JBidWatch.main(new String[]{});
 
 		final Config config = new Config("itemfinder.properties");
-		final String[] searches = config.getArrayProperty("freecycle.search.terms");
+		final String[] searches = config.getArrayProperty(ItemFinderMain.FREECYCLE_SEARCH_TERMS);
 
 		final String[] groupNames = config.getArrayProperty("freecycle.search.groups");
 		final FreecycleGroups[] groups = new FreecycleGroups[groupNames.length];
@@ -66,7 +68,7 @@ public final class ItemFinderMain {
 		final QueryReporter reporter = new QueryReporter();
 		boolean failIfEmpty = true;
 		SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-				failIfEmpty);
+		        failIfEmpty);
 
 		while (true) {
 
@@ -80,7 +82,7 @@ public final class ItemFinderMain {
 			Thread.sleep(time);
 			failIfEmpty = true;
 			SearchReporter.generateSearch(config, searches, groups, formatter, em, reporter,
-					failIfEmpty);
+			        failIfEmpty);
 		}
 	}
 

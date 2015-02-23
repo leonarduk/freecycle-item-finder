@@ -26,7 +26,10 @@ import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
  * @version $Date:: $: Date of last commit
  * @since 30 Jan 2015
  */
-public class SearchReporter {
+public final class SearchReporter {
+
+	/** The Constant MAX_RESULTS_PER_PAGE. */
+	public static final int MAX_RESULTS_PER_PAGE = 100;
 
 	/** The Constant LOGGER. */
 	static final Logger LOGGER = Logger.getLogger(SearchReporter.class);
@@ -62,8 +65,13 @@ public class SearchReporter {
 	        ExecutionException, ItemFinderException {
 		final StringBuilder emailBody = new StringBuilder();
 
-		final String runReport = reporter.runReport(searches, groups,
-		        config.getIntegerProperty("freecycle.search.period"), formatter, em);
+		Integer resultsPerPage = config.getIntegerProperty("freecycle.search.resultsperpage");
+		if (null == resultsPerPage) {
+			resultsPerPage = SearchReporter.MAX_RESULTS_PER_PAGE;
+		}
+		final String runReport = reporter
+		        .runReport(searches, groups, config.getIntegerProperty("freecycle.search.period"),
+		                formatter, em, resultsPerPage);
 		if (failIfEmpty && runReport.equals(QueryReporter.NO_RESULTS)) {
 			throw new ItemFinderException("No results found for " + searches);
 		}
@@ -74,7 +82,8 @@ public class SearchReporter {
 		emailBody.append("<hr/>");
 		emailBody.append(formatter.formatSubHeader("Searched " + Arrays.asList(groups)
 		        + " for everything"));
-		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em));
+		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em,
+		        resultsPerPage));
 		return emailBody.toString();
 	}
 
@@ -105,7 +114,7 @@ public class SearchReporter {
 	        final QueryReporter reporter, final boolean failIfEmpty) throws InterruptedException,
 	        ExecutionException {
 		SearchReporter.LOGGER.info("generateSearch:" + Arrays.asList(searches) + " - "
-				+ Arrays.asList(groups));
+		        + Arrays.asList(groups));
 		try {
 			final String text = SearchReporter.generateReport(config, searches, groups, formatter,
 			        em, reporter, failIfEmpty);
@@ -137,6 +146,12 @@ public class SearchReporter {
 		emailSender.sendMessage(config.getProperty("freecycle.email.from.email"),
 		        config.getProperty("freecycle.email.from.name"), "Matching Freecycle items found",
 		        emailBody.toString(), true, session, toEmail);
+	}
+
+	/**
+	 * Instantiates a new search reporter.
+	 */
+	private SearchReporter() {
 	}
 
 }
