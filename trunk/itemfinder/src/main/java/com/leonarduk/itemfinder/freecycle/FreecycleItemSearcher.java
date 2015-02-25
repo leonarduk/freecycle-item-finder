@@ -31,133 +31,143 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  */
 public class FreecycleItemSearcher implements ItemSearcher {
 
-	/** The log. */
-	private final Logger log = Logger.getLogger(FreecycleItemSearcher.class);
+    /** The log. */
+    private final Logger log = Logger.getLogger(FreecycleItemSearcher.class);
 
-	/** The em. */
-	private final EntityManager em;
+    /** The em. */
+    private final EntityManager em;
 
-	/** The monitor. */
-	private final Object dbLock = new Object();
+    /** The monitor. */
+    private final Object dbLock = new Object();
 
-	/**
-	 * Instantiates a new freecycle item searcher.
-	 *
-	 * @param entityManager
-	 *            the entity manager
-	 */
-	public FreecycleItemSearcher(final EntityManager entityManager) {
-		this.em = entityManager;
-	}
+    /**
+     * Instantiates a new freecycle item searcher.
+     *
+     * @param entityManager
+     *            the entity manager
+     */
+    public FreecycleItemSearcher(final EntityManager entityManager) {
+        this.em = entityManager;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang. String)
-	 */
-	@Override
-	public final Set<Item> findItems(final QueryBuilder queryBuilder) throws ItemFinderException {
-		try {
-			final HtmlParser parser = queryBuilder.build();
-			this.log.info("Connect to " + parser);
-			return this.getPosts(parser, queryBuilder);
-		}
-		catch (ParserException | IOException e) {
-			e.printStackTrace();
-			throw new ItemFinderException(e.getMessage(), e);
-		}
-	}
+    /*
+     * (non-Javadoc)
+     * @see
+     * com.leonarduk.itemfinder.interfaces.ItemSearcher#findItems(java.lang.
+     * String)
+     */
+    @Override
+    public final Set<Item> findItems(final QueryBuilder queryBuilder)
+            throws ItemFinderException {
+        try {
+            final HtmlParser parser = queryBuilder.build();
+            this.log.info("Connect to " + parser);
+            return this.getPosts(parser, queryBuilder);
+        }
+        catch (ParserException | IOException e) {
+            e.printStackTrace();
+            throw new ItemFinderException(e.getMessage(), e);
+        }
+    }
 
-	/**
-	 * Gets the posts.
-	 *
-	 * @param parser
-	 *            the parser
-	 * @param queryBuilder
-	 *            the query builder
-	 * @return the posts
-	 * @throws ParserException
-	 *             the parser exception
-	 */
-	public final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder)
-	        throws ParserException {
-		final Set<Item> items = new HashSet<>();
-		final FreecycleScraper scraper = new FreecycleScraper(parser);
-		final List<Post> posts = scraper.getPosts();
-		for (final Post post : posts) {
-			if (this.shouldBeReported(post.getLink())) {
-				final FreecycleItem fullPost = scraper.getFullPost(post);
-				if (this.includePost(queryBuilder, fullPost)) {
-					this.persistPost(items, fullPost);
-				}
-			}
-		}
-		return items;
-	}
+    /**
+     * Gets the posts.
+     *
+     * @param parser
+     *            the parser
+     * @param queryBuilder
+     *            the query builder
+     * @return the posts
+     * @throws ParserException
+     *             the parser exception
+     */
+    public final Set<Item> getPosts(
+            final HtmlParser parser,
+            final QueryBuilder queryBuilder) throws ParserException {
+        final Set<Item> items = new HashSet<>();
+        final FreecycleScraper scraper = new FreecycleScraper(parser);
+        final List<Post> posts = scraper.getPosts();
+        for (final Post post : posts) {
+            if (this.shouldBeReported(post.getLink())) {
+                final FreecycleItem fullPost = scraper.getFullPost(post);
+                if (this.includePost(queryBuilder, fullPost)) {
+                    this.persistPost(items, fullPost);
+                }
+            }
+        }
+        return items;
+    }
 
-	/**
-	 * This will query if this is included in the search terms and if an entry has been created on
-	 * the DB or not, creating a {@link ReportableItem} entry if we are to send this one out.
-	 *
-	 * @param queryBuilder
-	 *            the query builder
-	 * @param post
-	 *            the full post
-	 * @return true, if successful
-	 */
-	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
-		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
-		        || post.getDescription().toLowerCase()
-		                .contains(queryBuilder.getSearchWords().toLowerCase());
-	}
+    /**
+     * This will query if this is included in the search terms and if an entry
+     * has been created on the DB or not, creating a {@link ReportableItem}
+     * entry if we are to send this one out.
+     *
+     * @param queryBuilder
+     *            the query builder
+     * @param post
+     *            the full post
+     * @return true, if successful
+     */
+    public final boolean includePost(
+            final QueryBuilder queryBuilder,
+            final FreecycleItem post) {
+        return post.getName().toLowerCase()
+                .contains(queryBuilder.getSearchWords().toLowerCase())
+               || post.getDescription().toLowerCase()
+                       .contains(queryBuilder.getSearchWords().toLowerCase());
+    }
 
-	/**
-	 * Persist post.
-	 *
-	 * @param items
-	 *            the items
-	 * @param fullPost
-	 *            the full post
-	 */
-	private synchronized void persistPost(final Set<Item> items, final FreecycleItem fullPost) {
-		synchronized (this.dbLock) {
-			final EntityTransaction tx = this.em.getTransaction();
-			tx.begin();
-			this.em.persist(fullPost);
-			items.add(fullPost);
-			tx.commit();
-		}
-	}
+    /**
+     * Persist post.
+     *
+     * @param items
+     *            the items
+     * @param fullPost
+     *            the full post
+     */
+    private synchronized void persistPost(
+            final Set<Item> items,
+            final FreecycleItem fullPost) {
+        synchronized (this.dbLock) {
+            final EntityTransaction tx = this.em.getTransaction();
+            tx.begin();
+            this.em.persist(fullPost);
+            items.add(fullPost);
+            tx.commit();
+        }
+    }
 
-	/**
-	 * Should be reported.
-	 *
-	 * @param link
-	 *            the link
-	 * @return true, if successful
-	 */
-	public final boolean shouldBeReported(final String link) {
-		ReportableItem test = this.em.find(ReportableItem.class, link);
-		if (test == null) {
-			synchronized (this.dbLock) {
-				final EntityTransaction tx = this.em.getTransaction();
-				try {
-					tx.begin();
-					test = new ReportableItem(link, false);
-					this.em.persist(test);
-					tx.commit();
-				}
-				catch (final RuntimeException re) {
-					this.log.error("persist failed", re);
-					if (tx.isActive()) {
-						tx.rollback();
-					}
-					throw re;
-				}
-			}
-			this.log.debug("persist successful");
-			return true;
-		}
-		return false;
-	}
+    /**
+     * Should be reported.
+     *
+     * @param link
+     *            the link
+     * @return true, if successful
+     */
+    public final boolean shouldBeReported(final String link) {
+        this.log.info("shouldBeReported ? " + link);
+        ReportableItem test = this.em.find(ReportableItem.class, link);
+        if (test == null) {
+            synchronized (this.dbLock) {
+                final EntityTransaction tx = this.em.getTransaction();
+                try {
+                    tx.begin();
+                    test = new ReportableItem(link, false);
+                    this.em.persist(test);
+                    tx.commit();
+                }
+                catch (final RuntimeException re) {
+                    this.log.error("persist failed", re);
+                    if (tx.isActive()) {
+                        tx.rollback();
+                    }
+                    throw re;
+                }
+            }
+            this.log.info("persist successful");
+            return true;
+        }
+        return false;
+    }
 }
