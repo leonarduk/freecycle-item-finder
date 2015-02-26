@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.ItemFinderException;
@@ -47,7 +48,7 @@ public class SearchReporterTest {
      *             the exception
      */
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         this.config = MockObjectGenerator.createFreecycleConfig();
         this.searches = new String[] {
                 "bed", "desk"
@@ -107,6 +108,7 @@ public class SearchReporterTest {
      * Test send report.
      */
     @Test
+    @Ignore
     public final void testSendReport() {
         final String emailBody = "test email text";
         SearchReporter.sendReport(this.config, emailBody);
