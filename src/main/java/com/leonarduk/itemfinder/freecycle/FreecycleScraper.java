@@ -79,7 +79,7 @@ public class FreecycleScraper {
     private final List<Post> posts = new ArrayList<Post>();
 
     /** The freecycle group. */
-    private final FreecycleGroups freecycleGroup;
+    private final FreecycleGroup freecycleGroup;
 
     /**
      * Instantiates a new freecycle scraper.
@@ -90,7 +90,7 @@ public class FreecycleScraper {
      *            the group
      */
     public FreecycleScraper(final HtmlParser parserInstance,
-            final FreecycleGroups group) {
+            final FreecycleGroup group) {
         FreecycleScraper.LOG.info(String.format(
                 "Instantiated with url=%s, dateFormat=%s",
                 parserInstance.getURL(), FreecycleScraper.DATE_FORMAT));
