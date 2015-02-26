@@ -71,6 +71,26 @@ public class FreecycleItemSearcher implements ItemSearcher {
     }
 
     /**
+     * Gets the latest post.
+     *
+     * @param groups
+     *            the groups
+     * @return the latest post
+     */
+    private LatestPost getLatestPost(final FreecycleGroups groups) {
+        LatestPost latest = this.em.find(LatestPost.class, groups);
+        if (latest == null) {
+            synchronized (this.dbLock) {
+                latest = new LatestPost(groups);
+                latest = this.saveLatestPost(groups, latest);
+            }
+            this.log.info("persist successful");
+        }
+        return latest;
+
+    }
+
+    /**
      * Gets the posts.
      *
      * @param parser
@@ -85,16 +105,23 @@ public class FreecycleItemSearcher implements ItemSearcher {
             final HtmlParser parser,
             final QueryBuilder queryBuilder) throws ParserException {
         final Set<Item> items = new HashSet<>();
-        final FreecycleScraper scraper = new FreecycleScraper(parser);
+        final FreecycleScraper scraper =
+                new FreecycleScraper(parser, queryBuilder.getGroup());
+        final LatestPost latest = this.getLatestPost(queryBuilder.getGroup());
+        int lastIndex = latest.getLatestPostNumber();
         final List<Post> posts = scraper.getPosts();
         for (final Post post : posts) {
-            if (this.shouldBeReported(post.getLink())) {
+            if (post.getPostId() > lastIndex) {
+                lastIndex = post.getPostId();
+            }
+            if (this.shouldBeReported(post, latest)) {
                 final FreecycleItem fullPost = scraper.getFullPost(post);
                 if (this.includePost(queryBuilder, fullPost)) {
-                    this.persistPost(items, fullPost);
+                    items.add(fullPost);
                 }
             }
         }
+        this.saveLatestPost(queryBuilder.getGroup(), latest);
         return items;
     }
 
@@ -119,55 +146,54 @@ public class FreecycleItemSearcher implements ItemSearcher {
     }
 
     /**
-     * Persist post.
+     * Save latest post.
      *
-     * @param items
-     *            the items
-     * @param fullPost
-     *            the full post
+     * @param groups
+     *            the groups
+     * @param latest
+     *            the latest
+     * @return the latest post
      */
-    private synchronized void persistPost(
-            final Set<Item> items,
-            final FreecycleItem fullPost) {
-        synchronized (this.dbLock) {
-            final EntityTransaction tx = this.em.getTransaction();
+    private LatestPost saveLatestPost(
+            final FreecycleGroups groups,
+            final LatestPost latest) {
+        final EntityTransaction tx = this.em.getTransaction();
+        try {
             tx.begin();
-            this.em.persist(fullPost);
-            items.add(fullPost);
+            this.em.persist(latest);
             tx.commit();
         }
+        catch (final RuntimeException re) {
+            this.log.error("persist failed", re);
+            if (tx.isActive()) {
+                tx.rollback();
+            }
+            throw re;
+        }
+        return latest;
     }
 
     /**
      * Should be reported.
      *
-     * @param link
+     * @param post
      *            the link
+     * @param latest
+     *            the latest
      * @return true, if successful
      */
-    public final boolean shouldBeReported(final String link) {
-        this.log.info("shouldBeReported ? " + link);
-        ReportableItem test = this.em.find(ReportableItem.class, link);
-        if (test == null) {
-            synchronized (this.dbLock) {
-                final EntityTransaction tx = this.em.getTransaction();
-                try {
-                    tx.begin();
-                    test = new ReportableItem(link, false);
-                    this.em.persist(test);
-                    tx.commit();
-                }
-                catch (final RuntimeException re) {
-                    this.log.error("persist failed", re);
-                    if (tx.isActive()) {
-                        tx.rollback();
-                    }
-                    throw re;
-                }
-            }
-            this.log.info("persist successful");
-            return true;
-        }
-        return false;
+    public final boolean shouldBeReported(
+            final Post post,
+            final LatestPost latest) {
+        final String link = post.getLink();
+        final boolean shouldBeReported =
+                post.getPostId() > latest.getLatestPostNumber();
+
+        post.getFreecycleGroup();
+        this.log.info("report?: " + shouldBeReported + " ID: "
+                      + post.getPostId() + " Last: "
+                      + latest.getLatestPostNumber() + " URL:" + link);
+
+        return shouldBeReported;
     }
 }
