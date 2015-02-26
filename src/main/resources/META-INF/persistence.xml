@@ -8,6 +8,7 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 		<class>com.leonarduk.itemfinder.freecycle.ReportableItem</class>
 		<class>com.leonarduk.itemfinder.freecycle.FreecycleItem</class>
+		<class>com.leonarduk.itemfinder.freecycle.LatestPost</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
