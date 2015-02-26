@@ -15,7 +15,8 @@ import com.leonarduk.itemfinder.query.AbstractQueryBuilder;
 import com.leonarduk.itemfinder.query.QueryBuilder;
 
 /**
- * use http://www.freemesa.org/post.php?topic=124814&distance=124.27423844747&city
+ * use
+ * http://www.freemesa.org/post.php?topic=124814&distance=124.27423844747&city
  * =252713&type=Offer&ret=view&item=&skip=2 instead?
  *
  * @author Stephen Leonard
@@ -84,8 +85,8 @@ public class FreecycleQueryBuilder extends
      */
     @Override
     public final HtmlParser build() throws ParserException, IOException {
-        final StringBuilder builder = new StringBuilder(
-                "https://groups.freecycle.org/group/");
+        final StringBuilder builder =
+                new StringBuilder("https://groups.freecycle.org/group/");
         builder.append(this.town.url());
 
         builder.append("/posts/search");
@@ -115,6 +116,11 @@ public class FreecycleQueryBuilder extends
         else {
             return this.getGETConnection(builder.toString(), parameters);
         }
+    }
+
+    @Override
+    public final FreecycleGroups getGroup() {
+        return this.town;
     }
 
     /**
@@ -163,7 +169,8 @@ public class FreecycleQueryBuilder extends
 
     /*
      * (non-Javadoc)
-     * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
+     * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int,
+     * int)
      */
     @Override
     public final FreecycleQueryBuilder setDateEnd(
@@ -176,7 +183,8 @@ public class FreecycleQueryBuilder extends
 
     /*
      * (non-Javadoc)
-     * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
+     * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int,
+     * int)
      */
     @Override
     public final FreecycleQueryBuilder setDateStart(
@@ -189,7 +197,9 @@ public class FreecycleQueryBuilder extends
 
     /*
      * (non-Javadoc)
-     * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate)
+     * @see
+     * com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate
+     * )
      */
     @Override
     public final FreecycleQueryBuilder setDateStart(final LocalDate date) {
@@ -248,7 +258,9 @@ public class FreecycleQueryBuilder extends
 
     /*
      * (non-Javadoc)
-     * @see com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.String)
+     * @see
+     * com.leonarduk.itemfinder.query.QueryBuilder#setSearchWords(java.lang.
+     * String)
      */
     @Override
     public final FreecycleQueryBuilder setSearchWords(final String filterValue) {
