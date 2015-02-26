@@ -6,7 +6,7 @@ package com.leonarduk.itemfinder.freecycle;
 /**
  * The Enum FreecycleGroups.
  */
-public enum FreecycleGroups {
+public enum FreecycleGroup {
 
 	/** The kingston. */
 	kingston("freecycle-kingston"),
@@ -36,7 +36,7 @@ public enum FreecycleGroups {
 	 * @param aUrl
 	 *            the a url
 	 */
-	private FreecycleGroups(final String aUrl) {
+	private FreecycleGroup(final String aUrl) {
 		this.url = aUrl;
 	}
 

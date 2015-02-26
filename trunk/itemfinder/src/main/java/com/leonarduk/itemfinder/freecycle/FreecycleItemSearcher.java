@@ -77,7 +77,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
      *            the groups
      * @return the latest post
      */
-    private LatestPost getLatestPost(final FreecycleGroups groups) {
+    public LatestPost getLatestPost(final FreecycleGroup groups) {
         LatestPost latest = this.em.find(LatestPost.class, groups);
         if (latest == null) {
             synchronized (this.dbLock) {
@@ -141,8 +141,8 @@ public class FreecycleItemSearcher implements ItemSearcher {
             final FreecycleItem post) {
         return post.getName().toLowerCase()
                 .contains(queryBuilder.getSearchWords().toLowerCase())
-               || post.getDescription().toLowerCase()
-                       .contains(queryBuilder.getSearchWords().toLowerCase());
+                || post.getDescription().toLowerCase()
+                .contains(queryBuilder.getSearchWords().toLowerCase());
     }
 
     /**
@@ -155,7 +155,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
      * @return the latest post
      */
     private LatestPost saveLatestPost(
-            final FreecycleGroups groups,
+            final FreecycleGroup groups,
             final LatestPost latest) {
         final EntityTransaction tx = this.em.getTransaction();
         try {
@@ -189,11 +189,11 @@ public class FreecycleItemSearcher implements ItemSearcher {
         final boolean shouldBeReported =
                 post.getPostId() > latest.getLatestPostNumber();
 
-        post.getFreecycleGroup();
-        this.log.info("report?: " + shouldBeReported + " ID: "
-                      + post.getPostId() + " Last: "
-                      + latest.getLatestPostNumber() + " URL:" + link);
+                post.getFreecycleGroup();
+                this.log.info("report?: " + shouldBeReported + " ID: "
+                        + post.getPostId() + " Last: "
+                        + latest.getLatestPostNumber() + " URL:" + link);
 
-        return shouldBeReported;
+                return shouldBeReported;
     }
 }

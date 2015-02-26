@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
+import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.html.HtmlParser;
 
@@ -39,7 +39,7 @@ public interface QueryBuilder {
      *
      * @return the group
      */
-    FreecycleGroups getGroup();
+    FreecycleGroup getGroup();
 
     /**
      * Gets the search words.

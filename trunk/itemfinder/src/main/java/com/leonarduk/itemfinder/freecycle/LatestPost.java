@@ -23,7 +23,7 @@ public class LatestPost {
 
     /** The group name. */
     @Id
-    private FreecycleGroups groupName;
+    private FreecycleGroup groupName;
 
     /** The latest post number. */
     @Basic
@@ -38,7 +38,7 @@ public class LatestPost {
      * @param freecycleGroup
      *            the freecycle group
      */
-    public LatestPost(final FreecycleGroups freecycleGroup) {
+    public LatestPost(final FreecycleGroup freecycleGroup) {
         this.groupName = freecycleGroup;
         this.latestPostNumber = 0;
     }
@@ -48,7 +48,7 @@ public class LatestPost {
      *
      * @return the group
      */
-    public final FreecycleGroups getGroup() {
+    public final FreecycleGroup getGroup() {
         return this.groupName;
     }
 
@@ -59,6 +59,10 @@ public class LatestPost {
      */
     public final int getLatestPostNumber() {
         return this.latestPostNumber;
+    }
+
+    public void setLatestPostNumber(final int lastIndex) {
+        this.latestPostNumber = lastIndex;
     }
 
 }

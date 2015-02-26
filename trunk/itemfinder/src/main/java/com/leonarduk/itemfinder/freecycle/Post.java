@@ -23,7 +23,7 @@ public class Post {
     private final String title;
 
     /** The freecycle group. */
-    private final FreecycleGroups freecycleGroup;
+    private final FreecycleGroup freecycleGroup;
 
     /** The post id. */
     private final int postId;
@@ -55,7 +55,7 @@ public class Post {
      */
     public Post(final PostType postTypeValue, final Date postDateValue,
             final String titleValue, final String linkValue,
-            final FreecycleGroups group) {
+            final FreecycleGroup group) {
         this.postType = postTypeValue;
         this.postDate = postDateValue;
         this.title = titleValue;
@@ -118,7 +118,7 @@ public class Post {
      *
      * @return the freecycle group
      */
-    public final FreecycleGroups getFreecycleGroup() {
+    public final FreecycleGroup getFreecycleGroup() {
         return this.freecycleGroup;
     }
 

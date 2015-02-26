@@ -17,7 +17,7 @@ import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
 
 import com.leonarduk.itemfinder.format.Formatter;
-import com.leonarduk.itemfinder.freecycle.FreecycleGroups;
+import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
@@ -117,7 +117,7 @@ public class QueryReporter {
 	 *             the execution exception
 	 */
 	public final Set<Item> runQueries(final String[] searches,
-	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroups[] groups,
+	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroup[] groups,
 	        final EntityManager em) throws InterruptedException, ExecutionException {
 		final ExecutorService executor = Executors.newFixedThreadPool(20);
 		final Set<Item> resultsSet = new HashSet<>();
@@ -127,7 +127,7 @@ public class QueryReporter {
 			for (final String filter : searches) {
 
 				final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
-				for (final FreecycleGroups freecycleGroups : groups) {
+				for (final FreecycleGroup freecycleGroups : groups) {
 					final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
 					        queryBuilder);
 					queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
@@ -172,7 +172,7 @@ public class QueryReporter {
 	 * @throws ExecutionException
 	 *             the execution exception
 	 */
-	public final String runReport(final String[] searches, final FreecycleGroups[] groups,
+	public final String runReport(final String[] searches, final FreecycleGroup[] groups,
 	        final int timeperiod, final Formatter formatter, final EntityManager em,
 			final int resultsPerPageNumber) throws InterruptedException, ExecutionException {
 

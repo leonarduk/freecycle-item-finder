@@ -26,13 +26,13 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  * @since 21 Jan 2015
  */
 public class FreecycleQueryBuilder extends
-        AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
+AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
 
     /** The Constant DEFAULT_ITEMS_PER_PAGE. */
     private static final int DEFAULT_ITEMS_PER_PAGE = 50;
 
     /** The town. */
-    private FreecycleGroups town;
+    private FreecycleGroup town;
 
     /** The filter. */
     private String filter;
@@ -119,7 +119,7 @@ public class FreecycleQueryBuilder extends
     }
 
     @Override
-    public final FreecycleGroups getGroup() {
+    public final FreecycleGroup getGroup() {
         return this.town;
     }
 
@@ -215,7 +215,7 @@ public class FreecycleQueryBuilder extends
      * @return the freecycle query builder
      */
     public final FreecycleQueryBuilder setIncludeOffered(final boolean include) {
-        this.includeWanted = include;
+        this.includeOffered = include;
         return this;
     }
 
@@ -275,7 +275,7 @@ public class FreecycleQueryBuilder extends
      *            the town2
      * @return the freecycle query builder
      */
-    public final FreecycleQueryBuilder setTown(final FreecycleGroups town2) {
+    public final FreecycleQueryBuilder setTown(final FreecycleGroup town2) {
         this.town = town2;
         return this;
     }
