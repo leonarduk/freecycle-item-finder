@@ -1,5 +1,5 @@
 #!/bin/bash
-JAR=itemfinder-1.1.2-jar-with-dependencies.jar
+JAR=itemfinder-1.1.3-jar-with-dependencies.jar
 PID=`ps -ef  | grep $JAR | grep -v grep | awk  ' { print $2 } '`
 
 if [[ $PID != '' ]]; then
@@ -9,4 +9,4 @@ else
 echo "Not Running - will start"
 fi
 cd /home/stephen/workspace/luk/trunk/itemfinder
-java -jar target/$JAR
+nohup java -jar target/$JAR > /dev/null 2>&1 &
