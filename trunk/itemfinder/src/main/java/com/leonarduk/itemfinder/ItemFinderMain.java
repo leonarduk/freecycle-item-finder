@@ -68,27 +68,27 @@ public final class ItemFinderMain {
                 Persistence.createEntityManagerFactory("ReportableItem");
         final EntityManager em = emf.createEntityManager();
         final QueryReporter reporter = new QueryReporter();
-        boolean failIfEmpty = true;
+        final boolean failIfEmpty = true;
         new SearchReporter().generateSearch(config, searches, groups,
                 formatter, em, reporter, failIfEmpty);
 
-        while (true) {
-
-            final int millisecondsPerSecond = 1000;
-            final int secondsPerMinute = 60;
-            final int minutesToWait =
-                    config.getIntegerProperty("freecycle.search.interval");
-
-            final long time =
-                    millisecondsPerSecond * secondsPerMinute * minutesToWait;
-            ItemFinderMain.LOGGER
-            .info("Waiting " + minutesToWait + " minutes.");
-
-            Thread.sleep(time);
-            failIfEmpty = true;
-            new SearchReporter().generateSearch(config, searches, groups,
-                    formatter, em, reporter, failIfEmpty);
-        }
+        // while (true) {
+        //
+        // final int millisecondsPerSecond = 1000;
+        // final int secondsPerMinute = 60;
+        // final int minutesToWait =
+        // config.getIntegerProperty("freecycle.search.interval");
+        //
+        // final long time =
+        // millisecondsPerSecond * secondsPerMinute * minutesToWait;
+        // ItemFinderMain.LOGGER
+        // .info("Waiting " + minutesToWait + " minutes.");
+        //
+        // Thread.sleep(time);
+        // failIfEmpty = true;
+        // new SearchReporter().generateSearch(config, searches, groups,
+        // formatter, em, reporter, failIfEmpty);
+        // }
     }
 
     /**
