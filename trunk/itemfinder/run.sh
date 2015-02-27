@@ -6,6 +6,6 @@ echo "Already running"
 else
 echo "Not Running - will start"
 cd /home/stephen/workspace/luk/trunk/itemfinder
-nohup java -jar target/itemfinder-1.1.1-jar-with-dependencies.jar & >/dev/null
+nohup java -jar target/itemfinder-1.1.3.1-jar-with-dependencies.jar & >/dev/null
 fi
 
