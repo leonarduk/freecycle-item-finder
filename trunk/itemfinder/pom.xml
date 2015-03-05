@@ -18,7 +18,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<core.version>0.0.6</core.version>
+		<core.version>1.0.0</core.version>
 
 	</properties>
 
@@ -52,6 +52,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
+					<verbose>true</verbose>
+					<fork>true</fork>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 					<compilerArgument>-Xlint:all</compilerArgument>
