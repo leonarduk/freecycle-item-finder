@@ -8,5 +8,5 @@ kill $PID
 else
 echo "Not Running - will start"
 fi
-cd /var/lib/workspace/ItemFinder/itemfinder
+cd /var/lib/jenkins/workspace/ItemFinder/itemfinder
 nohup java -jar target/$JAR > /dev/null 2>&1 &
