@@ -13,8 +13,8 @@
 		<param name="append" value="false" />
 		<param name="maxFileSize" value="10KB" />
 		<param name="maxBackupIndex" value="5" />
-		<!-- For Tomcat -->
-		<param name="file" value="/home/stephen/logs/itemfinder.log" />
+
+		<param name="file" value="/var/log/itemfinder/itemfinder.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
 		</layout>
@@ -34,7 +34,7 @@
 		<priority value="info" />
 		<appender-ref ref="file" />
 		<appender-ref ref="console" />
-		
+
 	</root>
 
 </log4j:configuration>
