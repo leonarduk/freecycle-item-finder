@@ -33,12 +33,26 @@ public class SearchReporterTest {
 
     /** The Constant LOGGER. */
     static final Logger LOGGER = Logger.getLogger(SearchReporterTest.class);
+
+    /** The config. */
     private FreecycleConfig config;
+
+    /** The searches. */
     private String[] searches;
+
+    /** The groups. */
     private FreecycleGroup[] groups;
+
+    /** The formatter. */
     private Formatter formatter;
+
+    /** The em. */
     private EntityManager em;
+
+    /** The reporter. */
     private QueryReporter reporter;
+
+    /** The fail if empty. */
     private boolean failIfEmpty;
 
     /**
@@ -54,7 +68,7 @@ public class SearchReporterTest {
                 "bed", "desk"
         };
         this.groups = new FreecycleGroup[] {
-                FreecycleGroup.kingston
+            FreecycleGroup.kingston
         };
         this.reporter = new QueryReporter();
         this.failIfEmpty = false;
@@ -76,9 +90,12 @@ public class SearchReporterTest {
     /**
      * Test generate report.
      *
-     * @throws ItemFinderException
-     * @throws ExecutionException
      * @throws InterruptedException
+     *             the interrupted exception
+     * @throws ExecutionException
+     *             the execution exception
+     * @throws ItemFinderException
+     *             the item finder exception
      */
     @Test
     public final void testGenerateReport()
@@ -92,9 +109,6 @@ public class SearchReporterTest {
 
     /**
      * Test generate search.
-     *
-     * @throws ExecutionException
-     * @throws InterruptedException
      */
     // @Test
     // public final void testGenerateSearch()

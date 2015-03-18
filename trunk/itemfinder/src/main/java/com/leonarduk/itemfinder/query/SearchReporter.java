@@ -28,7 +28,6 @@ import com.leonarduk.itemfinder.freecycle.FreecycleScraper;
 import com.leonarduk.itemfinder.freecycle.LatestPost;
 import com.leonarduk.itemfinder.freecycle.Post;
 import com.leonarduk.itemfinder.freecycle.PostType;
-import com.leonarduk.itemfinder.freecycle.ReportableItem;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 
@@ -79,9 +78,9 @@ public final class SearchReporter {
             final EntityManager em,
             final QueryReporter reporter,
             final boolean failIfEmpty)
-                    throws InterruptedException,
-                    ExecutionException,
-                    ItemFinderException {
+            throws InterruptedException,
+            ExecutionException,
+            ItemFinderException {
         final StringBuilder emailBody = new StringBuilder();
 
         final Integer resultsPerPage = config.getResultsPerPage();
@@ -100,10 +99,10 @@ public final class SearchReporter {
         emailBody.append(runReport);
         emailBody.append("<hr/>");
         emailBody.append(formatter.formatSubHeader("Searched "
-                + Arrays.asList(groups)
-                + " for everything"));
+                                                   + Arrays.asList(groups)
+                                                   + " for everything"));
         emailBody.append(reporter.runReport(new String[] {
-                ""
+            ""
         }, groups, 1, formatter, em, resultsPerPage));
         return emailBody.toString();
     }
@@ -136,6 +135,7 @@ public final class SearchReporter {
                 session, toEmail);
     }
 
+    /** The db lock. */
     private final Object dbLock = new Object();
 
     /**
@@ -153,9 +153,7 @@ public final class SearchReporter {
      *            the item
      * @return the string
      */
-    public final String addPostDetails(
-            final Formatter formatter,
-            final Item item) {
+    public String addPostDetails(final Formatter formatter, final Item item) {
         final String spacer = formatter.getNewLine();
         final StringBuilder emailBodyBuilder = new StringBuilder(spacer);
         emailBodyBuilder.append(formatter.getNewSection());
@@ -198,7 +196,9 @@ public final class SearchReporter {
      * @throws ExecutionException
      *             the execution exception
      * @throws ParserException
+     *             the parser exception
      * @throws IOException
+     *             Signals that an I/O exception has occurred.
      */
     public void generateSearch(
             final FreecycleConfig config,
@@ -208,12 +208,15 @@ public final class SearchReporter {
             final EntityManager em,
             final QueryReporter reporter,
             final boolean failIfEmpty)
-                    throws InterruptedException,
-                    ExecutionException,
-                    ParserException,
-                    IOException {
+            throws InterruptedException,
+            ExecutionException,
+            ParserException,
+            IOException {
         SearchReporter.LOGGER.info("generateSearch:" + Arrays.asList(searches)
-                + " - " + Arrays.asList(groups));
+                                   + " - " + Arrays.asList(groups));
+
+        final EntityTransaction tx = em.getTransaction();
+        tx.begin();
         try {
 
             final long timeperiod =
@@ -221,11 +224,11 @@ public final class SearchReporter {
             final int resultsPerPageNumber = config.getResultsPerPage();
             final FreecycleQueryBuilder queryBuilder =
                     new FreecycleQueryBuilder()
-            .setIncludeWanted(false)
-            .setIncludeOffered(true)
-            .setDateStart(
-                    LocalDate.now().minus(timeperiod,
-                            ChronoUnit.DAYS)).useGet()
+                            .setIncludeWanted(false)
+                            .setIncludeOffered(true)
+                            .setDateStart(
+                                    LocalDate.now().minus(timeperiod,
+                                            ChronoUnit.DAYS)).useGet()
                             .setResultsPerPage(resultsPerPageNumber);
             final StringBuilder wantedItems = new StringBuilder();
             final StringBuilder otherItems = new StringBuilder();
@@ -245,52 +248,54 @@ public final class SearchReporter {
                 final List<Post> posts = scraper.getPosts();
 
                 for (final Post post : posts) {
-                    if (post.getPostId() > lastIndex) {
-                        lastIndex = post.getPostId();
-                    }
-                    if (this.shouldBeReported(post, latest)) {
-                        final FreecycleItem fullPost =
-                                scraper.getFullPost(post);
-                        if (this.includePost(searches, fullPost)) {
-                            wantedItems.append(this.addPostDetails(formatter,
-                                    fullPost));
-                        }
-                        else {
-                            otherItems.append(this.addPostDetails(formatter,
-                                    fullPost));
-                        }
-                    }
+                    lastIndex =
+                            this.processIndividualPost(searches, formatter,
+                                    wantedItems, otherItems, scraper, latest,
+                                    lastIndex, post);
                 }
-                latest.setLatestPostNumber(lastIndex);
-                this.saveLatestPost(queryBuilder.getGroup(), latest, em);
+                this.saveLatestPost(latest, em);
 
             }
 
             final StringBuilder emailBody = new StringBuilder();
 
             if (failIfEmpty && (wantedItems.length() == 0)) {
-                throw new ItemFinderException("No results found for "
-                        + searches);
-            }
-            final String heading =
-                    "Searched " + Arrays.asList(groups) + " for " + " "
-                            + Arrays.asList(searches);
-            emailBody.append(formatter.formatSubHeader(heading));
-            emailBody.append(wantedItems);
-            emailBody.append("<hr/>");
-            emailBody.append(formatter.formatSubHeader("Searched "
-                    + Arrays.asList(groups)
-                    + " for everything"));
-            emailBody.append(otherItems);
+                SearchReporter.LOGGER.info("No results - not sending message");
 
-            final String text = emailBody.toString();
-            SearchReporter.sendReport(config, text);
+            }
+            else {
+                final String heading =
+                        "Searched " + Arrays.asList(groups) + " for " + " "
+                                + Arrays.asList(searches);
+                emailBody.append(formatter.formatSubHeader(heading));
+                emailBody.append(wantedItems);
+                emailBody.append("<hr/>");
+                emailBody
+                        .append(formatter.formatSubHeader("Searched "
+                                                          + Arrays.asList(groups)
+                                                          + " for everything"));
+                emailBody.append(otherItems);
+
+                final String text = emailBody.toString();
+                SearchReporter.sendReport(config, text);
+            }
+            tx.commit();
         }
-        catch (final ItemFinderException e) {
-            SearchReporter.LOGGER.info("No results - not sending message");
+        catch (final Throwable e) {
+            tx.rollback();
+            SearchReporter.LOGGER.fatal("Unhandled error:", e);
         }
     }
 
+    /**
+     * Gets the latest post.
+     *
+     * @param groups
+     *            the groups
+     * @param em
+     *            the em
+     * @return the latest post
+     */
     public LatestPost getLatestPost(
             final FreecycleGroup groups,
             final EntityManager em) {
@@ -298,7 +303,7 @@ public final class SearchReporter {
         if (latest == null) {
             synchronized (this.dbLock) {
                 latest = new LatestPost(groups);
-                latest = this.saveLatestPost(groups, latest, em);
+                latest = this.saveLatestPost(latest, em);
             }
             SearchReporter.LOGGER.info("persist successful");
         }
@@ -308,8 +313,8 @@ public final class SearchReporter {
 
     /**
      * This will query if this is included in the search terms and if an entry
-     * has been created on the DB or not, creating a {@link ReportableItem}
-     * entry if we are to send this one out.
+     * has been created on the DB or not, creating a ReportableItem entry if we
+     * are to send this one out.
      *
      * @param queryBuilder
      *            the query builder
@@ -317,15 +322,24 @@ public final class SearchReporter {
      *            the full post
      * @return true, if successful
      */
-    public final boolean includePost(
+    public boolean includePost(
             final QueryBuilder queryBuilder,
             final FreecycleItem post) {
         return post.getName().toLowerCase()
                 .contains(queryBuilder.getSearchWords().toLowerCase())
-                || post.getDescription().toLowerCase()
-                .contains(queryBuilder.getSearchWords().toLowerCase());
+               || post.getDescription().toLowerCase()
+                       .contains(queryBuilder.getSearchWords().toLowerCase());
     }
 
+    /**
+     * Include post.
+     *
+     * @param searches
+     *            the searches
+     * @param fullPost
+     *            the full post
+     * @return true, if successful
+     */
     private boolean includePost(
             final String[] searches,
             final FreecycleItem fullPost) {
@@ -337,8 +351,63 @@ public final class SearchReporter {
         return false;
     }
 
+    /**
+     * Process individual post.
+     *
+     * @param searches
+     *            the searches
+     * @param formatter
+     *            the formatter
+     * @param wantedItems
+     *            the wanted items
+     * @param otherItems
+     *            the other items
+     * @param scraper
+     *            the scraper
+     * @param latest
+     *            the latest
+     * @param lastIndex
+     *            the last index
+     * @param post
+     *            the post
+     * @return the int
+     * @throws ParserException
+     *             the parser exception
+     */
+    public int processIndividualPost(
+            final String[] searches,
+            final Formatter formatter,
+            final StringBuilder wantedItems,
+            final StringBuilder otherItems,
+            final FreecycleScraper scraper,
+            final LatestPost latest,
+            final int lastIndex,
+            final Post post) throws ParserException {
+        if (this.shouldBeReported(post, latest)) {
+            final FreecycleItem fullPost = scraper.getFullPost(post);
+            if (this.includePost(searches, fullPost)) {
+                wantedItems.append(this.addPostDetails(formatter, fullPost));
+                if (post.getPostId() > lastIndex) {
+                    latest.setLatestPostNumber(post.getPostId());
+                }
+            }
+            else {
+                otherItems.append(this.addPostDetails(formatter, fullPost));
+            }
+        }
+        return lastIndex;
+    }
+
+    /**
+     * Save latest post.
+     *
+     * @param latest
+     *            the latest
+     * @param em
+     *            the em
+     * @return the latest post
+     */
     private LatestPost saveLatestPost(
-            final FreecycleGroup groups,
             final LatestPost latest,
             final EntityManager em) {
         final EntityTransaction tx = em.getTransaction();
@@ -357,9 +426,16 @@ public final class SearchReporter {
         return latest;
     }
 
-    public final boolean shouldBeReported(
-            final Post post,
-            final LatestPost latest) {
+    /**
+     * Should be reported.
+     *
+     * @param post
+     *            the post
+     * @param latest
+     *            the latest
+     * @return true, if successful
+     */
+    public boolean shouldBeReported(final Post post, final LatestPost latest) {
         final String link = post.getLink();
         if (post.getPostType() != PostType.OFFER) {
             return false;
@@ -367,13 +443,13 @@ public final class SearchReporter {
         final boolean shouldBeReported =
                 post.getPostId() > latest.getLatestPostNumber();
 
-                post.getFreecycleGroup();
-                SearchReporter.LOGGER.info("report?: " + shouldBeReported + " ID: "
-                        + post.getPostId() + " Last: "
-                        + latest.getLatestPostNumber() + " URL:"
-                        + link);
+        post.getFreecycleGroup();
+        SearchReporter.LOGGER.info("report?: " + shouldBeReported + " ID: "
+                                   + post.getPostId() + " Last: "
+                                   + latest.getLatestPostNumber() + " URL:"
+                                   + link);
 
-                return shouldBeReported;
+        return shouldBeReported;
     }
 
 }

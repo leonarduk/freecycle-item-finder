@@ -21,12 +21,25 @@ import org.junit.Test;
  */
 public class PostTest {
 
+    /** The post type value. */
     private PostType postTypeValue;
+
+    /** The post date value. */
     private Date postDateValue;
+
+    /** The title value. */
     private String titleValue;
+
+    /** The link value. */
     private String linkValue;
+
+    /** The group. */
     private FreecycleGroup group;
+
+    /** The post. */
     private Post post;
+
+    /** The post id. */
     private int postId;
 
     /**
@@ -36,11 +49,12 @@ public class PostTest {
      *             the exception
      */
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         this.postDateValue = new Date();
         this.postTypeValue = PostType.OFFER;
         this.titleValue = "Kids Snow Boots";
-        this.postId = 45736770;
+        final int samplePostId = 45736770;
+        this.postId = samplePostId;
         this.linkValue =
                 "https://groups.freecycle.org/group/freecycle-kingston/posts/"
                         + this.postId + "/Kids%20Snow%20Boots";
@@ -114,7 +128,8 @@ public class PostTest {
     @Test
     public final void testToPost() {
         final String expected =
-                "OFFER: Kids Snow Boots (https://groups.freecycle.org/group/freecycle-kingston/posts/45736770/Kids%20Snow%20Boots)";
+                "OFFER: Kids Snow Boots (https://groups.freecycle.org/group/freecycle-kingston"
+                        + "/posts/45736770/Kids%20Snow%20Boots)";
         Assert.assertEquals(expected, this.post.toPost());
     }
 
@@ -125,7 +140,8 @@ public class PostTest {
     public final void testToString() {
         final String expected =
                 this.postDateValue
-                        + ": OFFER: Kids Snow Boots (https://groups.freecycle.org/group/freecycle-kingston/posts/45736770/Kids%20Snow%20Boots)";
+                        + ": OFFER: Kids Snow Boots (https://groups.freecycle.org/group/"
+                        + "freecycle-kingston/posts/45736770/Kids%20Snow%20Boots)";
         Assert.assertEquals(expected, this.post.toString());
     }
 

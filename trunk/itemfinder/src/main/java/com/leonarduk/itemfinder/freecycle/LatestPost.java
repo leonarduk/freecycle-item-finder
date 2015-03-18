@@ -29,6 +29,9 @@ public class LatestPost {
     @Basic
     private int latestPostNumber;
 
+    /**
+     * Instantiates a new latest post.
+     */
     public LatestPost() {
     }
 
@@ -61,7 +64,13 @@ public class LatestPost {
         return this.latestPostNumber;
     }
 
-    public void setLatestPostNumber(final int lastIndex) {
+    /**
+     * Sets the latest post number.
+     *
+     * @param lastIndex
+     *            the new latest post number
+     */
+    public final void setLatestPostNumber(final int lastIndex) {
         this.latestPostNumber = lastIndex;
     }
 
