@@ -61,7 +61,7 @@ public class Post {
         this.title = titleValue;
         this.link = linkValue;
         final String[] urlParts = this.link.split("/");
-        int postIdIndex = 6;
+        final int postIdIndex = 6;
         this.postId = Integer.valueOf(urlParts[postIdIndex]);
         this.freecycleGroup = group;
     }
