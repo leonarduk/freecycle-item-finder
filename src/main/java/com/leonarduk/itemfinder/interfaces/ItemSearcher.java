@@ -8,8 +8,6 @@ import java.util.Set;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.query.QueryBuilder;
 
-// TODO: Auto-generated Javadoc
-
 /**
  * The Interface ItemSearcher.
  *
@@ -21,15 +19,15 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  */
 public interface ItemSearcher {
 
-	/**
-	 * Find items.
-	 *
-	 * @param queryBuilder
-	 *            the query builder
-	 * @return the sets the
-	 * @throws ItemFinderException
-	 *             the item finder exception
-	 */
-	Set<Item> findItems(QueryBuilder queryBuilder) throws ItemFinderException;
+    /**
+     * Find items.
+     *
+     * @param queryBuilder
+     *            the query builder
+     * @return the sets the
+     * @throws ItemFinderException
+     *             the item finder exception
+     */
+    Set<Item> findItems(QueryBuilder queryBuilder) throws ItemFinderException;
 
 }

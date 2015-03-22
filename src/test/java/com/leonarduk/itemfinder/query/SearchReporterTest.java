@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.leonarduk.core.email.EmailException;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.format.Formatter;
@@ -120,10 +121,12 @@ public class SearchReporterTest {
 
     /**
      * Test send report.
+     * 
+     * @throws EmailException
      */
     @Test
     @Ignore
-    public final void testSendReport() {
+    public final void testSendReport() throws EmailException {
         final String emailBody = "test email text";
         SearchReporter.sendReport(this.config, emailBody);
     }

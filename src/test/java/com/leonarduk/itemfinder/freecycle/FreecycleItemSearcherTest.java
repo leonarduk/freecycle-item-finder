@@ -22,7 +22,6 @@ import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class FreecycleItemSearcherTest.
  *
