@@ -255,7 +255,7 @@ public final class SearchReporter {
                                     wantedItems, otherItems, scraper, latest,
                                     lastIndex, post);
                 }
-                this.saveLatestPost(latest, em);
+                em.persist(latest);
 
             }
 
@@ -305,7 +305,7 @@ public final class SearchReporter {
         if (latest == null) {
             synchronized (this.dbLock) {
                 latest = new LatestPost(groups);
-                latest = this.saveLatestPost(latest, em);
+                em.persist(latest);
             }
             SearchReporter.LOGGER.info("persist successful");
         }
@@ -398,34 +398,6 @@ public final class SearchReporter {
             }
         }
         return lastIndex;
-    }
-
-    /**
-     * Save latest post.
-     *
-     * @param latest
-     *            the latest
-     * @param em
-     *            the em
-     * @return the latest post
-     */
-    private LatestPost saveLatestPost(
-            final LatestPost latest,
-            final EntityManager em) {
-        final EntityTransaction tx = em.getTransaction();
-        try {
-            tx.begin();
-            em.persist(latest);
-            tx.commit();
-        }
-        catch (final RuntimeException re) {
-            SearchReporter.LOGGER.error("persist failed", re);
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            throw re;
-        }
-        return latest;
     }
 
     /**
