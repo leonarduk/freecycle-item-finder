@@ -22,7 +22,6 @@ import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.interfaces.Item;
 
-// TODO: Auto-generated Javadoc
 /**
  * The Class QueryReporter.
  *
@@ -34,157 +33,181 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public class QueryReporter {
 
-	/** The Constant NO_RESULTS. */
-	public static final String NO_RESULTS = "No results";
-	/** The log. */
-	private static final Logger LOG = Logger.getLogger(QueryReporter.class);
+    /** The Constant NO_RESULTS. */
+    public static final String NO_RESULTS = "No results";
+    /** The log. */
+    private static final Logger LOG = Logger.getLogger(QueryReporter.class);
 
-	/**
-	 * Instantiates a new query reporter.
-	 */
-	public QueryReporter() {
-	}
+    /**
+     * Instantiates a new query reporter.
+     */
+    public QueryReporter() {
+    }
 
-	/**
-	 * Adds the post details.
-	 *
-	 * @param formatter
-	 *            the formatter
-	 * @param item
-	 *            the item
-	 * @return the string
-	 */
-	public final String addPostDetails(final Formatter formatter, final Item item) {
-		final String spacer = formatter.getNewLine();
-		final StringBuilder emailBodyBuilder = new StringBuilder(spacer);
-		emailBodyBuilder.append(formatter.getNewSection());
-		emailBodyBuilder.append(spacer);
+    /**
+     * Adds the post details.
+     *
+     * @param formatter
+     *            the formatter
+     * @param item
+     *            the item
+     * @return the string
+     */
+    public final String addPostDetails(
+            final Formatter formatter,
+            final Item item) {
+        final String spacer = formatter.getNewLine();
+        final StringBuilder emailBodyBuilder = new StringBuilder(spacer);
+        emailBodyBuilder.append(formatter.getNewSection());
+        emailBodyBuilder.append(spacer);
 
-		final String header = formatter.formatLink(item.getLink(), item.getName()) + " - "
-		        + item.getLocation() + " Posted: " + item.getPostedDate().toString();
+        final String header =
+                formatter.formatLink(item.getLink(), item.getName()) + " - "
+                        + item.getLocation() + " Posted: "
+                        + item.getPostedDate().toString();
 
-		emailBodyBuilder.append(formatter.formatSubHeader(header));
-		emailBodyBuilder.append(spacer);
+        emailBodyBuilder.append(formatter.formatSubHeader(header));
+        emailBodyBuilder.append(spacer);
 
-		emailBodyBuilder.append(item.getDescription());
+        emailBodyBuilder.append(item.getDescription());
 
-		emailBodyBuilder.append(item.getExtraHtml());
-		emailBodyBuilder.append(spacer);
-		return emailBodyBuilder.toString();
-	}
+        emailBodyBuilder.append(item.getExtraHtml());
+        emailBodyBuilder.append(spacer);
+        return emailBodyBuilder.toString();
+    }
 
-	/**
-	 * Convert results map to string.
-	 *
-	 * @param resultsSet
-	 *            the results map
-	 * @param formatter
-	 *            the formatter
-	 * @return the string
-	 */
-	public final String convertResultsSetToString(final Set<Item> resultsSet,
-	        final Formatter formatter) {
+    /**
+     * Convert results map to string.
+     *
+     * @param resultsSet
+     *            the results map
+     * @param formatter
+     *            the formatter
+     * @return the string
+     */
+    public final String convertResultsSetToString(
+            final Set<Item> resultsSet,
+            final Formatter formatter) {
 
-		final Set<String> uniqueitems = new HashSet<>();
-		final StringBuilder emailBodyBuilder = new StringBuilder();
+        final Set<String> uniqueitems = new HashSet<>();
+        final StringBuilder emailBodyBuilder = new StringBuilder();
 
-		for (final Item item : resultsSet) {
-			if (uniqueitems.contains(item.getLink())) {
-				QueryReporter.LOG.info("skip duplicate " + item);
-				continue;
-			}
-			uniqueitems.add(item.getLink());
-			emailBodyBuilder.append(this.addPostDetails(formatter, item));
-		}
-		return emailBodyBuilder.toString();
-	}
+        for (final Item item : resultsSet) {
+            if (uniqueitems.contains(item.getLink())) {
+                QueryReporter.LOG.info("skip duplicate " + item);
+                continue;
+            }
+            uniqueitems.add(item.getLink());
+            emailBodyBuilder.append(this.addPostDetails(formatter, item));
+        }
+        return emailBodyBuilder.toString();
+    }
 
-	/**
-	 * Run queries.
-	 *
-	 * @param searches
-	 *            the searches
-	 * @param queryBuilder
-	 *            the query builder
-	 * @param groups
-	 *            the groups
-	 * @param em
-	 *            the em
-	 * @return the map
-	 * @throws InterruptedException
-	 *             the interrupted exception
-	 * @throws ExecutionException
-	 *             the execution exception
-	 */
-	public final Set<Item> runQueries(final String[] searches,
-	        final FreecycleQueryBuilder queryBuilder, final FreecycleGroup[] groups,
-	        final EntityManager em) throws InterruptedException, ExecutionException {
-		final ExecutorService executor = Executors.newFixedThreadPool(20);
-		final Set<Item> resultsSet = new HashSet<>();
-		try {
-			final FreecycleItemSearcher searcher = new FreecycleItemSearcher(em);
+    /**
+     * Run queries.
+     *
+     * @param searches
+     *            the searches
+     * @param queryBuilder
+     *            the query builder
+     * @param groups
+     *            the groups
+     * @param em
+     *            the em
+     * @return the map
+     * @throws InterruptedException
+     *             the interrupted exception
+     * @throws ExecutionException
+     *             the execution exception
+     */
+    public final Set<Item> runQueries(
+            final String[] searches,
+            final FreecycleQueryBuilder queryBuilder,
+            final FreecycleGroup[] groups,
+            final EntityManager em)
+            throws InterruptedException,
+            ExecutionException {
+        final ExecutorService executor = Executors.newFixedThreadPool(20);
+        final Set<Item> resultsSet = new HashSet<>();
+        try {
+            final FreecycleItemSearcher searcher =
+                    new FreecycleItemSearcher(em);
 
-			for (final String filter : searches) {
+            for (final String filter : searches) {
 
-				final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
-				for (final FreecycleGroup freecycleGroups : groups) {
-					final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(
-					        queryBuilder);
-					queryBuilderCopy.setSearchWords(filter.toLowerCase()).setTown(freecycleGroups);
-					final CallableQuery query = new CallableQuery(searcher, queryBuilderCopy);
-					final FutureTask<Set<Item>> futureTask = new FutureTask<>(query);
-					tasks.add(futureTask);
-					executor.execute(futureTask);
-				}
-				for (final FutureTask<Set<Item>> futureTask : tasks) {
-					resultsSet.addAll(futureTask.get());
-				}
+                final Set<FutureTask<Set<Item>>> tasks = new HashSet<>();
+                for (final FreecycleGroup freecycleGroups : groups) {
+                    final FreecycleQueryBuilder queryBuilderCopy =
+                            new FreecycleQueryBuilder(queryBuilder);
+                    queryBuilderCopy.setSearchWords(filter.toLowerCase())
+                            .setTown(freecycleGroups);
+                    final CallableQuery query =
+                            new CallableQuery(searcher, queryBuilderCopy);
+                    final FutureTask<Set<Item>> futureTask =
+                            new FutureTask<>(query);
+                    tasks.add(futureTask);
+                    executor.execute(futureTask);
+                }
+                for (final FutureTask<Set<Item>> futureTask : tasks) {
+                    resultsSet.addAll(futureTask.get());
+                }
 
-			}
-		}
-		catch (final Exception e) {
-			QueryReporter.LOG.error("Caught error: " + e.getMessage(), e);
-		}
-		finally {
-			executor.shutdown();
-		}
-		return resultsSet;
-	}
+            }
+        }
+        catch (final Exception e) {
+            QueryReporter.LOG.error("Caught error: " + e.getMessage(), e);
+        }
+        finally {
+            executor.shutdown();
+        }
+        return resultsSet;
+    }
 
-	/**
-	 * Run report.
-	 *
-	 * @param searches
-	 *            the searches
-	 * @param groups
-	 *            the groups
-	 * @param timeperiod
-	 *            the timeperiod
-	 * @param formatter
-	 *            the formatter
-	 * @param em
-	 *            the em
-	 * @param resultsPerPageNumber
-	 *            the results per page number
-	 * @return the string
-	 * @throws InterruptedException
-	 *             the interrupted exception
-	 * @throws ExecutionException
-	 *             the execution exception
-	 */
-	public final String runReport(final String[] searches, final FreecycleGroup[] groups,
-	        final int timeperiod, final Formatter formatter, final EntityManager em,
-			final int resultsPerPageNumber) throws InterruptedException, ExecutionException {
+    /**
+     * Run report.
+     *
+     * @param searches
+     *            the searches
+     * @param groups
+     *            the groups
+     * @param timeperiod
+     *            the timeperiod
+     * @param formatter
+     *            the formatter
+     * @param em
+     *            the em
+     * @param resultsPerPageNumber
+     *            the results per page number
+     * @return the string
+     * @throws InterruptedException
+     *             the interrupted exception
+     * @throws ExecutionException
+     *             the execution exception
+     */
+    public final String runReport(
+            final String[] searches,
+            final FreecycleGroup[] groups,
+            final int timeperiod,
+            final Formatter formatter,
+            final EntityManager em,
+            final int resultsPerPageNumber)
+            throws InterruptedException,
+            ExecutionException {
 
-		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
-		.setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).usePost()
-		        .setResultsPerPage(resultsPerPageNumber);
-		final Set<Item> resultsSet = this.runQueries(searches, queryBuilder, groups, em);
-		final String emailBody = this.convertResultsSetToString(resultsSet, formatter);
-		if (emailBody.trim().isEmpty()) {
-			return QueryReporter.NO_RESULTS;
-		}
-		return emailBody;
-	}
+        final FreecycleQueryBuilder queryBuilder =
+                new FreecycleQueryBuilder()
+                        .setDateStart(
+                                LocalDate.now().minus(timeperiod,
+                                        ChronoUnit.DAYS)).usePost()
+                        .setResultsPerPage(resultsPerPageNumber);
+        final Set<Item> resultsSet =
+                this.runQueries(searches, queryBuilder, groups, em);
+        final String emailBody =
+                this.convertResultsSetToString(resultsSet, formatter);
+        if (emailBody.trim().isEmpty()) {
+            return QueryReporter.NO_RESULTS;
+        }
+        return emailBody;
+    }
 
 }

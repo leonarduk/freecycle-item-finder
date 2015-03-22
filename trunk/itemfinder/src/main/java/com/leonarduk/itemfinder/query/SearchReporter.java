@@ -16,6 +16,7 @@ import javax.persistence.EntityTransaction;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
+import com.leonarduk.core.email.EmailException;
 import com.leonarduk.core.email.EmailSender;
 import com.leonarduk.core.email.EmailSession;
 import com.leonarduk.itemfinder.ItemFinderException;
@@ -114,10 +115,11 @@ public final class SearchReporter {
      *            the config
      * @param emailBody
      *            the email body
+     * @throws EmailException
      */
     public static void sendReport(
             final FreecycleConfig config,
-            final String emailBody) {
+            final String emailBody) throws EmailException {
         final String[] toEmail = config.getArrayProperty("freecycle.email.to");
         final String user = config.getProperty("freecycle.email.user");
         final String server = config.getProperty("freecycle.email.server");
