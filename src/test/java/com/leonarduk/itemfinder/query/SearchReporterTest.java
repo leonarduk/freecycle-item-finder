@@ -14,10 +14,10 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.core.email.EmailException;
+import com.leonarduk.core.format.Formatter;
+import com.leonarduk.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.MockObjectGenerator;
-import com.leonarduk.itemfinder.format.Formatter;
-import com.leonarduk.itemfinder.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 
