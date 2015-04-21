@@ -112,18 +112,18 @@ public class FreecycleScraper {
      */
     public final FreecycleItem getFullPost(final Post post)
             throws ParserException {
-        final int locationNode = 16;
-        final int detailsNode = 19;
+        final int locationNode = 18;
+        final int detailsNode = 20;
         this.getParser().setURL(post.getLink());
         FreecycleScraper.LOG.info("Extracting details for " + post.getLink());
         final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
 
         final String location =
                 nodes.elementAt(locationNode).toPlainTextString()
-                .replace("Location :", "");
+                        .replace("Location :", "");
         final String detail =
                 nodes.elementAt(detailsNode).toPlainTextString()
-                .replace("Description  ", "").trim();
+                        .replace("Description  ", "").trim();
         this.getParser().setURL(post.getLink());
 
         final NodeList thumbnailNodes =
@@ -132,8 +132,8 @@ public class FreecycleScraper {
                                 new TagNameFilter("img"),
                                 new NotFilter(new HasAttributeFilter("alt",
                                         "The Freecycle Network")),
-                                        new NotFilter(new HasAttributeFilter("alt",
-                                                "Google+"))
+                                new NotFilter(new HasAttributeFilter("alt",
+                                        "Google+"))
 
                         }));
         final SimpleNodeIterator iter = thumbnailNodes.elements();
@@ -228,10 +228,10 @@ public class FreecycleScraper {
         final Node linkAndDescriptionNode = iterator.nextNode();
         final String description =
                 linkAndDescriptionNode.getChildren().elementAt(1)
-                .toPlainTextString();
+                        .toPlainTextString();
         final String link =
                 ((TagNode) linkAndDescriptionNode.getChildren().elementAt(1))
-                .getAttribute("href");
+                        .getAttribute("href");
 
         return new Post(postType, postDate, description, link,
                 this.freecycleGroup);
