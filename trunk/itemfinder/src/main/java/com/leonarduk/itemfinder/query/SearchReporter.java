@@ -286,6 +286,7 @@ public final class SearchReporter {
         catch (final Throwable e) {
             tx.rollback();
             SearchReporter.LOGGER.fatal("Unhandled error:", e);
+            throw new RuntimeException("Error in search", e);
         }
     }
 
