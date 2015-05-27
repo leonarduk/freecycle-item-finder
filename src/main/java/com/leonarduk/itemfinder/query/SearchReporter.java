@@ -236,24 +236,29 @@ public final class SearchReporter {
             final StringBuilder otherItems = new StringBuilder();
 
             for (final FreecycleGroup freecycleGroup : groups) {
+                LatestPost latest = null;
+                try {
 
-                final FreecycleQueryBuilder queryBuilderCopy =
-                        new FreecycleQueryBuilder(queryBuilder);
-                queryBuilderCopy.setTown(freecycleGroup);
-                final HtmlParser parser = queryBuilderCopy.build();
+                    final FreecycleQueryBuilder queryBuilderCopy =
+                            new FreecycleQueryBuilder(queryBuilder);
+                    queryBuilderCopy.setTown(freecycleGroup);
+                    final HtmlParser parser = queryBuilderCopy.build();
 
-                final FreecycleScraper scraper =
-                        new FreecycleScraper(parser, freecycleGroup);
-                final LatestPost latest =
-                        this.getLatestPost(freecycleGroup, em);
-                int lastIndex = latest.getLatestPostNumber();
-                final List<Post> posts = scraper.getPosts();
+                    final FreecycleScraper scraper =
+                            new FreecycleScraper(parser, freecycleGroup);
+                    latest = this.getLatestPost(freecycleGroup, em);
+                    int lastIndex = latest.getLatestPostNumber();
+                    final List<Post> posts = scraper.getPosts();
 
-                for (final Post post : posts) {
-                    lastIndex =
-                            this.processIndividualPost(searches, formatter,
-                                    wantedItems, otherItems, scraper, latest,
-                                    lastIndex, post);
+                    for (final Post post : posts) {
+                        lastIndex =
+                                this.processIndividualPost(searches, formatter,
+                                        wantedItems, otherItems, scraper,
+                                        latest, lastIndex, post);
+                    }
+                }
+                catch (Throwable e) {
+                    LOGGER.error("Error with " + freecycleGroup.name(), e);
                 }
                 em.persist(latest);
 
