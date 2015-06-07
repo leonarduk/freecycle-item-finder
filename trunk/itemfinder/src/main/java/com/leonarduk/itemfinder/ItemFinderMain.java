@@ -16,6 +16,8 @@ import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
 
+import com.leonarduk.core.email.EmailSender;
+import com.leonarduk.core.email.EmailSession;
 import com.leonarduk.core.format.Formatter;
 import com.leonarduk.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
@@ -69,8 +71,21 @@ public final class ItemFinderMain {
         final EntityManager em = emf.createEntityManager();
         final QueryReporter reporter = new QueryReporter();
         final boolean failIfEmpty = true;
+
+        final String[] toEmail = config.getArrayProperty("freecycle.email.to");
+        final String user = config.getProperty("freecycle.email.user");
+        final String server = config.getProperty("freecycle.email.server");
+        final String password = config.getProperty("freecycle.email.password");
+        final String port = config.getProperty("freecycle.email.port");
+
+        final EmailSender emailSender = new EmailSender();
+
+        final EmailSession session =
+                new EmailSession(user, password, server, port);
+
         new SearchReporter().generateSearch(config, searches, groups,
-                formatter, em, reporter, failIfEmpty);
+                formatter, em, reporter, failIfEmpty, emailSender, session,
+                toEmail);
     }
 
     /**

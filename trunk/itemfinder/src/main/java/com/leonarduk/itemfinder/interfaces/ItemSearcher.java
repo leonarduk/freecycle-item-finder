@@ -28,6 +28,7 @@ public interface ItemSearcher {
      * @throws ItemFinderException
      *             the item finder exception
      */
-    Set<Item> findItems(QueryBuilder queryBuilder) throws ItemFinderException;
+    Set<Item> findItems(QueryBuilder queryBuilder, Integer limit)
+            throws ItemFinderException;
 
 }

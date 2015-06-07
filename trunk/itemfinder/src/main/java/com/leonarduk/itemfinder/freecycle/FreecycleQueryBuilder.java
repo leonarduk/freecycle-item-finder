@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
@@ -26,8 +27,9 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  * @since 21 Jan 2015
  */
 public class FreecycleQueryBuilder extends
-AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
+        AbstractQueryBuilder<FreecycleQueryBuilder> implements QueryBuilder {
 
+    private Logger LOG = Logger.getLogger(FreecycleQueryBuilder.class);
     /** The Constant DEFAULT_ITEMS_PER_PAGE. */
     private static final int DEFAULT_ITEMS_PER_PAGE = 50;
 

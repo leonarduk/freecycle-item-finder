@@ -26,6 +26,8 @@ public class CallableQuery implements Callable<Set<Item>> {
     /** The query builder. */
     private final QueryBuilder queryBuilder;
 
+    private Integer limit;
+
     /**
      * Instantiates a new callable query.
      *
@@ -35,10 +37,11 @@ public class CallableQuery implements Callable<Set<Item>> {
      *            the query builder
      */
     public CallableQuery(final ItemSearcher itemSearcherValue,
-            final QueryBuilder queryBuilderInstance) {
+            final QueryBuilder queryBuilderInstance, Integer limit) {
         super();
         this.itemSearcher = itemSearcherValue;
         this.queryBuilder = queryBuilderInstance;
+        this.limit = limit;
     }
 
     /*
@@ -47,6 +50,6 @@ public class CallableQuery implements Callable<Set<Item>> {
      */
     @Override
     public final Set<Item> call() throws Exception {
-        return this.itemSearcher.findItems(this.queryBuilder);
+        return this.itemSearcher.findItems(this.queryBuilder, this.limit);
     }
 }

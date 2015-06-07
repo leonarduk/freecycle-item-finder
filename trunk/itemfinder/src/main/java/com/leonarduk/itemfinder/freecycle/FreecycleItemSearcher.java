@@ -57,12 +57,13 @@ public class FreecycleItemSearcher implements ItemSearcher {
      * String)
      */
     @Override
-    public final Set<Item> findItems(final QueryBuilder queryBuilder)
-            throws ItemFinderException {
+    public final Set<Item> findItems(
+            final QueryBuilder queryBuilder,
+            Integer limit) throws ItemFinderException {
         try {
             final HtmlParser parser = queryBuilder.build();
             this.log.info("Connect to " + parser);
-            return this.getPosts(parser, queryBuilder);
+            return this.getPosts(parser, queryBuilder, limit);
         }
         catch (ParserException | IOException e) {
             e.printStackTrace();
@@ -97,24 +98,33 @@ public class FreecycleItemSearcher implements ItemSearcher {
      *            the parser
      * @param queryBuilder
      *            the query builder
+     * @param limit
      * @return the posts
      * @throws ParserException
      *             the parser exception
      */
     public final Set<Item> getPosts(
             final HtmlParser parser,
-            final QueryBuilder queryBuilder) throws ParserException {
+            final QueryBuilder queryBuilder,
+            Integer limit) throws ParserException {
         final Set<Item> items = new HashSet<>();
         final FreecycleScraper scraper =
                 new FreecycleScraper(parser, queryBuilder.getGroup());
         final LatestPost latest = this.getLatestPost(queryBuilder.getGroup());
         int lastIndex = latest.getLatestPostNumber();
+
         final List<Post> posts = scraper.getPosts();
         for (final Post post : posts) {
+            if (limit < 1) {
+                break;
+            }
+            limit--;
             if (post.getPostId() > lastIndex) {
                 lastIndex = post.getPostId();
             }
+            log.info("Process " + post.getText());
             if (this.shouldBeReported(post, latest)) {
+
                 final FreecycleItem fullPost = scraper.getFullPost(post);
                 if (this.includePost(queryBuilder, fullPost)) {
                     items.add(fullPost);

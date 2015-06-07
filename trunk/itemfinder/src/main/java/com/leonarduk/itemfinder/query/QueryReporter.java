@@ -114,6 +114,7 @@ public class QueryReporter {
      *            the groups
      * @param em
      *            the em
+     * @param limit
      * @return the map
      * @throws InterruptedException
      *             the interrupted exception
@@ -124,9 +125,8 @@ public class QueryReporter {
             final String[] searches,
             final FreecycleQueryBuilder queryBuilder,
             final FreecycleGroup[] groups,
-            final EntityManager em)
-            throws InterruptedException,
-            ExecutionException {
+            final EntityManager em,
+            Integer limit) throws InterruptedException, ExecutionException {
         final ExecutorService executor = Executors.newFixedThreadPool(20);
         final Set<Item> resultsSet = new HashSet<>();
         try {
@@ -142,7 +142,7 @@ public class QueryReporter {
                     queryBuilderCopy.setSearchWords(filter.toLowerCase())
                             .setTown(freecycleGroups);
                     final CallableQuery query =
-                            new CallableQuery(searcher, queryBuilderCopy);
+                            new CallableQuery(searcher, queryBuilderCopy, limit);
                     final FutureTask<Set<Item>> futureTask =
                             new FutureTask<>(query);
                     tasks.add(futureTask);
@@ -178,6 +178,7 @@ public class QueryReporter {
      *            the em
      * @param resultsPerPageNumber
      *            the results per page number
+     * @param limit
      * @return the string
      * @throws InterruptedException
      *             the interrupted exception
@@ -190,9 +191,8 @@ public class QueryReporter {
             final int timeperiod,
             final Formatter formatter,
             final EntityManager em,
-            final int resultsPerPageNumber)
-            throws InterruptedException,
-            ExecutionException {
+            final int resultsPerPageNumber,
+            Integer limit) throws InterruptedException, ExecutionException {
 
         final FreecycleQueryBuilder queryBuilder =
                 new FreecycleQueryBuilder()
@@ -201,7 +201,7 @@ public class QueryReporter {
                                         ChronoUnit.DAYS)).usePost()
                         .setResultsPerPage(resultsPerPageNumber);
         final Set<Item> resultsSet =
-                this.runQueries(searches, queryBuilder, groups, em);
+                this.runQueries(searches, queryBuilder, groups, em, limit);
         final String emailBody =
                 this.convertResultsSetToString(resultsSet, formatter);
         if (emailBody.trim().isEmpty()) {
