@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
@@ -26,6 +27,8 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  */
 public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 
+    private static final Logger LOG = Logger
+            .getLogger(AbstractQueryBuilder.class);
     /** The use post. */
     private boolean usePost;
 
@@ -63,6 +66,8 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
             final Map<String, String> parameters)
             throws IOException,
             ParserException {
+        LOG.info("Attempt to get GET connection for " + urlString.toString());
+
         final StringBuilder builder = new StringBuilder(urlString + "?");
         for (final Entry<String, String> entry : parameters.entrySet()) {
             builder.append(entry.getKey() + "=");
@@ -91,6 +96,8 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
             final Map<String, String> parameters)
             throws IOException,
             ParserException {
+        LOG.info("Attempt to get POST connection for " + urlString.toString());
+
         final URL url = new URL(urlString);
         final HttpURLConnection connection =
                 (HttpURLConnection) url.openConnection();

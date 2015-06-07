@@ -43,6 +43,7 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public final class SearchReporter {
 
+    public static final int MAX_POSTS_PER_SEARCH = 100;
     /** The Constant LOGGER. */
     static final Logger LOGGER = Logger.getLogger(SearchReporter.class);
 
@@ -89,7 +90,8 @@ public final class SearchReporter {
         final String runReport =
                 reporter.runReport(searches, groups,
                         config.getIntegerProperty("freecycle.search.period"),
-                        formatter, em, resultsPerPage);
+                        formatter, em, resultsPerPage,
+                        config.getSearchItemLimit());
         if (failIfEmpty && runReport.equals(QueryReporter.NO_RESULTS)) {
             throw new ItemFinderException("No results found for " + searches);
         }
@@ -104,37 +106,9 @@ public final class SearchReporter {
                                                    + " for everything"));
         emailBody.append(reporter.runReport(new String[] {
             ""
-        }, groups, 1, formatter, em, resultsPerPage));
+        }, groups, 1, formatter, em, resultsPerPage,
+                config.getSearchItemLimit()));
         return emailBody.toString();
-    }
-
-    /**
-     * Send report.
-     *
-     * @param config
-     *            the config
-     * @param emailBody
-     *            the email body
-     * @throws EmailException
-     */
-    public static void sendReport(
-            final FreecycleConfig config,
-            final String emailBody) throws EmailException {
-        final String[] toEmail = config.getArrayProperty("freecycle.email.to");
-        final String user = config.getProperty("freecycle.email.user");
-        final String server = config.getProperty("freecycle.email.server");
-        final String password = config.getProperty("freecycle.email.password");
-        final String port = config.getProperty("freecycle.email.port");
-
-        final EmailSender emailSender = new EmailSender();
-
-        final EmailSession session =
-                new EmailSession(user, password, server, port);
-        emailSender.sendMessage(
-                config.getProperty("freecycle.email.from.email"),
-                config.getProperty("freecycle.email.from.name"),
-                "Matching Freecycle items found", emailBody.toString(), true,
-                session, toEmail);
     }
 
     /** The db lock. */
@@ -193,6 +167,9 @@ public final class SearchReporter {
      *            the reporter
      * @param failIfEmpty
      *            the fail if empty
+     * @param toEmail
+     * @param session
+     * @param emailSender
      * @throws InterruptedException
      *             the interrupted exception
      * @throws ExecutionException
@@ -209,7 +186,10 @@ public final class SearchReporter {
             final Formatter formatter,
             final EntityManager em,
             final QueryReporter reporter,
-            final boolean failIfEmpty)
+            final boolean failIfEmpty,
+            EmailSender emailSender,
+            EmailSession session,
+            String[] toEmail)
             throws InterruptedException,
             ExecutionException,
             ParserException,
@@ -220,72 +200,14 @@ public final class SearchReporter {
         final EntityTransaction tx = em.getTransaction();
         tx.begin();
         try {
+            final StringBuffer wantedItems = new StringBuffer();
+            final StringBuffer otherItems = new StringBuffer();
 
-            final long timeperiod =
-                    config.getIntegerProperty("freecycle.search.period");
-            final int resultsPerPageNumber = config.getResultsPerPage();
-            final FreecycleQueryBuilder queryBuilder =
-                    new FreecycleQueryBuilder()
-                            .setIncludeWanted(false)
-                            .setIncludeOffered(true)
-                            .setDateStart(
-                                    LocalDate.now().minus(timeperiod,
-                                            ChronoUnit.DAYS)).useGet()
-                            .setResultsPerPage(resultsPerPageNumber);
-            final StringBuilder wantedItems = new StringBuilder();
-            final StringBuilder otherItems = new StringBuilder();
+            processAllGroups(config, searches, groups, formatter, em,
+                    wantedItems, otherItems);
 
-            for (final FreecycleGroup freecycleGroup : groups) {
-                LatestPost latest = null;
-                try {
-
-                    final FreecycleQueryBuilder queryBuilderCopy =
-                            new FreecycleQueryBuilder(queryBuilder);
-                    queryBuilderCopy.setTown(freecycleGroup);
-                    final HtmlParser parser = queryBuilderCopy.build();
-
-                    final FreecycleScraper scraper =
-                            new FreecycleScraper(parser, freecycleGroup);
-                    latest = this.getLatestPost(freecycleGroup, em);
-                    int lastIndex = latest.getLatestPostNumber();
-                    final List<Post> posts = scraper.getPosts();
-
-                    for (final Post post : posts) {
-                        lastIndex =
-                                this.processIndividualPost(searches, formatter,
-                                        wantedItems, otherItems, scraper,
-                                        latest, lastIndex, post);
-                    }
-                }
-                catch (Throwable e) {
-                    LOGGER.error("Error with " + freecycleGroup.name(), e);
-                }
-                em.persist(latest);
-
-            }
-
-            final StringBuilder emailBody = new StringBuilder();
-
-            if (failIfEmpty && (wantedItems.length() == 0)) {
-                SearchReporter.LOGGER.info("No results - not sending message");
-
-            }
-            else {
-                final String heading =
-                        "Searched " + Arrays.asList(groups) + " for " + " "
-                                + Arrays.asList(searches);
-                emailBody.append(formatter.formatSubHeader(heading));
-                emailBody.append(wantedItems);
-                emailBody.append("<hr/>");
-                emailBody
-                        .append(formatter.formatSubHeader("Searched "
-                                                          + Arrays.asList(groups)
-                                                          + " for everything"));
-                emailBody.append(otherItems);
-
-                final String text = emailBody.toString();
-                SearchReporter.sendReport(config, text);
-            }
+            sendEmail(config, searches, groups, formatter, failIfEmpty,
+                    emailSender, session, toEmail, wantedItems, otherItems);
             tx.commit();
         }
         catch (final Throwable e) {
@@ -359,6 +281,43 @@ public final class SearchReporter {
         return false;
     }
 
+    public void processAllGroups(
+            final FreecycleConfig config,
+            final String[] searches,
+            final FreecycleGroup[] groups,
+            final Formatter formatter,
+            final EntityManager em,
+            final StringBuffer wantedItems,
+            final StringBuffer otherItems) {
+        final long timeperiod =
+                config.getIntegerProperty("freecycle.search.period");
+        final int resultsPerPageNumber = config.getResultsPerPage();
+        final FreecycleQueryBuilder queryBuilder =
+                new FreecycleQueryBuilder()
+                        .setIncludeWanted(false)
+                        .setIncludeOffered(true)
+                        .setDateStart(
+                                LocalDate.now().minus(timeperiod,
+                                        ChronoUnit.DAYS)).useGet()
+                        .setResultsPerPage(resultsPerPageNumber);
+
+        Integer processed = 0;
+        for (final FreecycleGroup freecycleGroup : groups) {
+            LatestPost latest = null;
+            try {
+                latest =
+                        processOneGroup(searches, formatter, em, queryBuilder,
+                                wantedItems, otherItems, freecycleGroup,
+                                processed);
+            }
+            catch (Throwable e) {
+                LOGGER.error("Error with " + freecycleGroup.name(), e);
+            }
+            em.persist(latest);
+
+        }
+    }
+
     /**
      * Process individual post.
      *
@@ -378,6 +337,7 @@ public final class SearchReporter {
      *            the last index
      * @param post
      *            the post
+     * @param processed
      * @return the int
      * @throws ParserException
      *             the parser exception
@@ -385,12 +345,13 @@ public final class SearchReporter {
     public int processIndividualPost(
             final String[] searches,
             final Formatter formatter,
-            final StringBuilder wantedItems,
-            final StringBuilder otherItems,
+            final StringBuffer wantedItems,
+            final StringBuffer otherItems,
             final FreecycleScraper scraper,
             final LatestPost latest,
             final int lastIndex,
-            final Post post) throws ParserException {
+            final Post post,
+            Integer processed) throws ParserException {
         if (this.shouldBeReported(post, latest)) {
             final FreecycleItem fullPost = scraper.getFullPost(post);
             if (this.includePost(searches, fullPost)) {
@@ -404,6 +365,79 @@ public final class SearchReporter {
             }
         }
         return lastIndex;
+    }
+
+    public LatestPost processOneGroup(
+            final String[] searches,
+            final Formatter formatter,
+            final EntityManager em,
+            final FreecycleQueryBuilder queryBuilder,
+            final StringBuffer wantedItems,
+            final StringBuffer otherItems,
+            final FreecycleGroup freecycleGroup,
+            Integer processed) throws ParserException, IOException {
+        LatestPost latest;
+        final FreecycleQueryBuilder queryBuilderCopy =
+                new FreecycleQueryBuilder(queryBuilder);
+        queryBuilderCopy.setTown(freecycleGroup);
+        final HtmlParser parser = queryBuilderCopy.build();
+
+        final FreecycleScraper scraper =
+                new FreecycleScraper(parser, freecycleGroup);
+        latest = this.getLatestPost(freecycleGroup, em);
+        int lastIndex = latest.getLatestPostNumber();
+        final List<Post> posts = scraper.getPosts();
+
+        for (final Post post : posts) {
+            if (processed > MAX_POSTS_PER_SEARCH) {
+                return latest;
+            }
+            lastIndex =
+                    this.processIndividualPost(searches, formatter,
+                            wantedItems, otherItems, scraper, latest,
+                            lastIndex, post, processed);
+            processed++;
+
+        }
+        return latest;
+    }
+
+    public void sendEmail(
+            final FreecycleConfig config,
+            final String[] searches,
+            final FreecycleGroup[] groups,
+            final Formatter formatter,
+            final boolean failIfEmpty,
+            EmailSender emailSender,
+            EmailSession session,
+            String[] toEmail,
+            final StringBuffer wantedItems,
+            final StringBuffer otherItems) throws EmailException {
+        final StringBuilder emailBody = new StringBuilder();
+
+        if (failIfEmpty && (wantedItems.length() == 0)) {
+            SearchReporter.LOGGER.info("No results - not sending message");
+
+        }
+        else {
+            final String heading =
+                    "Searched " + Arrays.asList(groups) + " for " + " "
+                            + Arrays.asList(searches);
+            emailBody.append(formatter.formatSubHeader(heading));
+            emailBody.append(wantedItems);
+            emailBody.append("<hr/>");
+            emailBody.append(formatter.formatSubHeader("Searched "
+                                                       + Arrays.asList(groups)
+                                                       + " for everything"));
+            emailBody.append(otherItems);
+
+            emailSender.sendMessage(
+                    config.getProperty("freecycle.email.from.email"),
+                    config.getProperty("freecycle.email.from.name"),
+                    "Matching Freecycle items found", emailBody.toString(),
+                    true, session, toEmail);
+
+        }
     }
 
     /**

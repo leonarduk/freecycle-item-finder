@@ -4,6 +4,9 @@
 
 package com.leonarduk.itemfinder.freecycle;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
@@ -18,6 +21,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.ItemFinderException;
+import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
@@ -74,20 +78,22 @@ public class FreecycleItemSearcherTest {
      * @throws IOException
      *             Signals that an I/O exception has occurred.
      */
-    @Ignore
     @Test
     public final void testFullPost() throws ParserException, IOException {
-        // final QueryBuilder queryBuilder = new
-        // FreecycleQueryBuilder().setTown(
-        // FreecycleGroups.kingston).setSearchWords(this.searchTerm);
-        // final HtmlParser parser = queryBuilder.build();
+        FreecycleGroup kingston = FreecycleGroup.kingston;
+
+        String fullPostUrl =
+                ClassLoader.getSystemResource("sofa.html").getPath();
+        final HtmlParser parser = mock(HtmlParser.class); // queryBuilder.build();
+        when(parser.getURL()).thenReturn(fullPostUrl);
         //
-        // final FreecycleScraper scraper = new FreecycleScraper(parser);
-        // final Post post = new Post(PostType.OFFER, new Date(), "sofa",
-        // "https://groups.freecycle.org/group/freecycle-kingston/posts/"
-        // + "45010383/leather%203%20seater%20sofa%20");
-        // final FreecycleItem fullPost = scraper.getFullPost(post);
-        // System.out.println(fullPost);
+        final FreecycleScraper scraper = new FreecycleScraper(parser, kingston);
+
+        final Post post =
+                new Post(PostType.OFFER, new Date(), "sofa", fullPostUrl,
+                        kingston);
+        final FreecycleItem fullPost = scraper.getFullPost(post);
+        System.out.println(fullPost);
 
     }
 

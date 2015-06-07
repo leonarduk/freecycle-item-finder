@@ -3,17 +3,21 @@
  */
 package com.leonarduk.itemfinder.query;
 
+import static org.mockito.Mockito.mock;
+
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
+import org.htmlparser.util.ParserException;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.leonarduk.core.email.EmailException;
+import com.leonarduk.core.email.EmailSender;
+import com.leonarduk.core.email.EmailSession;
 import com.leonarduk.core.format.Formatter;
 import com.leonarduk.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.ItemFinderException;
@@ -110,25 +114,24 @@ public class SearchReporterTest {
 
     /**
      * Test generate search.
-     */
-    // @Test
-    // public final void testGenerateSearch()
-    // throws InterruptedException,
-    // ExecutionException {
-    // SearchReporter.generateSearch(this.config, this.searches, this.groups,
-    // this.formatter, this.em, this.reporter, this.failIfEmpty);
-    // }
-
-    /**
-     * Test send report.
      * 
-     * @throws EmailException
+     * @throws IOException
+     * @throws ParserException
      */
     @Test
-    @Ignore
-    public final void testSendReport() throws EmailException {
-        final String emailBody = "test email text";
-        SearchReporter.sendReport(this.config, emailBody);
+    public final void testGenerateSearch()
+            throws InterruptedException,
+            ExecutionException,
+            ParserException,
+            IOException {
+        EmailSender sender = mock(EmailSender.class);
+        EmailSession session = mock(EmailSession.class);
+        String[] toEmail = {
+            "test@test.com"
+        };
+        new SearchReporter().generateSearch(this.config, this.searches,
+                this.groups, this.formatter, this.em, this.reporter,
+                this.failIfEmpty, sender, session, toEmail);
     }
 
 }
