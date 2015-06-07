@@ -65,7 +65,7 @@ public class FreecycleItemSearcherTest {
                 new FreecycleQueryBuilder().setTown(FreecycleGroup.kingston)
                         .setSearchWords(this.searchTerm);
 
-        final Set<Item> findItems = this.testClass.findItems(queryBuilder);
+        final Set<Item> findItems = this.testClass.findItems(queryBuilder, 10);
         System.out.println(findItems);
         Assert.assertTrue(findItems.size() > 0);
     }
