@@ -119,13 +119,6 @@
 			<artifactId>mockito-all</artifactId>
 			<version>1.8.5</version>
 		</dependency>
-		<!-- Logging -->
-
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>commons-io</groupId>
