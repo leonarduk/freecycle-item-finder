@@ -134,7 +134,16 @@ public class FreecycleScraper {
             startSearch++;
         }
         final String detail =
-                detailCandidate.replace(descriptionString, "").trim();
+                detailCandidate
+                        .replace(descriptionString, "")
+                        .trim()
+                        .replace(
+                                "(click on the thumbnail for full size image)",
+                                "")
+                        .replace(
+                                "<img alt=\"logo of The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\">",
+                                "");
+
         this.getParser().setURL(post.getLink());
 
         final NodeList thumbnailNodes =
