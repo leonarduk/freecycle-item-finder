@@ -112,18 +112,29 @@ public class FreecycleScraper {
      */
     public final FreecycleItem getFullPost(final Post post)
             throws ParserException {
-        final int locationNode = 20;
-        final int detailsNode = 22;
         this.getParser().setURL(post.getLink());
         FreecycleScraper.LOG.info("Extracting details for " + post.getLink());
         final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
 
-        final String location =
-                nodes.elementAt(locationNode).toPlainTextString()
-                        .replace("Location :", "");
-        final String detail =
-                nodes.elementAt(detailsNode).toPlainTextString()
-                        .replace("Description  ", "").trim();
+        int startSearch = 14;
+        String locationCandidate = "";
+        String locationString = "Location :";
+        String descriptionString = "Description  ";
+
+        while (locationCandidate.contains(descriptionString)
+               || !locationCandidate.contains(locationString)) {
+            locationCandidate =
+                    nodes.elementAt(startSearch).toPlainTextString();
+            startSearch++;
+        }
+        final String location = locationCandidate.replace(locationString, "");
+        final String detail = "";
+        String detailCandidate = "";
+        while (!detailCandidate.contains(descriptionString)) {
+            detailCandidate = nodes.elementAt(startSearch).toPlainTextString();
+            startSearch++;
+        }
+        detailCandidate.replace(descriptionString, "").trim();
         this.getParser().setURL(post.getLink());
 
         final NodeList thumbnailNodes =
