@@ -128,13 +128,13 @@ public class FreecycleScraper {
             startSearch++;
         }
         final String location = locationCandidate.replace(locationString, "");
-        final String detail = "";
         String detailCandidate = "";
         while (!detailCandidate.contains(descriptionString)) {
             detailCandidate = nodes.elementAt(startSearch).toPlainTextString();
             startSearch++;
         }
-        detailCandidate.replace(descriptionString, "").trim();
+        final String detail =
+                detailCandidate.replace(descriptionString, "").trim();
         this.getParser().setURL(post.getLink());
 
         final NodeList thumbnailNodes =
