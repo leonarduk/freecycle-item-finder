@@ -112,8 +112,8 @@ public class FreecycleScraper {
      */
     public final FreecycleItem getFullPost(final Post post)
             throws ParserException {
-        final int locationNode = 18;
-        final int detailsNode = 20;
+        final int locationNode = 20;
+        final int detailsNode = 22;
         this.getParser().setURL(post.getLink());
         FreecycleScraper.LOG.info("Extracting details for " + post.getLink());
         final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
