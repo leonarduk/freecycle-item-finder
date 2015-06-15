@@ -313,8 +313,9 @@ public final class SearchReporter {
             catch (Throwable e) {
                 LOGGER.error("Error with " + freecycleGroup.name(), e);
             }
-            em.persist(latest);
-
+            if (null != latest) {
+                em.persist(latest);
+            }
         }
     }
 
