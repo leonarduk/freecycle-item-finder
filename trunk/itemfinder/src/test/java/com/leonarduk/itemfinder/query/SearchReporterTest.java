@@ -115,8 +115,10 @@ public class SearchReporterTest {
     /**
      * Test generate search.
      * 
-     * @throws IOException
+     * @throws InterruptedException
+     * @throws ExecutionException
      * @throws ParserException
+     * @throws IOException
      */
     @Test
     public final void testGenerateSearch()

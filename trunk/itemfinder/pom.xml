@@ -40,6 +40,29 @@
 		<defaultGoal>install</defaultGoal>
 		<plugins>
 			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<file>src/main/shell/run.sh</file>
+					<outputFile>
+						run.sh
+					</outputFile>
+					<regex>false</regex>
+					<token>$VERSION$</token>
+					<value>${project.version}</value>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-eclipse-plugin</artifactId>
 				<version>2.9</version>
 				<configuration>
@@ -102,6 +125,7 @@
 			</extension>
 		</extensions>
 	</build>
+
 
 
 	<dependencies>
