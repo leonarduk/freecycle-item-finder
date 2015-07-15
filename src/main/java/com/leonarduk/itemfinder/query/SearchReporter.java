@@ -43,6 +43,7 @@ import com.leonarduk.itemfinder.interfaces.Item;
  */
 public final class SearchReporter {
 
+    /** The Constant MAX_POSTS_PER_SEARCH. */
     public static final int MAX_POSTS_PER_SEARCH = 100;
     /** The Constant LOGGER. */
     static final Logger LOGGER = Logger.getLogger(SearchReporter.class);
@@ -167,9 +168,12 @@ public final class SearchReporter {
      *            the reporter
      * @param failIfEmpty
      *            the fail if empty
-     * @param toEmail
-     * @param session
      * @param emailSender
+     *            the email sender
+     * @param session
+     *            the session
+     * @param toEmail
+     *            the to email
      * @throws InterruptedException
      *             the interrupted exception
      * @throws ExecutionException
@@ -281,6 +285,24 @@ public final class SearchReporter {
         return false;
     }
 
+    /**
+     * Process all groups.
+     *
+     * @param config
+     *            the config
+     * @param searches
+     *            the searches
+     * @param groups
+     *            the groups
+     * @param formatter
+     *            the formatter
+     * @param em
+     *            the em
+     * @param wantedItems
+     *            the wanted items
+     * @param otherItems
+     *            the other items
+     */
     public void processAllGroups(
             final FreecycleConfig config,
             final String[] searches,
@@ -339,6 +361,7 @@ public final class SearchReporter {
      * @param post
      *            the post
      * @param processed
+     *            the processed
      * @return the int
      * @throws ParserException
      *             the parser exception
@@ -368,6 +391,31 @@ public final class SearchReporter {
         return lastIndex;
     }
 
+    /**
+     * Process one group.
+     *
+     * @param searches
+     *            the searches
+     * @param formatter
+     *            the formatter
+     * @param em
+     *            the em
+     * @param queryBuilder
+     *            the query builder
+     * @param wantedItems
+     *            the wanted items
+     * @param otherItems
+     *            the other items
+     * @param freecycleGroup
+     *            the freecycle group
+     * @param processed
+     *            the processed
+     * @return the latest post
+     * @throws ParserException
+     *             the parser exception
+     * @throws IOException
+     *             Signals that an I/O exception has occurred.
+     */
     public LatestPost processOneGroup(
             final String[] searches,
             final Formatter formatter,
@@ -403,6 +451,32 @@ public final class SearchReporter {
         return latest;
     }
 
+    /**
+     * Send email.
+     *
+     * @param config
+     *            the config
+     * @param searches
+     *            the searches
+     * @param groups
+     *            the groups
+     * @param formatter
+     *            the formatter
+     * @param failIfEmpty
+     *            the fail if empty
+     * @param emailSender
+     *            the email sender
+     * @param session
+     *            the session
+     * @param toEmail
+     *            the to email
+     * @param wantedItems
+     *            the wanted items
+     * @param otherItems
+     *            the other items
+     * @throws EmailException
+     *             the email exception
+     */
     public void sendEmail(
             final FreecycleConfig config,
             final String[] searches,

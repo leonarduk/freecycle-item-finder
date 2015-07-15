@@ -32,16 +32,18 @@ public class CallableQuery implements Callable<Set<Item>> {
      * Instantiates a new callable query.
      *
      * @param itemSearcherValue
-     *            the item searcher
+     *            the item searcher value
      * @param queryBuilderInstance
-     *            the query builder
+     *            the query builder instance
+     * @param aLimit
+     *            the a limit
      */
     public CallableQuery(final ItemSearcher itemSearcherValue,
-            final QueryBuilder queryBuilderInstance, Integer limit) {
+            final QueryBuilder queryBuilderInstance, final Integer aLimit) {
         super();
         this.itemSearcher = itemSearcherValue;
         this.queryBuilder = queryBuilderInstance;
-        this.limit = limit;
+        this.limit = aLimit;
     }
 
     /*

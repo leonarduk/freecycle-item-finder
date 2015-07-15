@@ -15,6 +15,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.spi.ThrowableInformation;
 
 import com.leonarduk.core.email.EmailSender;
 import com.leonarduk.core.email.EmailSession;
@@ -51,7 +52,6 @@ public final class ItemFinderMain {
      *             the exception
      */
     public static void main(final String[] args) throws Exception {
-        // JBidWatch.main(new String[]{});
 
         final FreecycleConfig config =
                 new FreecycleConfig("itemfinder.properties");
@@ -79,7 +79,7 @@ public final class ItemFinderMain {
         final String port = config.getProperty("freecycle.email.port");
 
         final EmailSender emailSender = new EmailSender();
-
+        ThrowableInformation example;
         final EmailSession session =
                 new EmailSession(user, password, server, port);
 

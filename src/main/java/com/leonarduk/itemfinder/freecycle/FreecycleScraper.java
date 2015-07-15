@@ -116,22 +116,22 @@ public class FreecycleScraper {
         FreecycleScraper.LOG.info("Extracting details for " + post.getLink());
         final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
 
-        int startSearch = 14;
+        final int firstNodeToLookAt = 14;
+        int nodeCursor = firstNodeToLookAt;
         String locationCandidate = "";
         String locationString = "Location :";
         String descriptionString = "Description  ";
 
         while (locationCandidate.contains(descriptionString)
                || !locationCandidate.contains(locationString)) {
-            locationCandidate =
-                    nodes.elementAt(startSearch).toPlainTextString();
-            startSearch++;
+            locationCandidate = nodes.elementAt(nodeCursor).toPlainTextString();
+            nodeCursor++;
         }
         final String location = locationCandidate.replace(locationString, "");
         String detailCandidate = "";
         while (!detailCandidate.contains(descriptionString)) {
-            detailCandidate = nodes.elementAt(startSearch).toPlainTextString();
-            startSearch++;
+            detailCandidate = nodes.elementAt(nodeCursor).toPlainTextString();
+            nodeCursor++;
         }
         final String detail =
                 detailCandidate
