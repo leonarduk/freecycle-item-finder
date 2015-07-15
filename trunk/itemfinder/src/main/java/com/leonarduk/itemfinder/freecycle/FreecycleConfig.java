@@ -26,6 +26,7 @@ public class FreecycleConfig extends Config {
     private static final String FREECYCLE_SEARCH_RESULTSPERPAGE =
             "freecycle.search.resultsperpage";
 
+    /** The Constant FREECYCLE_SEARCH_MAX_LIMIT. */
     private static final String FREECYCLE_SEARCH_MAX_LIMIT =
             "freecycle.search.limit";
 
@@ -88,6 +89,11 @@ public class FreecycleConfig extends Config {
                 String.valueOf(period));
     }
 
+    /**
+     * Gets the search item limit.
+     *
+     * @return the search item limit
+     */
     public Integer getSearchItemLimit() {
         return this
                 .getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_MAX_LIMIT);

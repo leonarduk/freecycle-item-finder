@@ -27,6 +27,7 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  */
 public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 
+    /** The Constant LOG. */
     private static final Logger LOG = Logger
             .getLogger(AbstractQueryBuilder.class);
     /** The use post. */
