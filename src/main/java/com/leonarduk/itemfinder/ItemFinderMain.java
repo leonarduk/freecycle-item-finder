@@ -83,6 +83,7 @@ public final class ItemFinderMain {
         final EmailSession session =
                 new EmailSession(user, password, server, port);
 
+        
         new SearchReporter().generateSearch(config, searches, groups,
                 formatter, em, reporter, failIfEmpty, emailSender, session,
                 toEmail);
