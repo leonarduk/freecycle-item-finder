@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.leonarduk</groupId>
-	<artifactId>itemfinder</artifactId>
-	<version>1.4</version>
+	<artifactId>freecycle-item-finder</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
 
-	<name>itemfinder</name>
+	<name>freecycle-item-finder</name>
 	<url>http://leonarduk.com/maven2</url>
 	<prerequisites>
 		<maven>2.2.1</maven>
@@ -18,7 +18,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<core.version>1.4</core.version>
+		<webscraper-core.version>1.0.0</webscraper-core.version>
 
 	</properties>
 
@@ -156,8 +156,8 @@
 		</dependency>
 		<dependency>
 			<groupId>com.leonarduk</groupId>
-			<artifactId>core</artifactId>
-			<version>${core.version}</version>
+			<artifactId>webscraper-core</artifactId>
+			<version>${webscraper-core.version}</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>

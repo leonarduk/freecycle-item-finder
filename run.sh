@@ -1,11 +1,5 @@
 #!/bin/bash
-PID=`ps -ef  | grep itemfinder | grep -v grep | awk  ' { print $2 } '`
+export DISPLAY=:1
+cd target
 
-if [[ $PID != '' ]]; then
-echo "Already running"
-else
-echo "Not Running - will start"
-cd /home/stephen/workspace/luk/trunk/itemfinder
-nohup java -jar target/itemfinder-1.1.3.1-jar-with-dependencies.jar & >/dev/null
-fi
-
+java -jar itemfinder-1.0.0-jar-with-dependencies.jar 

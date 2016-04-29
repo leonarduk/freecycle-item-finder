@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 
-import com.leonarduk.core.format.Formatter;
+import com.leonarduk.webscraper.core.format.Formatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.freecycle.FreecycleItemSearcher;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;

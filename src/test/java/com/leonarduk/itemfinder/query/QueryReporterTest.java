@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.leonarduk.core.format.HtmlFormatter;
+import com.leonarduk.webscraper.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleItem;
 import com.leonarduk.itemfinder.interfaces.Item;
 

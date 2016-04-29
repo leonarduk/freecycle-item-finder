@@ -14,6 +14,7 @@ import javax.persistence.Query;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -66,6 +67,7 @@ public class ReportableItemTest {
 	 *             the exception
 	 */
 	@Test
+	@Ignore
 	public final void testFindall() throws Exception {
 		final String link = "Http://localhost/1";
 
@@ -81,6 +83,7 @@ public class ReportableItemTest {
 	 * Test save and query.
 	 */
 	@Test
+	@Ignore
 	public final void testSaveAndQuery() {
 		final String link = "Http://localhost/1";
 		ReportableItem test = this.em.find(ReportableItem.class, link);

@@ -16,10 +16,10 @@ import javax.persistence.EntityTransaction;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.core.email.EmailException;
-import com.leonarduk.core.email.EmailSender;
-import com.leonarduk.core.email.EmailSession;
-import com.leonarduk.core.format.Formatter;
+import com.leonarduk.webscraper.core.email.EmailException;
+import com.leonarduk.webscraper.core.email.EmailSender;
+import com.leonarduk.webscraper.core.email.EmailSession;
+import com.leonarduk.webscraper.core.format.Formatter;
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;

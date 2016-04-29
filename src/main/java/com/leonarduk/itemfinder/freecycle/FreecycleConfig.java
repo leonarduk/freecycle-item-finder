@@ -5,7 +5,7 @@ package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
 
-import com.leonarduk.core.config.Config;
+import com.leonarduk.webscraper.core.config.Config;
 
 /**
  * The Class FreecycleConfig.

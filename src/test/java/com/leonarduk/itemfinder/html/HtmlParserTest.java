@@ -10,6 +10,7 @@ import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -61,6 +62,7 @@ public class HtmlParserTest {
      *             the parser exception
      */
     @Test
+    @Ignore
     public final void testExtractAllNodesThatMatchNodeFilter()
             throws ParserException {
         final NodeFilter filter = new TagNameFilter("img");
@@ -82,6 +84,7 @@ public class HtmlParserTest {
      * .
      */
     @Test
+    @Ignore
     public final void testGetURL() {
         Assert.assertEquals(HtmlParserTest.filePathPrefix
                             + "target/test-classes/sofa.html",
@@ -125,6 +128,7 @@ public class HtmlParserTest {
      *             the parser exception
      */
     @Test
+    @Ignore
     public final void testSetURLString() throws ParserException {
         this.fullpostparser.setURL(this.list);
         Assert.assertEquals(HtmlParserTest.filePathPrefix
@@ -137,6 +141,7 @@ public class HtmlParserTest {
      * {@link com.leonarduk.itemfinder.html.HtmlParser#toString()}.
      */
     @Test
+    @Ignore
     public final void testToString() {
         Assert.assertEquals(HtmlParserTest.filePathPrefix
                             + "target/test-classes/list.html",

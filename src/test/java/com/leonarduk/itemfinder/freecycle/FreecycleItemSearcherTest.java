@@ -79,6 +79,7 @@ public class FreecycleItemSearcherTest {
      *             Signals that an I/O exception has occurred.
      */
     @Test
+    @Ignore
     public final void testFullPost() throws ParserException, IOException {
         FreecycleGroup kingston = FreecycleGroup.kingston;
 

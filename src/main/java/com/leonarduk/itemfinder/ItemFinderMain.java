@@ -17,10 +17,10 @@ import javax.persistence.Persistence;
 import org.apache.log4j.Logger;
 import org.apache.log4j.spi.ThrowableInformation;
 
-import com.leonarduk.core.email.EmailSender;
-import com.leonarduk.core.email.EmailSession;
-import com.leonarduk.core.format.Formatter;
-import com.leonarduk.core.format.HtmlFormatter;
+import com.leonarduk.webscraper.core.email.EmailSender;
+import com.leonarduk.webscraper.core.email.EmailSession;
+import com.leonarduk.webscraper.core.format.Formatter;
+import com.leonarduk.webscraper.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.query.QueryReporter;

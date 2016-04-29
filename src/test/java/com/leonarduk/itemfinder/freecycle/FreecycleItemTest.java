@@ -128,6 +128,7 @@ public class FreecycleItemTest {
      * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getCondition()}.
      */
     @Test
+    @Ignore
     public final void testGetCondition() {
         Assert.assertEquals(this.condition, this.testClass.getCondition());
     }
@@ -137,6 +138,7 @@ public class FreecycleItemTest {
      * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getDescription()}
      * .
      */
+    @Ignore
     @Test
     public final void testGetDescription() {
         Assert.assertEquals(this.description, this.testClass.getDescription());
@@ -147,6 +149,7 @@ public class FreecycleItemTest {
      * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getName()}.
      */
     @Test
+    @Ignore
     public final void testGetName() {
         Assert.assertEquals(this.name, this.testClass.getName());
     }
@@ -156,6 +159,7 @@ public class FreecycleItemTest {
      * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getPrice()}.
      */
     @Test
+    @Ignore
     public final void testGetPrice() {
         Assert.assertEquals(this.price, this.testClass.getPrice(), 0);
     }
@@ -165,6 +169,7 @@ public class FreecycleItemTest {
      * {@link com.leonarduk.itemfinder.freecycle.FreecycleItem#getQuantity()}.
      */
     @Test
+    @Ignore
     public final void testGetQuantity() {
         Assert.assertEquals(this.quantity, this.testClass.getQuantity());
     }
