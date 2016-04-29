@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.leonarduk</groupId>
+	<artifactId>itemfinder</artifactId>
+	<version>1.4</version>
+	<packaging>jar</packaging>
+
+	<name>itemfinder</name>
+	<url>http://leonarduk.com/maven2</url>
+	<prerequisites>
+		<maven>2.2.1</maven>
+	</prerequisites>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<log4j.version>1.2.17</log4j.version>
+		<junit.version>4.11</junit.version>
+		<java.version>1.8</java.version>
+		<core.version>1.4</core.version>
+
+	</properties>
+
+	<repositories>
+		<repository>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</releases>
+			<id>leonarduk.com</id>
+			<name>leonarduk</name>
+			<url>http://leonarduk.com/maven2/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
+
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<file>src/main/shell/run.sh</file>
+					<outputFile>
+						run.sh
+					</outputFile>
+					<regex>false</regex>
+					<token>$VERSION$</token>
+					<value>${project.version}</value>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.9</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<fork>true</fork>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<compilerArgument>-Xlint:all</compilerArgument>
+					<showWarnings>true</showWarnings>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<!-- Build an executable JAR -->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-4</version>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<archive>
+						<manifest>
+							<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
+						</manifest>
+					</archive>
+					<skipTests>${skipTests}</skipTests>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.2.1</version>
+				<configuration>
+					<mainClass>com.leonarduk.itemfinder.ItemFinderMain</mainClass>
+				</configuration>
+			</plugin>
+		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-alpha-6</version>
+			</extension>
+		</extensions>
+	</build>
+
+
+
+	<dependencies>
+
+		<!-- Testing -->
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+		<!-- Other -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.htmlparser</groupId>
+			<artifactId>htmlparser</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.leonarduk</groupId>
+			<artifactId>core</artifactId>
+			<version>${core.version}</version>
+		</dependency>
+	</dependencies>
+	<distributionManagement>
+		<repository>
+			<id>leonarduk-ftp</id>
+			<url>ftp://leonarduk.com/public_html/maven2</url>
+		</repository>
+	</distributionManagement>
+	<organization>
+		<name>Leonard UK Ltd</name>
+		<url>http://leonarduk.com</url>
+	</organization>
+	<inceptionYear>2014</inceptionYear>
+	<licenses>
+		<license>
+			<name>GNU General Public License v3.0 or later</name>
+			<url>http://www.spdx.org/licenses/GPL-3.0+</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<id>leonarduk</id>
+			<name>Stephen Leonard</name>
+			<email>sourceforge@leonarduk.com</email>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+				<role>Developer</role>
+			</roles>
+			<organization>Leonard UK Ltd</organization>
+			<organizationUrl>http://leonarduk.com</organizationUrl>
+			<timezone>0</timezone>
+			<url>http://uk.linkedin.com/in/steveleonard/</url>
+		</developer>
+	</developers>
+</project>
