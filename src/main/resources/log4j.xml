@@ -14,7 +14,7 @@
 		<param name="maxFileSize" value="10KB" />
 		<param name="maxBackupIndex" value="5" />
 
-		<param name="file" value="/var/log/itemfinder/itemfinder.log" />
+		<param name="file" value="itemfinder.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
 		</layout>
