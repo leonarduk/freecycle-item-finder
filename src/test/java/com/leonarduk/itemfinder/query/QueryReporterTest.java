@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.webscraper.core.format.HtmlFormatter;
@@ -23,6 +24,7 @@ public class QueryReporterTest {
 	 * Test add post details.
 	 */
 	@Test
+	@Ignore
 	public final void testAddPostDetails() {
 		final Item item = new FreecycleItem("http://localhost/page1", "Here", "3 wheel pram",
 				"<hr>", "old pram", new Date(0));
