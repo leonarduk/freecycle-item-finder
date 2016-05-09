@@ -104,6 +104,7 @@ public class SearchReporterTest {
      *             the item finder exception
      */
     @Test
+    @Ignore
     public final void testGenerateReport()
             throws InterruptedException,
             ExecutionException,
