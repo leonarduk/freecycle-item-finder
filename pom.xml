@@ -171,12 +171,6 @@
 			<version>${webscraper-core.version}</version>
 		</dependency>
 	</dependencies>
-	<distributionManagement>
-		<repository>
-			<id>leonarduk-ftp</id>
-			<url>ftp://leonarduk.com/public_html/maven2</url>
-		</repository>
-	</distributionManagement>
 	<organization>
 		<name>Leonard UK Ltd</name>
 		<url>http://leonarduk.com</url>
