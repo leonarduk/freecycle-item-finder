@@ -30,6 +30,7 @@ import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.webscraper.core.email.EmailException;
 import com.leonarduk.webscraper.core.email.EmailSender;
 import com.leonarduk.webscraper.core.email.EmailSession;
+import com.leonarduk.webscraper.core.email.impl.EmailSessionImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
 
 /**
@@ -172,7 +173,7 @@ public final class SearchReporter {
 		final String password = config.getEmailPassword();
 		final String port = config.getEmailPort();
 
-		final EmailSession session = new EmailSession(user, password, server, port);
+		final EmailSession session = new EmailSessionImpl(user, password, server, port);
 
 		final String[] groupNames = config.getSearchGroupNames();
 		final FreecycleGroup[] groups = new FreecycleGroup[groupNames.length];

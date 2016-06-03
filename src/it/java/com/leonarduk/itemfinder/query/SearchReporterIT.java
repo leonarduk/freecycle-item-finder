@@ -15,7 +15,6 @@ import javax.persistence.EntityTransaction;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -74,7 +73,6 @@ public class SearchReporterIT {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	@Ignore
 	@Test
 	public final void testGenerateSearch()
 	        throws ParserException, InterruptedException, ExecutionException, IOException {

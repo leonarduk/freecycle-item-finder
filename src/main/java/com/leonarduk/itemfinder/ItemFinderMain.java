@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.query.QueryReporter;
 import com.leonarduk.itemfinder.query.SearchReporter;
-import com.leonarduk.webscraper.core.email.EmailSender;
+import com.leonarduk.webscraper.core.email.impl.EmailSenderImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
 import com.leonarduk.webscraper.core.format.HtmlFormatter;
 
@@ -55,7 +55,7 @@ public final class ItemFinderMain {
 		final QueryReporter reporter = new QueryReporter();
 		final boolean failIfEmpty = true;
 
-		final EmailSender emailSender = new EmailSender();
+		final EmailSenderImpl emailSender = new EmailSenderImpl();
 
 		new SearchReporter().generateSearch(config, formatter, em, reporter, failIfEmpty,
 		        emailSender);

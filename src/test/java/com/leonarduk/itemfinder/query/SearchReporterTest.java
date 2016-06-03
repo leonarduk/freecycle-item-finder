@@ -20,7 +20,7 @@ import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
-import com.leonarduk.webscraper.core.email.EmailSender;
+import com.leonarduk.webscraper.core.email.impl.EmailSenderImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
 import com.leonarduk.webscraper.core.format.HtmlFormatter;
 
@@ -122,7 +122,7 @@ public class SearchReporterTest {
 	@Ignore
 	public final void testGenerateSearch()
 	        throws InterruptedException, ExecutionException, ParserException, IOException {
-		final EmailSender sender = Mockito.mock(EmailSender.class);
+		final EmailSenderImpl sender = Mockito.mock(EmailSenderImpl.class);
 		this.config.setToEmail("test@test.com");
 		new SearchReporter().generateSearch(this.config, this.formatter, this.em, this.reporter,
 		        this.failIfEmpty, sender);
