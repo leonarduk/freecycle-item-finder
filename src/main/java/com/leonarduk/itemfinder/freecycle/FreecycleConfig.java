@@ -33,24 +33,34 @@ public class FreecycleConfig {
 	/** The Constant MIN_RESULTS_PER_PAGE. */
 	public static final int MIN_RESULTS_PER_PAGE = 10;
 
+	/** The Constant FREECYCLE_FROM_EMAIL. */
 	private static final String FREECYCLE_FROM_EMAIL = "freecycle.email.from.email";
 
+	/** The Constant FREECYCLE_FROM_NAME. */
 	private static final String FREECYCLE_FROM_NAME = "freecycle.email.from.name";
 
+	/** The Constant FREECYCLE_TO_EMAIL. */
 	private static final String FREECYCLE_TO_EMAIL = "freecycle.email.to";
 
+	/** The Constant FREECYCLE_EMAIL_USER. */
 	private static final String FREECYCLE_EMAIL_USER = "freecycle.email.user";
 
+	/** The Constant FREECYCLE_EMAIL_SERVER. */
 	private static final String FREECYCLE_EMAIL_SERVER = "freecycle.email.server";
 
+	/** The Constant FREECYCLE_EMAIL_PASSWORD. */
 	private static final String FREECYCLE_EMAIL_PASSWORD = "freecycle.email.password";
 
+	/** The Constant FREECYCLE_EMAIL_PORT. */
 	private static final String FREECYCLE_EMAIL_PORT = "freecycle.email.port";
 
+	/** The Constant FREECYCLE_SEARCH_GROUP_NAMES. */
 	private static final String FREECYCLE_SEARCH_GROUP_NAMES = "freecycle.search.groups";
 
+	/** The Constant FREECYCLE_SEARCH_TERMS. */
 	public static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 
+	/** The config. */
 	private final Config config;
 
 	/**
@@ -74,26 +84,56 @@ public class FreecycleConfig {
 		this.setResultsPerPage(FreecycleConfig.MAX_RESULTS_PER_PAGE);
 	}
 
+	/**
+	 * Gets the email password.
+	 *
+	 * @return the email password
+	 */
 	public final String getEmailPassword() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_EMAIL_PASSWORD);
 	}
 
+	/**
+	 * Gets the email port.
+	 *
+	 * @return the email port
+	 */
 	public String getEmailPort() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_EMAIL_PORT);
 	}
 
+	/**
+	 * Gets the email server.
+	 *
+	 * @return the email server
+	 */
 	public final String getEmailServer() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_EMAIL_SERVER);
 	}
 
+	/**
+	 * Gets the email user.
+	 *
+	 * @return the email user
+	 */
 	public final String getEmailUser() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_EMAIL_USER);
 	}
 
+	/**
+	 * Gets the from email.
+	 *
+	 * @return the from email
+	 */
 	public final String getFromEmail() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_FROM_EMAIL);
 	}
 
+	/**
+	 * Gets the from name.
+	 *
+	 * @return the from name
+	 */
 	public final String getFromName() {
 		return this.config.getProperty(FreecycleConfig.FREECYCLE_FROM_NAME);
 	}
@@ -108,6 +148,11 @@ public class FreecycleConfig {
 		        .intValue();
 	}
 
+	/**
+	 * Gets the search group names.
+	 *
+	 * @return the search group names
+	 */
 	public final String[] getSearchGroupNames() {
 		return this.config.getArrayProperty(FreecycleConfig.FREECYCLE_SEARCH_GROUP_NAMES);
 	}
@@ -122,30 +167,69 @@ public class FreecycleConfig {
 		        .intValue();
 	}
 
+	/**
+	 * Gets the search period.
+	 *
+	 * @return the search period
+	 */
 	public final int getSearchPeriod() {
 		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_PERIOD).intValue();
 	}
 
+	/**
+	 * Gets the search terms.
+	 *
+	 * @return the search terms
+	 */
 	public String[] getSearchTerms() {
 		return this.config.getArrayProperty(FreecycleConfig.FREECYCLE_SEARCH_TERMS);
 	}
 
+	/**
+	 * Gets the to email.
+	 *
+	 * @return the to email
+	 */
 	public final String[] getToEmail() {
 		return this.config.getArrayProperty(FreecycleConfig.FREECYCLE_TO_EMAIL);
 	}
 
+	/**
+	 * Sets the email password.
+	 *
+	 * @param password
+	 *            the new email password
+	 */
 	public void setEmailPassword(final String password) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_EMAIL_PASSWORD, password);
 	}
 
+	/**
+	 * Sets the email port.
+	 *
+	 * @param port
+	 *            the new email port
+	 */
 	public void setEmailPort(final String port) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_EMAIL_PORT, port);
 	}
 
+	/**
+	 * Sets the email server.
+	 *
+	 * @param server
+	 *            the new email server
+	 */
 	public void setEmailServer(final String server) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_EMAIL_SERVER, server);
 	}
 
+	/**
+	 * Sets the email user.
+	 *
+	 * @param user
+	 *            the new email user
+	 */
 	public void setEmailUser(final String user) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_EMAIL_USER, user);
 	}
@@ -161,6 +245,12 @@ public class FreecycleConfig {
 		        String.valueOf(resultsPerPage));
 	}
 
+	/**
+	 * Sets the search group names.
+	 *
+	 * @param namesCsv
+	 *            the new search group names
+	 */
 	public void setSearchGroupNames(final String namesCsv) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_GROUP_NAMES, namesCsv);
 	}
@@ -175,10 +265,22 @@ public class FreecycleConfig {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_PERIOD, String.valueOf(period));
 	}
 
+	/**
+	 * Sets the search terms.
+	 *
+	 * @param searchTermsCsv
+	 *            the new search terms
+	 */
 	public void setSearchTerms(final String searchTermsCsv) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_TERMS, searchTermsCsv);
 	}
 
+	/**
+	 * Sets the to email.
+	 *
+	 * @param toEmailCsv
+	 *            the new to email
+	 */
 	public void setToEmail(final String toEmailCsv) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_TO_EMAIL, toEmailCsv);
 	}

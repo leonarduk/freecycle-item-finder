@@ -140,10 +140,6 @@ public final class SearchReporter {
 	 *
 	 * @param config
 	 *            the config
-	 * @param searches
-	 *            the searches
-	 * @param groups
-	 *            the groups
 	 * @param formatter
 	 *            the formatter
 	 * @param em
@@ -154,11 +150,7 @@ public final class SearchReporter {
 	 *            the fail if empty
 	 * @param emailSender
 	 *            the email sender
-	 * @param session
-	 *            the session
-	 * @param toEmail
-	 *            the to email
-	 * @return
+	 * @return the string builder
 	 * @throws InterruptedException
 	 *             the interrupted exception
 	 * @throws ExecutionException
@@ -430,7 +422,7 @@ public final class SearchReporter {
 	 *            the wanted items
 	 * @param otherItems
 	 *            the other items
-	 * @return
+	 * @return the string builder
 	 * @throws EmailException
 	 *             the email exception
 	 */

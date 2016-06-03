@@ -110,9 +110,13 @@ public class SearchReporterTest {
 	 * Test generate search.
 	 *
 	 * @throws InterruptedException
+	 *             the interrupted exception
 	 * @throws ExecutionException
+	 *             the execution exception
 	 * @throws ParserException
+	 *             the parser exception
 	 * @throws IOException
+	 *             Signals that an I/O exception has occurred.
 	 */
 	@Test
 	@Ignore

@@ -29,7 +29,7 @@ public class TestClass {
 		FreecycleItem test = em.find(FreecycleItem.class, "Http://local");
 		if (test == null) {
 			test = new FreecycleItem("Http://local", "there", "3 bags full", "",
-					"baa baa black sheep", new Date());
+			        "baa baa black sheep", new Date());
 
 			tx.begin();
 			em.persist(test);

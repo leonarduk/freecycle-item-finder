@@ -9,22 +9,14 @@ package com.leonarduk.itemfinder.freecycle;
 public enum FreecycleGroup {
 
 	/** The kingston. */
-	kingston("freecycle-kingston"),
-	/** The elmbridge. */
-	elmbridge("Elmbridge_Freecycle"),
-	/** The richmond. */
-	richmond("richmonduponthamesfreecycle"),
-	/** The wandsworth. */
-	wandsworth("WandsworthUK"),
-	/** The merton. */
-	merton("mertonfreecycle"),
-	/** The hammersmith. */
-	hammersmith("hammersmithandfulhamfreecycle"),
-	/** The epsom. */
-	epsom("Epsom"),
-	/** The ealing. */
-	ealing("EalingUK"),
-	/** The lambeth. */
+	kingston("freecycle-kingston"), /** The elmbridge. */
+	elmbridge("Elmbridge_Freecycle"), /** The richmond. */
+	richmond("richmonduponthamesfreecycle"), /** The wandsworth. */
+	wandsworth("WandsworthUK"), /** The merton. */
+	merton("mertonfreecycle"), /** The hammersmith. */
+	hammersmith("hammersmithandfulhamfreecycle"), /** The epsom. */
+	epsom("Epsom"), /** The ealing. */
+	ealing("EalingUK"), /** The lambeth. */
 	lambeth("LambethUK");
 
 	/** The url. */

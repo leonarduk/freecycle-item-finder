@@ -11,9 +11,9 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import com.leonarduk.webscraper.core.format.HtmlFormatter;
 import com.leonarduk.itemfinder.freecycle.FreecycleItem;
 import com.leonarduk.itemfinder.interfaces.Item;
+import com.leonarduk.webscraper.core.format.HtmlFormatter;
 
 /**
  * The Class QueryReporterTest.
@@ -27,12 +27,12 @@ public class QueryReporterTest {
 	@Ignore
 	public final void testAddPostDetails() {
 		final Item item = new FreecycleItem("http://localhost/page1", "Here", "3 wheel pram",
-				"<hr>", "old pram", new Date(0));
+		        "<hr>", "old pram", new Date(0));
 		new QueryReporter();
 		final String post = new QueryReporter().addPostDetails(new HtmlFormatter(), item);
 		Assert.assertEquals("<br/><hr/><br/><h2><a href=\"http://localhost/page1\">"
-				+ "3 wheel pram</a> - Here Posted: Thu Jan 01 01:00:00 GMT 1970</h2>"
-				+ "<br/>old pram<hr><br/>", post);
+		        + "3 wheel pram</a> - Here Posted: Thu Jan 01 01:00:00 GMT 1970</h2>"
+		        + "<br/>old pram<hr><br/>", post);
 	}
 
 	/**

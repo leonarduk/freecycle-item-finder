@@ -20,38 +20,40 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  */
 public class CallableQuery implements Callable<Set<Item>> {
 
-    /** The item searcher. */
-    private final ItemSearcher itemSearcher;
+	/** The item searcher. */
+	private final ItemSearcher itemSearcher;
 
-    /** The query builder. */
-    private final QueryBuilder queryBuilder;
+	/** The query builder. */
+	private final QueryBuilder queryBuilder;
 
-    private Integer limit;
+	/** The limit. */
+	private final Integer limit;
 
-    /**
-     * Instantiates a new callable query.
-     *
-     * @param itemSearcherValue
-     *            the item searcher value
-     * @param queryBuilderInstance
-     *            the query builder instance
-     * @param aLimit
-     *            the a limit
-     */
-    public CallableQuery(final ItemSearcher itemSearcherValue,
-            final QueryBuilder queryBuilderInstance, final Integer aLimit) {
-        super();
-        this.itemSearcher = itemSearcherValue;
-        this.queryBuilder = queryBuilderInstance;
-        this.limit = aLimit;
-    }
+	/**
+	 * Instantiates a new callable query.
+	 *
+	 * @param itemSearcherValue
+	 *            the item searcher value
+	 * @param queryBuilderInstance
+	 *            the query builder instance
+	 * @param aLimit
+	 *            the a limit
+	 */
+	public CallableQuery(final ItemSearcher itemSearcherValue,
+	        final QueryBuilder queryBuilderInstance, final Integer aLimit) {
+		super();
+		this.itemSearcher = itemSearcherValue;
+		this.queryBuilder = queryBuilderInstance;
+		this.limit = aLimit;
+	}
 
-    /*
-     * (non-Javadoc)
-     * @see java.util.concurrent.Callable#call()
-     */
-    @Override
-    public final Set<Item> call() throws Exception {
-        return this.itemSearcher.findItems(this.queryBuilder, this.limit);
-    }
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.util.concurrent.Callable#call()
+	 */
+	@Override
+	public final Set<Item> call() throws Exception {
+		return this.itemSearcher.findItems(this.queryBuilder, this.limit);
+	}
 }

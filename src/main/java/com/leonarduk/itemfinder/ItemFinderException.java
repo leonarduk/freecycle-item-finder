@@ -9,7 +9,7 @@ package com.leonarduk.itemfinder;
 public class ItemFinderException extends Exception {
 
 	/** The Constant serialVersionUID. */
-	private static final long	serialVersionUID	= 6957476799043277085L;
+	private static final long serialVersionUID = 6957476799043277085L;
 
 	/**
 	 * Instantiates a new item finder exception.
