@@ -6,21 +6,21 @@
 		<server>
 			<!-- Maven Central Deployment -->
 			<id>ossrh</id>
-			<username>leonarduk</username>
-			<password>{hhZIqr0YRKAH2ZwUf+88O2XJKWCYC0Tq3HR1dyXA+oc=}</password>
+			<username>${env.SONATYPE_USERNAME}</username>
+			<password>${env.SONATYPE_PASSWORD}</password>
 		</server>
 	</servers>
-		<profiles>
-    <profile>
-      <id>ossrh</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <gpg.executable>gpg</gpg.executable>
-        <gpg.passphrase>upwork</gpg.passphrase>
-      </properties>
-    </profile>
-  </profiles>
+	<profiles>
+		<profile>
+			<id>ossrh</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<gpg.executable>gpg</gpg.executable>
+				<gpg.passphrase>upwork</gpg.passphrase>
+			</properties>
+		</profile>
+	</profiles>
 </settings>
 

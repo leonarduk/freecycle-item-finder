@@ -38,13 +38,13 @@ public class FreecycleItem implements Item {
 	private Date createdDate;
 
 	/** The description. */
-	@Column(columnDefinition = "character varying (" + FreecycleItem.MAX_FIELD_SIZE + ") not null",
-	        length = FreecycleItem.MAX_FIELD_SIZE, nullable = false)
+	@Column(columnDefinition = "character varying (" + FreecycleItem.MAX_FIELD_SIZE
+	        + ") not null", length = FreecycleItem.MAX_FIELD_SIZE, nullable = false)
 	private String description;
 
 	/** The extra html. */
-	@Column(columnDefinition = "character varying (" + FreecycleItem.MAX_FIELD_SIZE + ") not null",
-	        length = FreecycleItem.MAX_FIELD_SIZE, nullable = false)
+	@Column(columnDefinition = "character varying (" + FreecycleItem.MAX_FIELD_SIZE
+	        + ") not null", length = FreecycleItem.MAX_FIELD_SIZE, nullable = false)
 	private String extraHtml;
 
 	/** The link. */
@@ -92,9 +92,9 @@ public class FreecycleItem implements Item {
 	 * @param createdDateValue
 	 *            the created date
 	 */
-	public FreecycleItem(final String linkValue, final String locationValue,
-			final String nameValue, final int quantityValue, final String extraHtmlValue,
-			final String descriptionValue, final Date createdDateValue) {
+	public FreecycleItem(final String linkValue, final String locationValue, final String nameValue,
+	        final int quantityValue, final String extraHtmlValue, final String descriptionValue,
+	        final Date createdDateValue) {
 		super();
 		this.createdDate = createdDateValue;
 		this.condition = Condition.USED;
@@ -123,9 +123,8 @@ public class FreecycleItem implements Item {
 	 * @param date
 	 *            the date
 	 */
-	public FreecycleItem(final String linkValue, final String locationValue,
-			final String nameValue, final String extraHtmlValue, final String descriptionValue,
-			final Date date) {
+	public FreecycleItem(final String linkValue, final String locationValue, final String nameValue,
+	        final String extraHtmlValue, final String descriptionValue, final Date date) {
 		this(linkValue, locationValue, nameValue, 1, extraHtmlValue, descriptionValue, date);
 	}
 
@@ -252,8 +251,8 @@ public class FreecycleItem implements Item {
 	@Override
 	public final String toString() {
 		return "FreecycleItem [condition=" + this.condition + ", price=" + this.price + ", link="
-				+ this.link + ", location=" + this.location + ", name=" + this.name + ", quantity="
-				+ this.quantity + ", extraHtml=" + this.extraHtml + ", description="
-				+ this.description + "]";
+		        + this.link + ", location=" + this.location + ", name=" + this.name + ", quantity="
+		        + this.quantity + ", extraHtml=" + this.extraHtml + ", description="
+		        + this.description + "]";
 	}
 }

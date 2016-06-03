@@ -21,36 +21,35 @@ import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
  */
 public final class MockObjectGenerator {
 
-    /**
-     * Instantiates a new mock object generator.
-     */
-    private MockObjectGenerator() {
-        throw new UnsupportedOperationException();
-    }
+	/**
+	 * Creates the freecycle config.
+	 *
+	 * @return the freecycle config
+	 */
+	public static FreecycleConfig createFreecycleConfig() {
+		final FreecycleConfig config = new FreecycleConfig();
+		final int period = 3;
+		config.setSearchPeriod(period);
+		config.setResultsPerPage(FreecycleConfig.MIN_RESULTS_PER_PAGE);
+		return config;
+	}
 
-    /**
-     * Creates the freecycle config.
-     *
-     * @return the freecycle config
-     */
-    public static FreecycleConfig createFreecycleConfig() {
-        final FreecycleConfig config = new FreecycleConfig();
-        final int period = 3;
-        config.setSearchPeriod(period);
-        config.setResultsPerPage(FreecycleConfig.MIN_RESULTS_PER_PAGE);
-        return config;
-    }
+	/**
+	 * Gets the mock entity manager.
+	 *
+	 * @return the mock entity manager
+	 */
+	public static EntityManager getMockEntityManager() {
+		final EntityManager mockEm = Mockito.mock(EntityManager.class);
+		final EntityTransaction transaction = Mockito.mock(EntityTransaction.class);
+		Mockito.when(mockEm.getTransaction()).thenReturn(transaction);
+		return mockEm;
+	}
 
-    /**
-     * Gets the mock entity manager.
-     *
-     * @return the mock entity manager
-     */
-    public static EntityManager getMockEntityManager() {
-        final EntityManager mockEm = Mockito.mock(EntityManager.class);
-        final EntityTransaction transaction =
-                Mockito.mock(EntityTransaction.class);
-        Mockito.when(mockEm.getTransaction()).thenReturn(transaction);
-        return mockEm;
-    }
+	/**
+	 * Instantiates a new mock object generator.
+	 */
+	private MockObjectGenerator() {
+		throw new UnsupportedOperationException();
+	}
 }

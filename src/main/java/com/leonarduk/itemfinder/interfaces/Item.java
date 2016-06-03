@@ -6,35 +6,15 @@ package com.leonarduk.itemfinder.interfaces;
 import java.util.Date;
 
 /**
- *
- *
+ * The Interface Item.
  *
  * @author Stephen Leonard
- * @since 28 Jan 2015
- *
  * @version $Author:: $: Author of last commit
  * @version $Rev:: $: Revision of last commit
  * @version $Date:: $: Date of last commit
- *
+ * @since 28 Jan 2015
  */
 public interface Item {
-
-	/**
-	 * The Enum Condition.
-	 */
-	enum Condition {
-
-		/** The new. */
-		NEW,
-		/** The used. */
-		USED,
-		/** The refurbished. */
-		REFURBISHED,
-		/** The broken. */
-		BROKEN,
-		/** The unknown. */
-		UNKNOWN
-	}
 
 	/**
 	 * Gets the condition.
@@ -98,4 +78,17 @@ public interface Item {
 	 * @return the quantity
 	 */
 	int getQuantity();
+
+	/**
+	 * The Enum Condition.
+	 */
+	enum Condition {
+
+		/** The new. */
+		NEW, /** The used. */
+		USED, /** The refurbished. */
+		REFURBISHED, /** The broken. */
+		BROKEN, /** The unknown. */
+		UNKNOWN
+	}
 }

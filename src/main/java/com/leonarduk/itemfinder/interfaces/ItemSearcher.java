@@ -19,16 +19,17 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
  */
 public interface ItemSearcher {
 
-    /**
-     * Find items.
-     *
-     * @param queryBuilder
-     *            the query builder
-     * @return the sets the
-     * @throws ItemFinderException
-     *             the item finder exception
-     */
-    Set<Item> findItems(QueryBuilder queryBuilder, Integer limit)
-            throws ItemFinderException;
+	/**
+	 * Find items.
+	 *
+	 * @param queryBuilder
+	 *            the query builder
+	 * @param limit
+	 *            the limit
+	 * @return the sets the
+	 * @throws ItemFinderException
+	 *             the item finder exception
+	 */
+	Set<Item> findItems(QueryBuilder queryBuilder, Integer limit) throws ItemFinderException;
 
 }
