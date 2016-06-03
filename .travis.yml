@@ -5,7 +5,8 @@ env:
   global:
   - SONATYPE_USERNAME=leonarduk
   - secure: dM/0W/VqkJuSX0ZVs8wXrewjJHtx93aiPOARAtS4C6QShBlRQ2o6p9089avCmb5k6NiF/DUs0rqssDPSe+4W7/rhdkUCqI8MA0cMU4gntHSdkJPd7SS9vDduzWiYQCVj/UqRNvce5DGimlkwJ9TL3yLeoJjel7IjYsbZGzvf1PQ2ElH4Q1ApksFnidHnZa+dtg99pe/UigaD56SyxYBO9U4sxWHSfHvzwi7lppcqaIaX0pu7V0avdjf5C29sHP4F+rFJMR81udrWkYm9oHZMt1AvttpWRrwvO8/0Vh8b4AOi6t8RyGuCWPIi+kOi6HZ1DMLSGCYOUormpBGDIkxLy1IERwmxMy4DfvavWPa6N5/BDJgzWLwv1VktOTMb5n6egBWKctURUqO6W5s+TRKrfe/QoiQZk/yGfh62lQHM+d03AYf1VxbtoPVWtM/u2QZjvV2pxZilo8ALux7JOxnA94sLOJiwZwSR/fL3GpWCXCJiRHaGf+5j8UwyNSLv0cU/i4a/H+EJU/hZOCMOliuPIE1bK0bZ3ffc/yQjYWnLMj8LQJ/6PyinsJjpVBY8nhbPXjjpAFq6FvfSMnHOHe2iCPiogaylOmC7IK0UWnKoTMiaK6kqQXXDhfhyEzZ1jQWR8yyhMr6kaw3jExoJv6EadGkUCENj6+Z1dXaz0mzFnSM=
-script: mvn clean verify
+script: mvn clean verify --settings travis-settings.xml -Dgpg.passphrase=upwork
+
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 - mvn deploy --settings travis-settings.xml -DskipTests=true -B -Dgpg.passphrase=upwork
