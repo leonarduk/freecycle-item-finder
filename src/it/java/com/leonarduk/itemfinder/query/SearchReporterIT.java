@@ -81,7 +81,7 @@ public class SearchReporterIT {
 		config.setSearchTerms("sofa");
 		config.setSearchGroupNames("kingston,epsom");
 		config.setToEmail("someone@dummy.email");
-
+		config.setSearchItemLimit(1);
 		config.setEmailUser("test");
 		config.setEmailServer("testserver");
 		config.setEmailPassword("pwd");

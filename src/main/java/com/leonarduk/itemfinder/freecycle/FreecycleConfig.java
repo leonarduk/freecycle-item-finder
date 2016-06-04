@@ -4,6 +4,9 @@
 package com.leonarduk.itemfinder.freecycle;
 
 import java.io.IOException;
+import java.util.Arrays;
+
+import org.apache.log4j.Logger;
 
 import com.leonarduk.webscraper.core.config.Config;
 
@@ -60,8 +63,9 @@ public class FreecycleConfig {
 	/** The Constant FREECYCLE_SEARCH_TERMS. */
 	public static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 
+	static final Logger		LOGGER	= Logger.getLogger(FreecycleConfig.class);
 	/** The config. */
-	private final Config config;
+	private final Config	config;
 
 	/**
 	 * Instantiates a new freecycle config.
@@ -69,6 +73,7 @@ public class FreecycleConfig {
 	public FreecycleConfig() {
 		this.config = new Config();
 		this.setResultsPerPage(FreecycleConfig.MAX_RESULTS_PER_PAGE);
+		FreecycleConfig.LOGGER.info(this.toString());
 	}
 
 	/**
@@ -143,9 +148,8 @@ public class FreecycleConfig {
 	 *
 	 * @return the results per page
 	 */
-	public final int getResultsPerPage() {
-		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_RESULTSPERPAGE)
-		        .intValue();
+	public final Integer getResultsPerPage() {
+		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_RESULTSPERPAGE);
 	}
 
 	/**
@@ -162,9 +166,8 @@ public class FreecycleConfig {
 	 *
 	 * @return the search item limit
 	 */
-	public int getSearchItemLimit() {
-		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_MAX_LIMIT)
-		        .intValue();
+	public Integer getSearchItemLimit() {
+		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_MAX_LIMIT);
 	}
 
 	/**
@@ -172,8 +175,8 @@ public class FreecycleConfig {
 	 *
 	 * @return the search period
 	 */
-	public final int getSearchPeriod() {
-		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_PERIOD).intValue();
+	public final Integer getSearchPeriod() {
+		return this.config.getIntegerProperty(FreecycleConfig.FREECYCLE_SEARCH_PERIOD);
 	}
 
 	/**
@@ -255,6 +258,11 @@ public class FreecycleConfig {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_GROUP_NAMES, namesCsv);
 	}
 
+	public void setSearchItemLimit(final int i) {
+		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_MAX_LIMIT, String.valueOf(i));
+		;
+	}
+
 	/**
 	 * Sets the search period.
 	 *
@@ -283,6 +291,20 @@ public class FreecycleConfig {
 	 */
 	public void setToEmail(final String toEmailCsv) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_TO_EMAIL, toEmailCsv);
+	}
+
+	@Override
+	public String toString() {
+		return "FreecycleConfig [getEmailPassword()=" + this.getEmailPassword()
+		        + ", getEmailPort()=" + this.getEmailPort() + ", getEmailServer()="
+		        + this.getEmailServer() + ", getEmailUser()=" + this.getEmailUser()
+		        + ", getFromEmail()=" + this.getFromEmail() + ", getFromName()="
+		        + this.getFromName() + ", getResultsPerPage()=" + this.getResultsPerPage()
+		        + ", getSearchGroupNames()=" + Arrays.toString(this.getSearchGroupNames())
+		        + ", getSearchItemLimit()=" + this.getSearchItemLimit() + ", getSearchPeriod()="
+		        + this.getSearchPeriod() + ", getSearchTerms()="
+		        + Arrays.toString(this.getSearchTerms()) + ", getToEmail()="
+		        + Arrays.toString(this.getToEmail()) + "]";
 	}
 
 }
