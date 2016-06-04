@@ -8,8 +8,9 @@
 	<packaging>jar</packaging>
 
 	<name>freecycle-item-finder</name>
-<description>A Java command line program to poll Freecycle.org for specific items</description>
-		<url>http://leonarduk.com/maven2</url>
+	<description>A Java command line program to poll Freecycle.org for
+		specific items</description>
+	<url>http://leonarduk.com/maven2</url>
 	<prerequisites>
 		<maven>2.2.1</maven>
 	</prerequisites>
@@ -19,7 +20,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<webscraper-core.version>1.0.4</webscraper-core.version>
+		<webscraper-core.version>1.0.6</webscraper-core.version>
 		<jacoco.version>0.7.6.201602180812</jacoco.version>
 	</properties>
 
@@ -50,6 +51,29 @@
 					<file>src/main/shell/run.sh</file>
 					<outputFile>
 						run.sh
+					</outputFile>
+					<regex>false</regex>
+					<token>$VERSION$</token>
+					<value>${project.version}</value>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.google.code.maven-replacer-plugin</groupId>
+				<artifactId>replacer</artifactId>
+				<version>1.5.3</version>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>replace</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<ignoreMissingFile>false</ignoreMissingFile>
+					<file>src/main/shell/run.bat</file>
+					<outputFile>
+						run.bat
 					</outputFile>
 					<regex>false</regex>
 					<token>$VERSION$</token>
