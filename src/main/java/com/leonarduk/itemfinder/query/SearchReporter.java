@@ -456,6 +456,8 @@ public final class SearchReporter {
 				}
 				catch (final EmailException e) {
 					if (e.getCause() instanceof SMTPSendFailedException) {
+						SearchReporter.LOGGER.error("Failed to send email to " + toEmail,
+						        e.getCause());
 						emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
 						        "Failed to send to " + toEmail, emailBody.toString(), true, session,
 						        new String[] { config.getFromEmail() });
