@@ -32,6 +32,7 @@ import com.leonarduk.webscraper.core.email.EmailSender;
 import com.leonarduk.webscraper.core.email.EmailSession;
 import com.leonarduk.webscraper.core.email.impl.EmailSessionImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
+import com.sun.mail.smtp.SMTPSendFailedException;
 
 /**
  * The Class SearchReporter.
@@ -417,7 +418,7 @@ public final class SearchReporter {
 	 *            the email sender
 	 * @param session
 	 *            the session
-	 * @param toEmail
+	 * @param toEmails
 	 *            the to email
 	 * @param wantedItems
 	 *            the wanted items
@@ -429,7 +430,7 @@ public final class SearchReporter {
 	 */
 	public StringBuilder sendEmail(final FreecycleConfig config, final String[] searches,
 	        final FreecycleGroup[] groups, final Formatter formatter, final boolean failIfEmpty,
-	        final EmailSender emailSender, final EmailSession session, final String[] toEmail,
+	        final EmailSender emailSender, final EmailSession session, final String[] toEmails,
 	        final StringBuffer wantedItems, final StringBuffer otherItems) throws EmailException {
 		final StringBuilder emailBody = new StringBuilder();
 
@@ -447,8 +448,20 @@ public final class SearchReporter {
 			        .formatSubHeader("Searched " + Arrays.asList(groups) + " for everything"));
 			emailBody.append(otherItems);
 
-			emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-			        "Matching Freecycle items found", emailBody.toString(), true, session, toEmail);
+			for (final String toEmail : toEmails) {
+				try {
+					emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
+					        "Matching Freecycle items found", emailBody.toString(), true, session,
+					        new String[] { toEmail });
+				}
+				catch (final EmailException e) {
+					if (e.getCause() instanceof SMTPSendFailedException) {
+						emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
+						        "Failed to send to " + toEmail, emailBody.toString(), true, session,
+						        new String[] { config.getFromEmail() });
+					}
+				}
+			}
 		}
 		return emailBody;
 	}

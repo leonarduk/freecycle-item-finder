@@ -48,6 +48,8 @@ public final class ItemFinderMain {
 
 		final FreecycleConfig config = new FreecycleConfig("itemfinder.properties");
 
+		ItemFinderMain.LOGGER.info("Config: " + config.toString());
+
 		final Formatter formatter = new HtmlFormatter();
 
 		final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ReportableItem");
