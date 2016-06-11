@@ -18,7 +18,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
@@ -84,7 +83,7 @@ public class SearchReporterTest {
 
 	}
 
-	@Ignore   // need to fix date - Travis is UST
+	@Ignore    // need to fix date - Travis is UST
 	@Test
 	public final void testAddPostDetails() throws Exception {
 		final String linkValue = "http://sss";
@@ -104,25 +103,6 @@ public class SearchReporterTest {
 		        + " Posted: Fri Jul 08 00:00:00 BST 2016</h2><br/>" + descriptionValue
 		        + extraHtmlValue + "<br/>";
 		Assert.assertEquals(expected, actual);
-	}
-
-	/**
-	 * Test generate report.
-	 *
-	 * @throws InterruptedException
-	 *             the interrupted exception
-	 * @throws ExecutionException
-	 *             the execution exception
-	 * @throws ItemFinderException
-	 *             the item finder exception
-	 */
-	@Test
-	@Ignore
-	public final void testGenerateReport()
-	        throws InterruptedException, ExecutionException, ItemFinderException {
-		SearchReporter.generateReport(this.config, this.searches, this.groups, this.formatter,
-		        this.em, this.reporter, this.failIfEmpty);
-
 	}
 
 	/**

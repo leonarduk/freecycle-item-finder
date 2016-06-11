@@ -16,7 +16,6 @@ import javax.persistence.EntityTransaction;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.freecycle.FreecycleItem;
@@ -52,56 +51,6 @@ public final class SearchReporter {
 
 	/** The db lock. */
 	private final Object dbLock = new Object();
-
-	/**
-	 * Generate report.
-	 *
-	 * @param config
-	 *            the config
-	 * @param searches
-	 *            the searches
-	 * @param groups
-	 *            the groups
-	 * @param formatter
-	 *            the formatter
-	 * @param em
-	 *            the em
-	 * @param reporter
-	 *            the reporter
-	 * @param failIfEmpty
-	 *            the fail if empty
-	 * @return the string
-	 * @throws InterruptedException
-	 *             the interrupted exception
-	 * @throws ExecutionException
-	 *             the execution exception
-	 * @throws ItemFinderException
-	 *             the item finder exception
-	 */
-	public static String generateReport(final FreecycleConfig config, final String[] searches,
-	        final FreecycleGroup[] groups, final Formatter formatter, final EntityManager em,
-	        final QueryReporter reporter, final boolean failIfEmpty)
-	                throws InterruptedException, ExecutionException, ItemFinderException {
-		final StringBuilder emailBody = new StringBuilder();
-
-		final int resultsPerPage = config.getResultsPerPage();
-
-		final String runReport = reporter.runReport(searches, groups, config.getSearchPeriod(),
-		        formatter, em, resultsPerPage, config.getSearchItemLimit());
-		if (failIfEmpty && runReport.equals(QueryReporter.NO_RESULTS)) {
-			throw new ItemFinderException("No results found for " + searches);
-		}
-		final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
-		        + Arrays.asList(searches);
-		emailBody.append(formatter.formatSubHeader(heading));
-		emailBody.append(runReport);
-		emailBody.append("<hr/>");
-		emailBody.append(
-		        formatter.formatSubHeader("Searched " + Arrays.asList(groups) + " for everything"));
-		emailBody.append(reporter.runReport(new String[] { "" }, groups, 1, formatter, em,
-		        resultsPerPage, config.getSearchItemLimit()));
-		return emailBody.toString();
-	}
 
 	/**
 	 * Instantiates a new search reporter.
@@ -166,13 +115,12 @@ public final class SearchReporter {
 
 		}
 		else {
-			final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
-			        + Arrays.asList(searches);
-			emailBody.append(formatter.formatSubHeader(heading));
 			emailBody.append(wantedItems);
 			emailBody.append("<hr/>");
-			emailBody.append(formatter
-			        .formatSubHeader("Searched " + Arrays.asList(groups) + " for everything"));
+			final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
+			        + Arrays.asList(searches);
+			emailBody.append(formatter.formatSmall(heading));
+			emailBody.append("<hr/>");
 			emailBody.append(otherItems);
 
 		}
