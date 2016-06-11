@@ -48,9 +48,9 @@ public class HtmlParserTest {
 	@Before
 	public final void setUp() throws Exception {
 		this.list = ClassLoader.getSystemResource("list.html").getPath();
-		this.listparser = new HtmlParser(this.list);
+		this.listparser = new HtmlParserImpl(this.list);
 		this.fullPost = ClassLoader.getSystemResource("sofa.html").getPath();
-		this.fullpostparser = new HtmlParser(this.fullPost);
+		this.fullpostparser = new HtmlParserImpl(this.fullPost);
 		HtmlParserTest.filePathPrefix = "file://localhost" + System.getProperty("user.dir") + "/";
 	}
 

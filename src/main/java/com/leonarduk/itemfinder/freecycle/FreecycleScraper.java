@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.Node;
@@ -35,6 +36,8 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  */
 public class FreecycleScraper {
 
+	public static final int LOCATION_NODE_INDEX = 14;
+
 	/** The date format. */
 	public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss yyyy";
 
@@ -44,6 +47,10 @@ public class FreecycleScraper {
 
 	/** The log. */
 	private static final Logger LOG = Logger.getLogger(FreecycleScraper.class);
+
+	final static String locationString = "Location :";
+
+	final static String descriptionString = "Description  ";
 
 	/** The freecycle date format. */
 	private final SimpleDateFormat freecycleDateFormat;
@@ -96,6 +103,16 @@ public class FreecycleScraper {
 
 	}
 
+	public String cleanHtml(final String detailCandidate) {
+		final String regex = "<img src=\"//static.freecycle.org/images/freecycle_logo.jpg.*?/>";
+		final String cleanStr = Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
+		        .matcher(detailCandidate).replaceAll("");
+
+		final String detail = cleanStr.replace(FreecycleScraper.descriptionString, "").trim()
+		        .replace("(click on the thumbnail for full size image)", "");
+		return detail;
+	}
+
 	/**
 	 * Gets the full post.
 	 *
@@ -110,27 +127,22 @@ public class FreecycleScraper {
 		FreecycleScraper.LOG.info("Extracting details for " + post.getLink());
 		final NodeList nodes = this.getParser().parse(this.itemHeaderFilter);
 
-		final int firstNodeToLookAt = 14;
+		final int firstNodeToLookAt = FreecycleScraper.LOCATION_NODE_INDEX;
 		int nodeCursor = firstNodeToLookAt;
 		String locationCandidate = "";
-		final String locationString = "Location :";
-		final String descriptionString = "Description  ";
 
-		while (locationCandidate.contains(descriptionString)
-		        || !locationCandidate.contains(locationString)) {
+		while (locationCandidate.contains(FreecycleScraper.descriptionString)
+		        || !locationCandidate.contains(FreecycleScraper.locationString)) {
 			locationCandidate = nodes.elementAt(nodeCursor).toPlainTextString();
 			nodeCursor++;
 		}
-		final String location = locationCandidate.replace(locationString, "");
+		final String location = locationCandidate.replace(FreecycleScraper.locationString, "");
 		String detailCandidate = "";
-		while (!detailCandidate.contains(descriptionString)) {
+		while (!detailCandidate.contains(FreecycleScraper.descriptionString)) {
 			detailCandidate = nodes.elementAt(nodeCursor).toPlainTextString();
 			nodeCursor++;
 		}
-		final String detail = detailCandidate.replace(descriptionString, "").trim()
-		        .replace("(click on the thumbnail for full size image)", "").replace(
-		                "<img alt=\"logo of The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\">",
-		                "");
+		final String detail = this.cleanHtml(detailCandidate);
 
 		this.getParser().setURL(post.getLink());
 

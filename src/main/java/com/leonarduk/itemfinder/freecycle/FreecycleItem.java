@@ -144,6 +144,78 @@ public class FreecycleItem implements Item {
 		return value.substring(0, length - 1);
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() != obj.getClass()) {
+			return false;
+		}
+		final FreecycleItem other = (FreecycleItem) obj;
+		if (this.condition != other.condition) {
+			return false;
+		}
+		if (this.createdDate == null) {
+			if (other.createdDate != null) {
+				return false;
+			}
+		}
+		else if (!this.createdDate.equals(other.createdDate)) {
+			return false;
+		}
+		if (this.description == null) {
+			if (other.description != null) {
+				return false;
+			}
+		}
+		else if (!this.description.equals(other.description)) {
+			return false;
+		}
+		if (this.extraHtml == null) {
+			if (other.extraHtml != null) {
+				return false;
+			}
+		}
+		else if (!this.extraHtml.equals(other.extraHtml)) {
+			return false;
+		}
+		if (this.link == null) {
+			if (other.link != null) {
+				return false;
+			}
+		}
+		else if (!this.link.equals(other.link)) {
+			return false;
+		}
+		if (this.location == null) {
+			if (other.location != null) {
+				return false;
+			}
+		}
+		else if (!this.location.equals(other.location)) {
+			return false;
+		}
+		if (this.name == null) {
+			if (other.name != null) {
+				return false;
+			}
+		}
+		else if (!this.name.equals(other.name)) {
+			return false;
+		}
+		if (Double.doubleToLongBits(this.price) != Double.doubleToLongBits(other.price)) {
+			return false;
+		}
+		if (this.quantity != other.quantity) {
+			return false;
+		}
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 *
@@ -241,6 +313,24 @@ public class FreecycleItem implements Item {
 	@Override
 	public final int getQuantity() {
 		return this.quantity;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = (prime * result) + ((this.condition == null) ? 0 : this.condition.hashCode());
+		result = (prime * result) + ((this.createdDate == null) ? 0 : this.createdDate.hashCode());
+		result = (prime * result) + ((this.description == null) ? 0 : this.description.hashCode());
+		result = (prime * result) + ((this.extraHtml == null) ? 0 : this.extraHtml.hashCode());
+		result = (prime * result) + ((this.link == null) ? 0 : this.link.hashCode());
+		result = (prime * result) + ((this.location == null) ? 0 : this.location.hashCode());
+		result = (prime * result) + ((this.name == null) ? 0 : this.name.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(this.price);
+		result = (prime * result) + (int) (temp ^ (temp >>> 32));
+		result = (prime * result) + this.quantity;
+		return result;
 	}
 
 	/*

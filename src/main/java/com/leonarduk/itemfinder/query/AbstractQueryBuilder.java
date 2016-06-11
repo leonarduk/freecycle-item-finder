@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
+import com.leonarduk.itemfinder.html.HtmlParserImpl;
 
 /**
  * The Class AbstractQueryBuilder.
@@ -72,7 +73,7 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 		}
 		final String url = builder.toString();
 		System.out.println("URL:" + url);
-		return new HtmlParser(url);
+		return new HtmlParserImpl(url);
 	}
 
 	/**
@@ -113,7 +114,7 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 			buffer.append(entry.getValue());
 		}
 
-		return new HtmlParser(connection);
+		return new HtmlParserImpl(connection);
 
 		// PrintWriter out = new PrintWriter(connection.getOutputStream());
 		// out.print(buffer);

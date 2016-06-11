@@ -138,6 +138,48 @@ public final class SearchReporter {
 	}
 
 	/**
+	 * Format email.
+	 *
+	 * @param searches
+	 *            the searches
+	 * @param groups
+	 *            the groups
+	 * @param formatter
+	 *            the formatter
+	 * @param failIfEmpty
+	 *            the fail if empty
+	 * @param wantedItems
+	 *            the wanted items
+	 * @param otherItems
+	 *            the other items
+	 * @return the string builder
+	 * @throws EmailException
+	 *             the email exception
+	 */
+	public StringBuilder formatEmail(final String[] searches, final FreecycleGroup[] groups,
+	        final Formatter formatter, final boolean failIfEmpty, final StringBuffer wantedItems,
+	        final StringBuffer otherItems) throws EmailException {
+		final StringBuilder emailBody = new StringBuilder();
+
+		if (failIfEmpty && (wantedItems.length() == 0)) {
+			SearchReporter.LOGGER.info("No results - not sending message");
+
+		}
+		else {
+			final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
+			        + Arrays.asList(searches);
+			emailBody.append(formatter.formatSubHeader(heading));
+			emailBody.append(wantedItems);
+			emailBody.append("<hr/>");
+			emailBody.append(formatter
+			        .formatSubHeader("Searched " + Arrays.asList(groups) + " for everything"));
+			emailBody.append(otherItems);
+
+		}
+		return emailBody;
+	}
+
+	/**
 	 * Generate search.
 	 *
 	 * @param config
@@ -167,7 +209,7 @@ public final class SearchReporter {
 	        final EmailSender emailSender)
 	                throws InterruptedException, ExecutionException, ParserException, IOException {
 		final String[] searches = config.getSearchTerms();
-		final String[] toEmail = config.getToEmail();
+		final String[] toEmails = config.getToEmail();
 
 		final String user = config.getEmailUser();
 		final String server = config.getEmailServer();
@@ -193,13 +235,16 @@ public final class SearchReporter {
 
 			this.processAllGroups(config, searches, groups, formatter, em, wantedItems, otherItems);
 
-			final StringBuilder emailBody = this.sendEmail(config, searches, groups, formatter,
-			        failIfEmpty, emailSender, session, toEmail, wantedItems, otherItems);
+			final StringBuilder emailBody = this.formatEmail(searches, groups, formatter,
+			        failIfEmpty, wantedItems, otherItems);
+			this.sendEmail(config, emailSender, session, toEmails, emailBody);
+
 			tx.commit();
 			return emailBody;
 		}
 		catch (final Throwable e) {
 			tx.rollback();
+			// we rollback if there is an issue with email send
 			SearchReporter.LOGGER.fatal("Unhandled error:", e);
 			throw new RuntimeException("Error in search", e);
 		}
@@ -282,8 +327,8 @@ public final class SearchReporter {
 	public void processAllGroups(final FreecycleConfig config, final String[] searches,
 	        final FreecycleGroup[] groups, final Formatter formatter, final EntityManager em,
 	        final StringBuffer wantedItems, final StringBuffer otherItems) {
-		final int timeperiod = config.getSearchPeriod();
-		final int resultsPerPageNumber = config.getResultsPerPage();
+		final int timeperiod = config.getSearchPeriod().intValue();
+		final int resultsPerPageNumber = config.getResultsPerPage().intValue();
 		final FreecycleQueryBuilder queryBuilder = new FreecycleQueryBuilder()
 		        .setIncludeWanted(false).setIncludeOffered(true)
 		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).useGet()
@@ -324,8 +369,6 @@ public final class SearchReporter {
 	 *            the last index
 	 * @param post
 	 *            the post
-	 * @param processed
-	 *            the processed
 	 * @return the int
 	 * @throws ParserException
 	 *             the parser exception
@@ -333,7 +376,7 @@ public final class SearchReporter {
 	public int processIndividualPost(final String[] searches, final Formatter formatter,
 	        final StringBuffer wantedItems, final StringBuffer otherItems,
 	        final FreecycleScraper scraper, final LatestPost latest, final int lastIndex,
-	        final Post post, final Integer processed) throws ParserException {
+	        final Post post) throws ParserException {
 		if (this.shouldBeReported(post, latest)) {
 			final FreecycleItem fullPost = scraper.getFullPost(post);
 			if (this.includePost(searches, fullPost)) {
@@ -377,7 +420,7 @@ public final class SearchReporter {
 	public LatestPost processOneGroup(final String[] searches, final Formatter formatter,
 	        final EntityManager em, final FreecycleQueryBuilder queryBuilder,
 	        final StringBuffer wantedItems, final StringBuffer otherItems,
-	        final FreecycleGroup freecycleGroup, Integer processed)
+	        final FreecycleGroup freecycleGroup, final int processed)
 	                throws ParserException, IOException {
 		LatestPost latest;
 		final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(queryBuilder);
@@ -389,13 +432,14 @@ public final class SearchReporter {
 		int lastIndex = latest.getLatestPostNumber();
 		final List<Post> posts = scraper.getPosts();
 
+		int currentProcessedTotal = processed;
 		for (final Post post : posts) {
-			if (processed > SearchReporter.MAX_POSTS_PER_SEARCH) {
+			if (currentProcessedTotal > SearchReporter.MAX_POSTS_PER_SEARCH) {
 				return latest;
 			}
 			lastIndex = this.processIndividualPost(searches, formatter, wantedItems, otherItems,
-			        scraper, latest, lastIndex, post, processed);
-			processed++;
+			        scraper, latest, lastIndex, post);
+			currentProcessedTotal++;
 
 		}
 		return latest;
@@ -406,66 +450,35 @@ public final class SearchReporter {
 	 *
 	 * @param config
 	 *            the config
-	 * @param searches
-	 *            the searches
-	 * @param groups
-	 *            the groups
-	 * @param formatter
-	 *            the formatter
-	 * @param failIfEmpty
-	 *            the fail if empty
 	 * @param emailSender
 	 *            the email sender
 	 * @param session
 	 *            the session
 	 * @param toEmails
-	 *            the to email
-	 * @param wantedItems
-	 *            the wanted items
-	 * @param otherItems
-	 *            the other items
-	 * @return the string builder
+	 *            the to emails
+	 * @param emailBody
+	 *            the email body
 	 * @throws EmailException
 	 *             the email exception
 	 */
-	public StringBuilder sendEmail(final FreecycleConfig config, final String[] searches,
-	        final FreecycleGroup[] groups, final Formatter formatter, final boolean failIfEmpty,
-	        final EmailSender emailSender, final EmailSession session, final String[] toEmails,
-	        final StringBuffer wantedItems, final StringBuffer otherItems) throws EmailException {
-		final StringBuilder emailBody = new StringBuilder();
-
-		if (failIfEmpty && (wantedItems.length() == 0)) {
-			SearchReporter.LOGGER.info("No results - not sending message");
-
-		}
-		else {
-			final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
-			        + Arrays.asList(searches);
-			emailBody.append(formatter.formatSubHeader(heading));
-			emailBody.append(wantedItems);
-			emailBody.append("<hr/>");
-			emailBody.append(formatter
-			        .formatSubHeader("Searched " + Arrays.asList(groups) + " for everything"));
-			emailBody.append(otherItems);
-
-			for (final String toEmail : toEmails) {
-				try {
+	public void sendEmail(final FreecycleConfig config, final EmailSender emailSender,
+	        final EmailSession session, final String[] toEmails, final StringBuilder emailBody)
+	                throws EmailException {
+		for (final String toEmail : toEmails) {
+			try {
+				emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
+				        "Matching Freecycle items found", emailBody.toString(), true, session,
+				        new String[] { toEmail });
+			}
+			catch (final EmailException e) {
+				if (e.getCause() instanceof SMTPSendFailedException) {
+					SearchReporter.LOGGER.error("Failed to send email to " + toEmail, e.getCause());
 					emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-					        "Matching Freecycle items found", emailBody.toString(), true, session,
-					        new String[] { toEmail });
-				}
-				catch (final EmailException e) {
-					if (e.getCause() instanceof SMTPSendFailedException) {
-						SearchReporter.LOGGER.error("Failed to send email to " + toEmail,
-						        e.getCause());
-						emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-						        "Failed to send to " + toEmail, emailBody.toString(), true, session,
-						        new String[] { config.getFromEmail() });
-					}
+					        "Failed to send to " + toEmail, emailBody.toString(), true, session,
+					        new String[] { config.getFromEmail() });
 				}
 			}
 		}
-		return emailBody;
 	}
 
 	/**

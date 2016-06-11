@@ -4,13 +4,15 @@
 package com.leonarduk.itemfinder.query;
 
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
-import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -20,6 +22,8 @@ import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
+import com.leonarduk.itemfinder.freecycle.FreecycleItem;
+import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.webscraper.core.email.impl.EmailSenderImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
 import com.leonarduk.webscraper.core.format.HtmlFormatter;
@@ -59,6 +63,8 @@ public class SearchReporterTest {
 	/** The fail if empty. */
 	private boolean failIfEmpty;
 
+	private SearchReporter searchReporter;
+
 	/**
 	 * Sets the up.
 	 *
@@ -74,17 +80,30 @@ public class SearchReporterTest {
 		this.failIfEmpty = false;
 		this.formatter = new HtmlFormatter();
 		this.em = MockObjectGenerator.getMockEntityManager();
+		this.searchReporter = new SearchReporter();
 
 	}
 
-	/**
-	 * Tear down.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@After
-	public void tearDown() throws Exception {
+	@Ignore   // need to fix date - Travis is UST
+	@Test
+	public final void testAddPostDetails() throws Exception {
+		final String linkValue = "http://sss";
+		final String locationValue = "TestVille";
+		final String nameValue = "Free things";
+		final String extraHtmlValue = "more";
+		final String descriptionValue = "PLease take this old rubbish away";
+		final Calendar instance = Calendar.getInstance();
+		instance.set(2016, 6, 8, 0, 0, 0);
+		final Date createdDateValue = instance.getTime();
+
+		final Item item = new FreecycleItem(linkValue, locationValue, nameValue, extraHtmlValue,
+		        descriptionValue, createdDateValue);
+		final String actual = this.searchReporter.addPostDetails(this.formatter, item);
+		final String expected = "<br/><hr/><br/><h2><a href=\"" + linkValue
+		        + "\">Free things</a> - " + locationValue
+		        + " Posted: Fri Jul 08 00:00:00 BST 2016</h2><br/>" + descriptionValue
+		        + extraHtmlValue + "<br/>";
+		Assert.assertEquals(expected, actual);
 	}
 
 	/**
@@ -124,7 +143,7 @@ public class SearchReporterTest {
 	        throws InterruptedException, ExecutionException, ParserException, IOException {
 		final EmailSenderImpl sender = Mockito.mock(EmailSenderImpl.class);
 		this.config.setToEmail("test@test.com");
-		new SearchReporter().generateSearch(this.config, this.formatter, this.em, this.reporter,
+		this.searchReporter.generateSearch(this.config, this.formatter, this.em, this.reporter,
 		        this.failIfEmpty, sender);
 	}
 
