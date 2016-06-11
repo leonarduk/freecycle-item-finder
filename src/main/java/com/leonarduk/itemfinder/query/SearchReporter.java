@@ -138,10 +138,8 @@ public final class SearchReporter {
 	}
 
 	/**
-	 * Send email.
+	 * Format email.
 	 *
-	 * @param config
-	 *            the config
 	 * @param searches
 	 *            the searches
 	 * @param groups
@@ -150,12 +148,6 @@ public final class SearchReporter {
 	 *            the formatter
 	 * @param failIfEmpty
 	 *            the fail if empty
-	 * @param emailSender
-	 *            the email sender
-	 * @param session
-	 *            the session
-	 * @param toEmails
-	 *            the to email
 	 * @param wantedItems
 	 *            the wanted items
 	 * @param otherItems
@@ -377,8 +369,6 @@ public final class SearchReporter {
 	 *            the last index
 	 * @param post
 	 *            the post
-	 * @param processed
-	 *            the processed
 	 * @return the int
 	 * @throws ParserException
 	 *             the parser exception
@@ -455,6 +445,22 @@ public final class SearchReporter {
 		return latest;
 	}
 
+	/**
+	 * Send email.
+	 *
+	 * @param config
+	 *            the config
+	 * @param emailSender
+	 *            the email sender
+	 * @param session
+	 *            the session
+	 * @param toEmails
+	 *            the to emails
+	 * @param emailBody
+	 *            the email body
+	 * @throws EmailException
+	 *             the email exception
+	 */
 	public void sendEmail(final FreecycleConfig config, final EmailSender emailSender,
 	        final EmailSession session, final String[] toEmails, final StringBuilder emailBody)
 	                throws EmailException {

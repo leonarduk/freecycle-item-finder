@@ -9,6 +9,7 @@ package com.leonarduk.itemfinder.freecycle;
 import java.util.Date;
 
 import org.htmlparser.util.ParserException;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.html.HtmlParser;
@@ -16,6 +17,7 @@ import com.leonarduk.itemfinder.html.HtmlParserImpl;
 
 public class FreecycleScraperIT {
 
+	@Ignore
 	@Test
 	public final void testGetFullPost() throws ParserException {
 
@@ -30,10 +32,6 @@ public class FreecycleScraperIT {
 		final Post post = new Post(postTypeValue, postDateValue, titleValue, urlString, group);
 		final FreecycleItem fullPost = scraper.getFullPost(post);
 		System.out.println(fullPost.toString());
-	}
-
-	@Test
-	public final void testGetPosts() {
 	}
 
 }
