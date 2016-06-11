@@ -20,7 +20,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<webscraper-core.version>1.0.7</webscraper-core.version>
+		<webscraper-core.version>1.0.8</webscraper-core.version>
 		<jacoco.version>0.7.6.201602180812</jacoco.version>
 	</properties>
 
