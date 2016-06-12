@@ -113,7 +113,10 @@ public class FreecycleScraper {
 		        .replaceAll("<img src=\"//static.freecycle.org/images/freecycle_logo.jpg", "")
 		        .replaceAll(
 		                "alt=\"logo of The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\" />",
-		                "");
+		                "")
+		        .replaceAll(" this ad", " this posting")
+		        .replaceAll(" this advert", " this posting");
+
 		return detail;
 	}
 
