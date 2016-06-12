@@ -109,18 +109,15 @@ public final class SearchReporter {
 
 		if (failIfEmpty && (wantedItems.length() == 0)) {
 			SearchReporter.LOGGER.info("No results - not sending message");
-
+			return null;
 		}
-		else {
-			emailBody.append(wantedItems);
-			emailBody.append("<hr/>");
-			final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
-			        + Arrays.asList(searches);
-			emailBody.append(formatter.formatSmall(heading));
-			emailBody.append("<hr/>");
-			emailBody.append(otherItems);
-
-		}
+		emailBody.append(wantedItems);
+		emailBody.append("<hr/>");
+		final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
+		        + Arrays.asList(searches);
+		emailBody.append(formatter.formatSmall(heading));
+		emailBody.append("<hr/>");
+		emailBody.append(otherItems);
 		return emailBody;
 	}
 

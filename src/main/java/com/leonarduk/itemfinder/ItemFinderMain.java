@@ -67,8 +67,9 @@ public final class ItemFinderMain {
 			final StringBuilder emailBody = searchReporter.generateSearch(config, formatter, em,
 			        reporter, failIfEmpty, emailSender);
 			ItemFinderMain.LOGGER.info("Email content: \n" + emailBody);
-			searchReporter.sendEmail(config, emailSender, emailBody);
-
+			if (emailBody != null) {
+				searchReporter.sendEmail(config, emailSender, emailBody);
+			}
 			tx.commit();
 		}
 		catch (final Throwable e) {
