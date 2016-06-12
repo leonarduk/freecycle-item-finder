@@ -10,6 +10,7 @@ package com.leonarduk.itemfinder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
 import org.apache.log4j.Logger;
@@ -58,9 +59,25 @@ public final class ItemFinderMain {
 		final boolean failIfEmpty = true;
 
 		final EmailSenderImpl emailSender = new EmailSenderImpl();
+		final EntityTransaction tx = em.getTransaction();
 
-		new SearchReporter().generateSearch(config, formatter, em, reporter, failIfEmpty,
-		        emailSender);
+		try {
+			tx.begin();
+			final SearchReporter searchReporter = new SearchReporter();
+			final StringBuilder emailBody = searchReporter.generateSearch(config, formatter, em,
+			        reporter, failIfEmpty, emailSender);
+			ItemFinderMain.LOGGER.info("Email content: \n" + emailBody);
+			searchReporter.sendEmail(config, emailSender, emailBody);
+
+			tx.commit();
+		}
+		catch (final Throwable e) {
+			tx.rollback();
+			// we rollback if there is an issue with email send
+			ItemFinderMain.LOGGER.fatal("Unhandled error:", e);
+			throw new RuntimeException("Error in search", e);
+		}
+
 	}
 
 	/**
