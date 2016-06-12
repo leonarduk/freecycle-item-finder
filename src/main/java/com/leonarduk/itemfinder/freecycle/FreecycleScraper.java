@@ -109,7 +109,11 @@ public class FreecycleScraper {
 		        .matcher(detailCandidate).replaceAll("");
 
 		final String detail = cleanStr.replace(FreecycleScraper.descriptionString, "").trim()
-		        .replace("(click on the thumbnail for full size image)", "");
+		        .replace("(click on the thumbnail for full size image)", "")
+		        .replaceAll("<img src=\"//static.freecycle.org/images/freecycle_logo.jpg", "")
+		        .replaceAll(
+		                "alt=\"logo of The Freecycle Network\" title=\"The Freecycle Network\" height=\"169\" width=\"360\" />",
+		                "");
 		return detail;
 	}
 
@@ -161,7 +165,7 @@ public class FreecycleScraper {
 			imagesBuilder.append(iter.nextNode().toHtml());
 		}
 		final FreecycleItem details = new FreecycleItem(post.getLink(), location, post.getText(),
-		        imagesBuilder.toString(), detail, post.getDate());
+		        this.cleanHtml(imagesBuilder.toString()), detail, post.getDate());
 
 		return details;
 	}
