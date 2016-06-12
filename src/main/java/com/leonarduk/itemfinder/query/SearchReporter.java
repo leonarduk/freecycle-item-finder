@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
 
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
@@ -102,12 +101,10 @@ public final class SearchReporter {
 	 * @param otherItems
 	 *            the other items
 	 * @return the string builder
-	 * @throws EmailException
-	 *             the email exception
 	 */
 	public StringBuilder formatEmail(final String[] searches, final FreecycleGroup[] groups,
 	        final Formatter formatter, final boolean failIfEmpty, final StringBuffer wantedItems,
-	        final StringBuffer otherItems) throws EmailException {
+	        final StringBuffer otherItems) {
 		final StringBuilder emailBody = new StringBuilder();
 
 		if (failIfEmpty && (wantedItems.length() == 0)) {
@@ -157,14 +154,6 @@ public final class SearchReporter {
 	        final EmailSender emailSender)
 	                throws InterruptedException, ExecutionException, ParserException, IOException {
 		final String[] searches = config.getSearchTerms();
-		final String[] toEmails = config.getToEmail();
-
-		final String user = config.getEmailUser();
-		final String server = config.getEmailServer();
-		final String password = config.getEmailPassword();
-		final String port = config.getEmailPort();
-
-		final EmailSession session = new EmailSessionImpl(user, password, server, port);
 
 		final String[] groupNames = config.getSearchGroupNames();
 		final FreecycleGroup[] groups = new FreecycleGroup[groupNames.length];
@@ -175,27 +164,15 @@ public final class SearchReporter {
 		SearchReporter.LOGGER
 		        .info("generateSearch:" + Arrays.asList(searches) + " - " + Arrays.asList(groups));
 
-		final EntityTransaction tx = em.getTransaction();
-		tx.begin();
-		try {
-			final StringBuffer wantedItems = new StringBuffer();
-			final StringBuffer otherItems = new StringBuffer();
+		final StringBuffer wantedItems = new StringBuffer();
+		final StringBuffer otherItems = new StringBuffer();
 
-			this.processAllGroups(config, searches, groups, formatter, em, wantedItems, otherItems);
+		this.processAllGroups(config, searches, groups, formatter, em, wantedItems, otherItems);
 
-			final StringBuilder emailBody = this.formatEmail(searches, groups, formatter,
-			        failIfEmpty, wantedItems, otherItems);
-			this.sendEmail(config, emailSender, session, toEmails, emailBody);
+		final StringBuilder emailBody = this.formatEmail(searches, groups, formatter, failIfEmpty,
+		        wantedItems, otherItems);
 
-			tx.commit();
-			return emailBody;
-		}
-		catch (final Throwable e) {
-			tx.rollback();
-			// we rollback if there is an issue with email send
-			SearchReporter.LOGGER.fatal("Unhandled error:", e);
-			throw new RuntimeException("Error in search", e);
-		}
+		return emailBody;
 	}
 
 	/**
@@ -400,18 +377,22 @@ public final class SearchReporter {
 	 *            the config
 	 * @param emailSender
 	 *            the email sender
-	 * @param session
-	 *            the session
-	 * @param toEmails
-	 *            the to emails
 	 * @param emailBody
 	 *            the email body
 	 * @throws EmailException
 	 *             the email exception
 	 */
 	public void sendEmail(final FreecycleConfig config, final EmailSender emailSender,
-	        final EmailSession session, final String[] toEmails, final StringBuilder emailBody)
-	                throws EmailException {
+	        final StringBuilder emailBody) throws EmailException {
+		final String[] toEmails = config.getToEmail();
+
+		final String user = config.getEmailUser();
+		final String server = config.getEmailServer();
+		final String password = config.getEmailPassword();
+		final String port = config.getEmailPort();
+
+		final EmailSession session = new EmailSessionImpl(user, password, server, port);
+
 		for (final String toEmail : toEmails) {
 			try {
 				emailSender.sendMessage(config.getFromEmail(), config.getFromName(),

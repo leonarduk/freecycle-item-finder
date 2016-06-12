@@ -46,22 +46,6 @@ public class SearchReporterIT {
 	}
 
 	/**
-	 * Test add post details.
-	 */
-	@Test
-	public final void testAddPostDetails() {
-
-	}
-
-	/**
-	 * Test generate report.
-	 */
-	@Test
-	public final void testGenerateReport() {
-
-	}
-
-	/**
 	 * Test generate search.
 	 *
 	 * @throws ParserException
@@ -78,14 +62,9 @@ public class SearchReporterIT {
 	        throws ParserException, InterruptedException, ExecutionException, IOException {
 		final FreecycleConfig config = new FreecycleConfig();
 		config.setSearchPeriod(14);
-		config.setSearchTerms("sofa");
+		config.setSearchTerms("sofa,table");
 		config.setSearchGroupNames("kingston,epsom");
-		config.setToEmail("someone@dummy.email");
 		config.setSearchItemLimit(1);
-		config.setEmailUser("test");
-		config.setEmailServer("testserver");
-		config.setEmailPassword("pwd");
-		config.setEmailPort("123");
 
 		config.setResultsPerPage(1);
 
@@ -99,64 +78,7 @@ public class SearchReporterIT {
 		final EmailSender emailSender = Mockito.mock(EmailSender.class);
 		final StringBuilder emailBody = this.searchReporter.generateSearch(config, formatter, em,
 		        reporter, failIfEmpty, emailSender);
-		SearchReporterIT.LOGGER.info("Report: " + emailBody);
+		System.out.println("Report: " + emailBody);
 
 	}
-
-	/**
-	 * Test get latest post.
-	 */
-	@Test
-	public final void testGetLatestPost() {
-
-	}
-
-	/**
-	 * Test include post.
-	 */
-	@Test
-	public final void testIncludePost() {
-
-	}
-
-	/**
-	 * Test process all groups.
-	 */
-	@Test
-	public final void testProcessAllGroups() {
-
-	}
-
-	/**
-	 * Test process individual post.
-	 */
-	@Test
-	public final void testProcessIndividualPost() {
-
-	}
-
-	/**
-	 * Test process one group.
-	 */
-	@Test
-	public final void testProcessOneGroup() {
-
-	}
-
-	/**
-	 * Test send email.
-	 */
-	@Test
-	public final void testSendEmail() {
-
-	}
-
-	/**
-	 * Test should be reported.
-	 */
-	@Test
-	public final void testShouldBeReported() {
-
-	}
-
 }

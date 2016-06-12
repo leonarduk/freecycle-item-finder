@@ -21,7 +21,7 @@ public class FreecycleScraperIT {
 	@Test
 	public final void testGetFullPost() throws ParserException {
 
-		final String urlString = "https://groups.freecycle.org/group/hammersmithandfulhamfreecycle/posts/54818262/Offered%20bath%20room%20cabinet";
+		final String urlString = "https://groups.freecycle.org/group/hammersmithandfulhamfreecycle/posts/54871164/Sofa";
 
 		final HtmlParser parserInstance = new HtmlParserImpl(urlString);
 		final FreecycleGroup group = FreecycleGroup.hammersmith;
