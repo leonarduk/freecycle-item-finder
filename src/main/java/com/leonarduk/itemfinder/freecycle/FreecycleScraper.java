@@ -36,10 +36,10 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  */
 public class FreecycleScraper {
 
-	public static final int LOCATION_NODE_INDEX = 14;
+	static final int LOCATION_NODE_INDEX = 14;
 
 	/** The date format. */
-	public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss yyyy";
+	private static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss yyyy";
 
 	/** The Constant tableDataContainingLinkFilter. */
 	private static final NodeFilter TABLE_LINK_FILTER = new AndFilter(new TagNameFilter("td"),
@@ -62,7 +62,7 @@ public class FreecycleScraper {
 	private final HtmlParser parser;
 
 	/** The posts. */
-	private final List<Post> posts = new ArrayList<Post>();
+	private final List<Post> posts = new ArrayList<>();
 
 	/** The freecycle group. */
 	private final FreecycleGroup freecycleGroup;
@@ -103,7 +103,7 @@ public class FreecycleScraper {
 
 	}
 
-	public String cleanHtml(final String detailCandidate) {
+	String cleanHtml(final String detailCandidate) {
 		final String regex = "<img src=\"//static.freecycle.org/images/freecycle_logo.jpg.*?/>";
 		final String cleanStr = Pattern.compile(regex, Pattern.CASE_INSENSITIVE)
 		        .matcher(detailCandidate).replaceAll("");
@@ -207,7 +207,8 @@ public class FreecycleScraper {
 
 		try {
 			final NodeList list = this.getHTMLNodes();
-			FreecycleScraper.LOG.info(String.format("Parsed %s matching HTML nodes", list.size()));
+			FreecycleScraper.LOG.info(
+			        String.format("Parsed %s matching HTML nodes", Integer.valueOf(list.size())));
 
 			final SimpleNodeIterator iterator = list.elements();
 			while (iterator.hasMoreNodes()) {
@@ -225,7 +226,8 @@ public class FreecycleScraper {
 			FreecycleScraper.LOG.error("Unable to retrieve HTML nodes", e);
 		}
 
-		FreecycleScraper.LOG.info(String.format("Returning %s posts", this.posts.size()));
+		FreecycleScraper.LOG
+		        .info(String.format("Returning %s posts", Integer.valueOf(this.posts.size())));
 		return this.posts;
 	}
 

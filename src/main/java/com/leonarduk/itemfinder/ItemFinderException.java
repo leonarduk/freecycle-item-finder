@@ -16,16 +16,6 @@ public class ItemFinderException extends Exception {
 	 *
 	 * @param message
 	 *            the message
-	 */
-	public ItemFinderException(final String message) {
-		super(message);
-	}
-
-	/**
-	 * Instantiates a new item finder exception.
-	 *
-	 * @param message
-	 *            the message
 	 * @param e
 	 *            the e
 	 */

@@ -76,7 +76,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the groups
 	 * @return the latest post
 	 */
-	public final LatestPost getLatestPost(final FreecycleGroup groups) {
+	private final LatestPost getLatestPost(final FreecycleGroup groups) {
 		LatestPost latest = this.em.find(LatestPost.class, groups);
 		if (latest == null) {
 			synchronized (this.dbLock) {
@@ -102,8 +102,9 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 * @throws ParserException
 	 *             the parser exception
 	 */
-	public final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder,
-	        Integer limit) throws ParserException {
+	private final Set<Item> getPosts(final HtmlParser parser, final QueryBuilder queryBuilder,
+	        final Integer inputLimit) throws ParserException {
+		int limit = inputLimit.intValue();
 		final Set<Item> items = new HashSet<>();
 		final FreecycleScraper scraper = new FreecycleScraper(parser, queryBuilder.getGroup());
 		final LatestPost latest = this.getLatestPost(queryBuilder.getGroup());
@@ -141,7 +142,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the full post
 	 * @return true, if successful
 	 */
-	public final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
+	final boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
 		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
 		        || post.getDescription().toLowerCase()
 		                .contains(queryBuilder.getSearchWords().toLowerCase());
@@ -182,7 +183,7 @@ public class FreecycleItemSearcher implements ItemSearcher {
 	 *            the latest
 	 * @return true, if successful
 	 */
-	public final boolean shouldBeReported(final Post post, final LatestPost latest) {
+	private final boolean shouldBeReported(final Post post, final LatestPost latest) {
 		final String link = post.getLink();
 		final boolean shouldBeReported = post.getPostId() > latest.getLatestPostNumber();
 

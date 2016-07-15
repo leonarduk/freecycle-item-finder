@@ -5,7 +5,6 @@ package com.leonarduk.itemfinder.freecycle;
 
 import java.util.Date;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -63,16 +62,6 @@ public class PostTest {
 	}
 
 	/**
-	 * Tear down.
-	 *
-	 * @throws Exception
-	 *             the exception
-	 */
-	@After
-	public void tearDown() throws Exception {
-	}
-
-	/**
 	 * Test get date.
 	 */
 	@Test
@@ -118,16 +107,6 @@ public class PostTest {
 	@Test
 	public final void testGetText() {
 		Assert.assertEquals(this.titleValue, this.post.getText());
-	}
-
-	/**
-	 * Test to post.
-	 */
-	@Test
-	public final void testToPost() {
-		final String expected = "OFFER: Kids Snow Boots (https://groups.freecycle.org/group/freecycle-kingston"
-		        + "/posts/45736770/Kids%20Snow%20Boots)";
-		Assert.assertEquals(expected, this.post.toPost());
 	}
 
 	/**

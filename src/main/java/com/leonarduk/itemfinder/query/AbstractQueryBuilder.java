@@ -126,6 +126,7 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
+	@SuppressWarnings("unchecked")
 	public final T useGet() {
 		this.usePost = false;
 		return ((T) this);
@@ -136,9 +137,10 @@ public abstract class AbstractQueryBuilder<T extends AbstractQueryBuilder<T>> {
 	 *
 	 * @return the t
 	 */
+	@SuppressWarnings("unchecked")
 	public final T usePost() {
 		this.usePost = true;
-		return (T) this;
+		return ((T) this);
 	}
 
 	/**

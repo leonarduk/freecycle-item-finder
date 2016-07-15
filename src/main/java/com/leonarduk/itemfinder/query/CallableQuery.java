@@ -18,7 +18,7 @@ import com.leonarduk.itemfinder.interfaces.ItemSearcher;
  * @version $Date:: $: Date of last commit
  * @since 28 Jan 2015
  */
-public class CallableQuery implements Callable<Set<Item>> {
+class CallableQuery implements Callable<Set<Item>> {
 
 	/** The item searcher. */
 	private final ItemSearcher itemSearcher;
@@ -39,8 +39,8 @@ public class CallableQuery implements Callable<Set<Item>> {
 	 * @param aLimit
 	 *            the a limit
 	 */
-	public CallableQuery(final ItemSearcher itemSearcherValue,
-	        final QueryBuilder queryBuilderInstance, final Integer aLimit) {
+	CallableQuery(final ItemSearcher itemSearcherValue, final QueryBuilder queryBuilderInstance,
+	        final Integer aLimit) {
 		super();
 		this.itemSearcher = itemSearcherValue;
 		this.queryBuilder = queryBuilderInstance;
@@ -49,7 +49,7 @@ public class CallableQuery implements Callable<Set<Item>> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.util.concurrent.Callable#call()
 	 */
 	@Override

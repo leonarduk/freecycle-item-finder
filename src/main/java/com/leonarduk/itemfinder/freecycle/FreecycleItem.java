@@ -29,10 +29,6 @@ public class FreecycleItem implements Item {
 	/** The Constant MAX_FIELD_SIZE. */
 	private static final int MAX_FIELD_SIZE = 500;
 
-	/** The condition. */
-	@Basic
-	private Condition condition;
-
 	/** The created date. */
 	@Basic
 	private Date createdDate;
@@ -92,12 +88,11 @@ public class FreecycleItem implements Item {
 	 * @param createdDateValue
 	 *            the created date
 	 */
-	public FreecycleItem(final String linkValue, final String locationValue, final String nameValue,
-	        final int quantityValue, final String extraHtmlValue, final String descriptionValue,
-	        final Date createdDateValue) {
+	private FreecycleItem(final String linkValue, final String locationValue,
+	        final String nameValue, final int quantityValue, final String extraHtmlValue,
+	        final String descriptionValue, final Date createdDateValue) {
 		super();
 		this.createdDate = createdDateValue;
-		this.condition = Condition.USED;
 		this.price = 0;
 		this.link = linkValue;
 		this.location = locationValue;
@@ -156,9 +151,6 @@ public class FreecycleItem implements Item {
 			return false;
 		}
 		final FreecycleItem other = (FreecycleItem) obj;
-		if (this.condition != other.condition) {
-			return false;
-		}
 		if (this.createdDate == null) {
 			if (other.createdDate != null) {
 				return false;
@@ -214,16 +206,6 @@ public class FreecycleItem implements Item {
 			return false;
 		}
 		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getCondition()
-	 */
-	@Override
-	public final Condition getCondition() {
-		return this.condition;
 	}
 
 	/**
@@ -295,31 +277,10 @@ public class FreecycleItem implements Item {
 		return this.createdDate;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getPrice()
-	 */
-	@Override
-	public final double getPrice() {
-		return this.price;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.leonarduk.itemfinder.interfaces.Item#getQuantity()
-	 */
-	@Override
-	public final int getQuantity() {
-		return this.quantity;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + ((this.condition == null) ? 0 : this.condition.hashCode());
 		result = (prime * result) + ((this.createdDate == null) ? 0 : this.createdDate.hashCode());
 		result = (prime * result) + ((this.description == null) ? 0 : this.description.hashCode());
 		result = (prime * result) + ((this.extraHtml == null) ? 0 : this.extraHtml.hashCode());
@@ -340,9 +301,8 @@ public class FreecycleItem implements Item {
 	 */
 	@Override
 	public final String toString() {
-		return "FreecycleItem [condition=" + this.condition + ", price=" + this.price + ", link="
-		        + this.link + ", location=" + this.location + ", name=" + this.name + ", quantity="
-		        + this.quantity + ", extraHtml=" + this.extraHtml + ", description="
-		        + this.description + "]";
+		return "FreecycleItem [price=" + this.price + ", link=" + this.link + ", location="
+		        + this.location + ", name=" + this.name + ", quantity=" + this.quantity
+		        + ", extraHtml=" + this.extraHtml + ", description=" + this.description + "]";
 	}
 }
