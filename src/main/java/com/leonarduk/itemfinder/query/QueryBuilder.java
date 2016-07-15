@@ -49,32 +49,6 @@ public interface QueryBuilder {
 	String getSearchWords();
 
 	/**
-	 * Sets the date end.
-	 *
-	 * @param day
-	 *            the day
-	 * @param month
-	 *            the month
-	 * @param year
-	 *            the year
-	 * @return the freecycle query builder
-	 */
-	FreecycleQueryBuilder setDateEnd(int day, int month, int year);
-
-	/**
-	 * Sets the date start.
-	 *
-	 * @param i
-	 *            the i
-	 * @param j
-	 *            the j
-	 * @param k
-	 *            the k
-	 * @return the freecycle query builder
-	 */
-	FreecycleQueryBuilder setDateStart(int i, int j, int k);
-
-	/**
 	 * Sets the date start.
 	 *
 	 * @param date

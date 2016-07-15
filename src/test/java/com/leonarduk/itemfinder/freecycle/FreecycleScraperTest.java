@@ -74,7 +74,7 @@ public class FreecycleScraperTest {
 		final NodeList imageNodes = Mockito.mock(NodeList.class);
 		final SimpleNodeIterator iter = Mockito.mock(SimpleNodeIterator.class);
 		Mockito.when(imageNodes.elements()).thenReturn(iter);
-		Mockito.when(iter.hasMoreNodes()).thenReturn(false);
+		Mockito.when(Boolean.valueOf(iter.hasMoreNodes())).thenReturn(Boolean.FALSE);
 		Mockito.when(this.parserInstance.extractAllNodesThatMatch(Matchers.any(NodeFilter.class)))
 		        .thenReturn(imageNodes);
 
@@ -93,9 +93,4 @@ public class FreecycleScraperTest {
 	public final void testGetParser() {
 		Assert.assertEquals(this.parserInstance, this.scraper.getParser());
 	}
-
-	@Test
-	public final void testGetPosts() {
-	}
-
 }

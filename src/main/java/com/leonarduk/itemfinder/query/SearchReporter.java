@@ -44,9 +44,9 @@ import com.sun.mail.smtp.SMTPSendFailedException;
 public final class SearchReporter {
 
 	/** The Constant MAX_POSTS_PER_SEARCH. */
-	public static final int	MAX_POSTS_PER_SEARCH	= 100;
+	private static final int	MAX_POSTS_PER_SEARCH	= 100;
 	/** The Constant LOGGER. */
-	static final Logger		LOGGER					= Logger.getLogger(SearchReporter.class);
+	private static final Logger	LOGGER					= Logger.getLogger(SearchReporter.class);
 
 	/** The db lock. */
 	private final Object dbLock = new Object();
@@ -66,7 +66,7 @@ public final class SearchReporter {
 	 *            the item
 	 * @return the string
 	 */
-	public String addPostDetails(final Formatter formatter, final Item item) {
+	String addPostDetails(final Formatter formatter, final Item item) {
 		final String spacer = formatter.getNewLine();
 		final StringBuilder emailBodyBuilder = new StringBuilder(spacer);
 		emailBodyBuilder.append(formatter.getNewSection());
@@ -102,7 +102,7 @@ public final class SearchReporter {
 	 *            the other items
 	 * @return the string builder
 	 */
-	public StringBuilder formatEmail(final String[] searches, final FreecycleGroup[] groups,
+	private StringBuilder formatEmail(final String[] searches, final FreecycleGroup[] groups,
 	        final Formatter formatter, final boolean failIfEmpty, final StringBuffer wantedItems,
 	        final StringBuffer otherItems) {
 		final StringBuilder emailBody = new StringBuilder();
@@ -181,7 +181,7 @@ public final class SearchReporter {
 	 *            the em
 	 * @return the latest post
 	 */
-	public LatestPost getLatestPost(final FreecycleGroup groups, final EntityManager em) {
+	private LatestPost getLatestPost(final FreecycleGroup groups, final EntityManager em) {
 		LatestPost latest = em.find(LatestPost.class, groups);
 		if (latest == null) {
 			synchronized (this.dbLock) {
@@ -192,22 +192,6 @@ public final class SearchReporter {
 		}
 		return latest;
 
-	}
-
-	/**
-	 * This will query if this is included in the search terms and if an entry has been created on
-	 * the DB or not, creating a ReportableItem entry if we are to send this one out.
-	 *
-	 * @param queryBuilder
-	 *            the query builder
-	 * @param post
-	 *            the full post
-	 * @return true, if successful
-	 */
-	public boolean includePost(final QueryBuilder queryBuilder, final FreecycleItem post) {
-		return post.getName().toLowerCase().contains(queryBuilder.getSearchWords().toLowerCase())
-		        || post.getDescription().toLowerCase()
-		                .contains(queryBuilder.getSearchWords().toLowerCase());
 	}
 
 	/**
@@ -246,7 +230,7 @@ public final class SearchReporter {
 	 * @param otherItems
 	 *            the other items
 	 */
-	public void processAllGroups(final FreecycleConfig config, final String[] searches,
+	private void processAllGroups(final FreecycleConfig config, final String[] searches,
 	        final FreecycleGroup[] groups, final Formatter formatter, final EntityManager em,
 	        final StringBuffer wantedItems, final StringBuffer otherItems) {
 		final int timeperiod = config.getSearchPeriod().intValue();
@@ -256,12 +240,12 @@ public final class SearchReporter {
 		        .setDateStart(LocalDate.now().minus(timeperiod, ChronoUnit.DAYS)).useGet()
 		        .setResultsPerPage(resultsPerPageNumber);
 
-		final Integer processed = 0;
+		final Integer processed = Integer.valueOf(0);
 		for (final FreecycleGroup freecycleGroup : groups) {
 			LatestPost latest = null;
 			try {
 				latest = this.processOneGroup(searches, formatter, em, queryBuilder, wantedItems,
-				        otherItems, freecycleGroup, processed);
+				        otherItems, freecycleGroup, processed.intValue());
 			}
 			catch (final Throwable e) {
 				SearchReporter.LOGGER.error("Error with " + freecycleGroup.name(), e);
@@ -295,7 +279,7 @@ public final class SearchReporter {
 	 * @throws ParserException
 	 *             the parser exception
 	 */
-	public int processIndividualPost(final String[] searches, final Formatter formatter,
+	private int processIndividualPost(final String[] searches, final Formatter formatter,
 	        final StringBuffer wantedItems, final StringBuffer otherItems,
 	        final FreecycleScraper scraper, final LatestPost latest, final int lastIndex,
 	        final Post post) throws ParserException {
@@ -339,7 +323,7 @@ public final class SearchReporter {
 	 * @throws IOException
 	 *             Signals that an I/O exception has occurred.
 	 */
-	public LatestPost processOneGroup(final String[] searches, final Formatter formatter,
+	private LatestPost processOneGroup(final String[] searches, final Formatter formatter,
 	        final EntityManager em, final FreecycleQueryBuilder queryBuilder,
 	        final StringBuffer wantedItems, final StringBuffer otherItems,
 	        final FreecycleGroup freecycleGroup, final int processed)
@@ -417,7 +401,7 @@ public final class SearchReporter {
 	 *            the latest
 	 * @return true, if successful
 	 */
-	public boolean shouldBeReported(final Post post, final LatestPost latest) {
+	private boolean shouldBeReported(final Post post, final LatestPost latest) {
 		final String link = post.getLink();
 		if (post.getPostType() != PostType.OFFER) {
 			return false;

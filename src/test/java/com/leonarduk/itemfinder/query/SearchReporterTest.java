@@ -20,7 +20,6 @@ import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
-import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 import com.leonarduk.itemfinder.freecycle.FreecycleItem;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.webscraper.core.email.impl.EmailSenderImpl;
@@ -43,12 +42,6 @@ public class SearchReporterTest {
 
 	/** The config. */
 	private FreecycleConfig config;
-
-	/** The searches. */
-	private String[] searches;
-
-	/** The groups. */
-	private FreecycleGroup[] groups;
 
 	/** The formatter. */
 	private Formatter formatter;
@@ -73,8 +66,6 @@ public class SearchReporterTest {
 	@Before
 	public final void setUp() throws Exception {
 		this.config = MockObjectGenerator.createFreecycleConfig();
-		this.searches = new String[] { "bed", "desk" };
-		this.groups = new FreecycleGroup[] { FreecycleGroup.kingston };
 		this.reporter = new QueryReporter();
 		this.failIfEmpty = false;
 		this.formatter = new HtmlFormatter();
@@ -83,7 +74,7 @@ public class SearchReporterTest {
 
 	}
 
-	@Ignore    // need to fix date - Travis is UST
+	@Ignore     // need to fix date - Travis is UST
 	@Test
 	public final void testAddPostDetails() throws Exception {
 		final String linkValue = "http://sss";

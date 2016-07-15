@@ -31,7 +31,7 @@ public class FreecycleConfig {
 	private static final String FREECYCLE_SEARCH_MAX_LIMIT = "freecycle.search.limit";
 
 	/** The Constant MAX_RESULTS_PER_PAGE. */
-	public static final int MAX_RESULTS_PER_PAGE = 100;
+	private static final int MAX_RESULTS_PER_PAGE = 100;
 
 	/** The Constant MIN_RESULTS_PER_PAGE. */
 	public static final int MIN_RESULTS_PER_PAGE = 10;
@@ -61,9 +61,9 @@ public class FreecycleConfig {
 	private static final String FREECYCLE_SEARCH_GROUP_NAMES = "freecycle.search.groups";
 
 	/** The Constant FREECYCLE_SEARCH_TERMS. */
-	public static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
+	private static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 
-	static final Logger LOGGER = Logger.getLogger(FreecycleConfig.class);
+	private static final Logger LOGGER = Logger.getLogger(FreecycleConfig.class);
 
 	private static final String	FREECYCLE_SEND_HTML_EMAILS	= "freecycle.send.html.emails";
 	/** The config. */
@@ -266,7 +266,6 @@ public class FreecycleConfig {
 
 	public void setSearchItemLimit(final int i) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_MAX_LIMIT, String.valueOf(i));
-		;
 	}
 
 	/**

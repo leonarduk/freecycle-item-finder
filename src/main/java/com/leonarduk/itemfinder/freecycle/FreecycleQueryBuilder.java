@@ -81,11 +81,12 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 */
 	@Override
 	public final HtmlParser build() throws ParserException, IOException {
+		this.LOG.debug("Build parser");
 		final StringBuilder builder = new StringBuilder("https://groups.freecycle.org/group/");
 		builder.append(this.town.url());
 
 		builder.append("/posts/search");
-		final Map<String, String> parameters = new HashMap<String, String>();
+		final Map<String, String> parameters = new HashMap<>();
 		parameters.put("page", String.valueOf(this.pageNumber));
 		parameters.put("resultsperpage", String.valueOf(this.resultsPerPage));
 		if (this.includeOffered) {
@@ -108,9 +109,7 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 			parameters.put("submit", "Search for Posts");
 			return this.getPOSTConnection(builder.toString(), parameters);
 		}
-		else {
-			return this.getGETConnection(builder.toString(), parameters);
-		}
+		return this.getGETConnection(builder.toString(), parameters);
 	}
 
 	/*
@@ -171,29 +170,6 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	/*
 	 * (non-Javadoc)
 	 *
-	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateEnd(int, int, int)
-	 */
-	@Override
-	public final FreecycleQueryBuilder setDateEnd(final int day, final int month, final int year) {
-		this.dateEnd = LocalDate.of(year, month, day);
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(int, int, int)
-	 */
-	@Override
-	public final FreecycleQueryBuilder setDateStart(final int day, final int month,
-	        final int year) {
-		this.dateStart = LocalDate.of(year, month, day);
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 *
 	 * @see com.leonarduk.itemfinder.query.QueryBuilder#setDateStart(java.time.LocalDate )
 	 */
 	@Override
@@ -223,18 +199,6 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	 */
 	public final FreecycleQueryBuilder setIncludeWanted(final boolean include) {
 		this.includeWanted = include;
-		return this;
-	}
-
-	/**
-	 * Sets the page number.
-	 *
-	 * @param pageNumberValue
-	 *            the page number
-	 * @return the freecycle query builder
-	 */
-	public final FreecycleQueryBuilder setPageNumber(final int pageNumberValue) {
-		this.pageNumber = pageNumberValue;
 		return this;
 	}
 

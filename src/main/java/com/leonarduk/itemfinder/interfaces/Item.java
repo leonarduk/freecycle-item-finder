@@ -17,13 +17,6 @@ import java.util.Date;
 public interface Item {
 
 	/**
-	 * Gets the condition.
-	 *
-	 * @return the condition
-	 */
-	Condition getCondition();
-
-	/**
 	 * Gets the description.
 	 *
 	 * @return the description
@@ -65,30 +58,4 @@ public interface Item {
 	 */
 	Date getPostedDate();
 
-	/**
-	 * Gets the price.
-	 *
-	 * @return the price
-	 */
-	double getPrice();
-
-	/**
-	 * Gets the quantity.
-	 *
-	 * @return the quantity
-	 */
-	int getQuantity();
-
-	/**
-	 * The Enum Condition.
-	 */
-	enum Condition {
-
-		/** The new. */
-		NEW, /** The used. */
-		USED, /** The refurbished. */
-		REFURBISHED, /** The broken. */
-		BROKEN, /** The unknown. */
-		UNKNOWN
-	}
 }

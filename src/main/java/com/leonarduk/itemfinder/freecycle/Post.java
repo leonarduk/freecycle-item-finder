@@ -31,16 +31,6 @@ public class Post {
 	/**
 	 * Instantiates a new post.
 	 *
-	 * @param post
-	 *            the post
-	 */
-	public Post(final Post post) {
-		this(post.postType, post.postDate, post.title, post.link, post.freecycleGroup);
-	}
-
-	/**
-	 * Instantiates a new post.
-	 *
 	 * @param postTypeValue
 	 *            the post type
 	 * @param postDateValue
@@ -52,7 +42,7 @@ public class Post {
 	 * @param group
 	 *            the group
 	 */
-	public Post(final PostType postTypeValue, final Date postDateValue, final String titleValue,
+	Post(final PostType postTypeValue, final Date postDateValue, final String titleValue,
 	        final String linkValue, final FreecycleGroup group) {
 		this.postType = postTypeValue;
 		this.postDate = postDateValue;
@@ -60,13 +50,13 @@ public class Post {
 		this.link = linkValue;
 		final String[] urlParts = this.link.split("/");
 		final int postIdIndex = 6;
-		this.postId = Integer.valueOf(urlParts[postIdIndex]);
+		this.postId = Integer.valueOf(urlParts[postIdIndex]).intValue();
 		this.freecycleGroup = group;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -159,7 +149,7 @@ public class Post {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -187,18 +177,9 @@ public class Post {
 		return object.hashCode();
 	}
 
-	/**
-	 * To post.
-	 *
-	 * @return the string
-	 */
-	public final String toPost() {
-		return String.format("%s: %s (%s)", this.postType, this.title, this.link);
-	}
-
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override

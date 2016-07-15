@@ -28,7 +28,7 @@ public enum PostType {
 	 *            the type and date node
 	 * @return the post type
 	 */
-	public static PostType parse(final Node typeAndDateNode) {
+	static PostType parse(final Node typeAndDateNode) {
 		final Node typeLink = typeAndDateNode.getChildren().elementAt(1);
 		final String typeLinkString = typeLink.toHtml();
 
@@ -45,7 +45,7 @@ public enum PostType {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Enum#toString()
 	 */
 	@Override
