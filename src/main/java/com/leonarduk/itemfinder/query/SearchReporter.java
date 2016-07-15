@@ -387,13 +387,14 @@ public final class SearchReporter {
 		final String server = config.getEmailServer();
 		final String password = config.getEmailPassword();
 		final String port = config.getEmailPort();
+		final boolean sendAsHtml = config.isSendAsHtml();
 
 		final EmailSession session = new EmailSessionImpl(user, password, server, port);
 
 		for (final String toEmail : toEmails) {
 			try {
 				emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-				        "Matching Freecycle items found", emailBody.toString(), true, session,
+				        "Matching Freecycle items found", emailBody.toString(), sendAsHtml, session,
 				        new String[] { toEmail });
 			}
 			catch (final EmailException e) {

@@ -63,9 +63,11 @@ public class FreecycleConfig {
 	/** The Constant FREECYCLE_SEARCH_TERMS. */
 	public static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 
-	static final Logger		LOGGER	= Logger.getLogger(FreecycleConfig.class);
+	static final Logger LOGGER = Logger.getLogger(FreecycleConfig.class);
+
+	private static final String	FREECYCLE_SEND_HTML_EMAILS	= "freecycle.send.html.emails";
 	/** The config. */
-	private final Config	config;
+	private final Config		config;
 
 	/**
 	 * Instantiates a new freecycle config.
@@ -197,6 +199,10 @@ public class FreecycleConfig {
 		return this.config.getArrayProperty(FreecycleConfig.FREECYCLE_TO_EMAIL);
 	}
 
+	public boolean isSendAsHtml() {
+		return this.config.getBooleanProperty(FreecycleConfig.FREECYCLE_SEND_HTML_EMAILS);
+	}
+
 	/**
 	 * Sets the email password.
 	 *
@@ -281,6 +287,10 @@ public class FreecycleConfig {
 	 */
 	public void setSearchTerms(final String searchTermsCsv) {
 		this.config.setProperty(FreecycleConfig.FREECYCLE_SEARCH_TERMS, searchTermsCsv);
+	}
+
+	public void setSendAsHtml(final boolean sendAsHtml) {
+		this.config.setBooleanProperty(FreecycleConfig.FREECYCLE_SEND_HTML_EMAILS, sendAsHtml);
 	}
 
 	/**
