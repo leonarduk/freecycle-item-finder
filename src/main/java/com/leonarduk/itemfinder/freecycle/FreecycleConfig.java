@@ -63,7 +63,11 @@ public class FreecycleConfig {
 	/** The Constant FREECYCLE_SEARCH_TERMS. */
 	private static final String FREECYCLE_SEARCH_TERMS = "freecycle.search.terms";
 
+<<<<<<< HEAD
 	private static final Logger LOGGER = Logger.getLogger(FreecycleConfig.class);
+=======
+	static final Logger LOGGER = Logger.getLogger(FreecycleConfig.class);
+>>>>>>> branch 'feature/#18-reduce-spaminess-of-email' of https://github.com/leonarduk/freecycle-item-finder.git
 
 	private static final String	FREECYCLE_SEND_HTML_EMAILS	= "freecycle.send.html.emails";
 	/** The config. */
