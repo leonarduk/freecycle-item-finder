@@ -17,6 +17,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.leonarduk.itemfinder.freecycle.db.ReportableItem;
+
 /**
  * The Class ReportableItemTest.
  *

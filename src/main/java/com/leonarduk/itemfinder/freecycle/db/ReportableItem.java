@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.leonarduk.itemfinder.freecycle;
+package com.leonarduk.itemfinder.freecycle.db;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;

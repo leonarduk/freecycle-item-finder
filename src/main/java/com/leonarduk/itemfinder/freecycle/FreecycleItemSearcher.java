@@ -15,6 +15,9 @@ import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.ItemFinderException;
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
+import com.leonarduk.itemfinder.freecycle.db.LatestPost;
+import com.leonarduk.itemfinder.freecycle.db.ReportableItem;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;

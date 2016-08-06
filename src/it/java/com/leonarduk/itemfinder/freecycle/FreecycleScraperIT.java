@@ -12,6 +12,7 @@ import org.htmlparser.util.ParserException;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.html.HtmlParserImpl;
 

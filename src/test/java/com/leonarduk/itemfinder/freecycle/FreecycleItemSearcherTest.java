@@ -18,6 +18,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.ItemFinderException;
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
