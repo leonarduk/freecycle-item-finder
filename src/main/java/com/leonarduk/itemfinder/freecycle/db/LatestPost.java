@@ -1,12 +1,14 @@
 /**
  * All rights reserved. @Leonard UK Ltd.
  */
-package com.leonarduk.itemfinder.freecycle;
+package com.leonarduk.itemfinder.freecycle.db;
 
 import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
 
 /**
  * The Class LatestPost.

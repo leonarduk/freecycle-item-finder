@@ -20,7 +20,7 @@ import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.MockObjectGenerator;
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
-import com.leonarduk.itemfinder.freecycle.FreecycleItem;
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.webscraper.core.email.impl.EmailSenderImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
@@ -74,7 +74,7 @@ public class SearchReporterTest {
 
 	}
 
-	@Ignore     // need to fix date - Travis is UST
+	@Ignore      // need to fix date - Travis is UST
 	@Test
 	public final void testAddPostDetails() throws Exception {
 		final String linkValue = "http://sss";

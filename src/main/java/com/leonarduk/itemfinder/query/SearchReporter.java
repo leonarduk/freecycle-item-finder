@@ -17,12 +17,12 @@ import org.htmlparser.util.ParserException;
 
 import com.leonarduk.itemfinder.freecycle.FreecycleConfig;
 import com.leonarduk.itemfinder.freecycle.FreecycleGroup;
-import com.leonarduk.itemfinder.freecycle.FreecycleItem;
 import com.leonarduk.itemfinder.freecycle.FreecycleQueryBuilder;
 import com.leonarduk.itemfinder.freecycle.FreecycleScraper;
-import com.leonarduk.itemfinder.freecycle.LatestPost;
 import com.leonarduk.itemfinder.freecycle.Post;
 import com.leonarduk.itemfinder.freecycle.PostType;
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
+import com.leonarduk.itemfinder.freecycle.db.LatestPost;
 import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.webscraper.core.email.EmailException;
@@ -30,6 +30,7 @@ import com.leonarduk.webscraper.core.email.EmailSender;
 import com.leonarduk.webscraper.core.email.EmailSession;
 import com.leonarduk.webscraper.core.email.impl.EmailSessionImpl;
 import com.leonarduk.webscraper.core.format.Formatter;
+import com.leonarduk.webscraper.core.format.HtmlFormatter;
 import com.sun.mail.smtp.SMTPSendFailedException;
 
 /**
@@ -112,11 +113,12 @@ public final class SearchReporter {
 			return null;
 		}
 		emailBody.append(wantedItems);
-		emailBody.append("<hr/>");
+		emailBody.append(formatter.getNewSection());
 		final String heading = "Searched " + Arrays.asList(groups) + " for " + " "
 		        + Arrays.asList(searches);
 		emailBody.append(formatter.formatSmall(heading));
-		emailBody.append("<hr/>");
+
+		emailBody.append(formatter.getNewSection());
 		emailBody.append(otherItems);
 		return emailBody;
 	}
@@ -371,22 +373,23 @@ public final class SearchReporter {
 		final String server = config.getEmailServer();
 		final String password = config.getEmailPassword();
 		final String port = config.getEmailPort();
-		final boolean sendAsHtml = config.isSendAsHtml();
 
 		final EmailSession session = new EmailSessionImpl(user, password, server, port);
+
+		final Formatter formatter = new HtmlFormatter();
 
 		for (final String toEmail : toEmails) {
 			try {
 				emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-				        "Matching Freecycle items found", emailBody.toString(), sendAsHtml, session,
+				        "Matching Freecycle items found", emailBody.toString(), formatter, session,
 				        new String[] { toEmail });
 			}
 			catch (final EmailException e) {
 				if (e.getCause() instanceof SMTPSendFailedException) {
 					SearchReporter.LOGGER.error("Failed to send email to " + toEmail, e.getCause());
 					emailSender.sendMessage(config.getFromEmail(), config.getFromName(),
-					        "Failed to send to " + toEmail, emailBody.toString(), true, session,
-					        new String[] { config.getFromEmail() });
+					        "Failed to send to " + toEmail, emailBody.toString(), formatter,
+					        session, new String[] { config.getFromEmail() });
 				}
 			}
 		}

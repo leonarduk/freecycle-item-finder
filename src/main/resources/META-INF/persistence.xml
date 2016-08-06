@@ -6,9 +6,9 @@
 	<persistence-unit name="ReportableItem"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>com.leonarduk.itemfinder.freecycle.ReportableItem</class>
-		<class>com.leonarduk.itemfinder.freecycle.FreecycleItem</class>
-		<class>com.leonarduk.itemfinder.freecycle.LatestPost</class>
+		<class>com.leonarduk.itemfinder.freecycle.db.ReportableItem</class>
+		<class>com.leonarduk.itemfinder.freecycle.db.FreecycleItem</class>
+		<class>com.leonarduk.itemfinder.freecycle.db.LatestPost</class>
 
 		<properties>
 			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />

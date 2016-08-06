@@ -10,6 +10,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
+import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
+
 /**
  * The Class TestClass.
  */
