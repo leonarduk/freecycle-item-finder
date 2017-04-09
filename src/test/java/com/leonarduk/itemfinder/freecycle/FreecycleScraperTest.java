@@ -21,7 +21,7 @@ import org.mockito.Matchers;
 import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
-import com.leonarduk.itemfinder.html.HtmlParser;
+import com.leonarduk.web.HtmlParser;
 
 public class FreecycleScraperTest {
 

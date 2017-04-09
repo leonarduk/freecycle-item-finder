@@ -19,10 +19,10 @@ import org.mockito.Mockito;
 
 import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
-import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
+import com.leonarduk.web.HtmlParser;
 
 /**
  * The Class FreecycleItemSearcherTest.
@@ -32,10 +32,10 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
 public class FreecycleItemSearcherTest {
 
 	/** The test class. */
-	private ItemSearcher testClass;
+	private ItemSearcher	testClass;
 
 	/** The search term. */
-	private String searchTerm;
+	private String			searchTerm;
 
 	/**
 	 * Sets the up.
@@ -107,10 +107,11 @@ public class FreecycleItemSearcherTest {
 		final FreecycleItem fullPost = new FreecycleItem("http://", "Thames Ditton", "3 wheel pram",
 		        "<hr>",
 
-		"Mothercare mychoice 3 wheel pram, green, good working order, "
-		        + "comes with a rain cover and small handy pump for the tyres,"
-		        + " can be used frombirth"
-		        + " up to 4 years, Maxicosi car seat can be used with it.", new Date());
+		        "Mothercare mychoice 3 wheel pram, green, good working order, "
+		                + "comes with a rain cover and small handy pump for the tyres,"
+		                + " can be used frombirth"
+		                + " up to 4 years, Maxicosi car seat can be used with it.",
+		        new Date());
 		Assert.assertTrue(searcher.includePost(queryBuilder, fullPost));
 
 	}

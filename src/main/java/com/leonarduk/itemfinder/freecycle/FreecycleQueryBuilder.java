@@ -11,9 +11,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.query.AbstractQueryBuilder;
 import com.leonarduk.itemfinder.query.QueryBuilder;
+import com.leonarduk.web.HtmlParser;
 
 /**
  * The Class FreecycleQueryBuilder.
@@ -24,31 +24,32 @@ public class FreecycleQueryBuilder extends AbstractQueryBuilder<FreecycleQueryBu
 	/** The Constant DEFAULT_ITEMS_PER_PAGE. */
 	private static final int	DEFAULT_ITEMS_PER_PAGE	= 50;
 	/** The log. */
-	private final Logger		LOG					= Logger.getLogger(FreecycleQueryBuilder.class);
+	private final Logger		LOG						= Logger
+	        .getLogger(FreecycleQueryBuilder.class);
 
 	/** The town. */
-	private FreecycleGroup town;
+	private FreecycleGroup		town;
 
 	/** The filter. */
-	private String filter;
+	private String				filter;
 
 	/** The include wanted. */
-	private boolean includeWanted = false;
+	private boolean				includeWanted			= false;
 
 	/** The include offered. */
-	private boolean includeOffered = true;
+	private boolean				includeOffered			= true;
 
 	/** The results per page. */
-	private int resultsPerPage = FreecycleQueryBuilder.DEFAULT_ITEMS_PER_PAGE;
+	private int					resultsPerPage			= FreecycleQueryBuilder.DEFAULT_ITEMS_PER_PAGE;
 
 	/** The page number. */
-	private int pageNumber = 1;
+	private int					pageNumber				= 1;
 
 	/** The date start. */
-	private LocalDate dateStart;
+	private LocalDate			dateStart;
 
 	/** The date end. */
-	private LocalDate dateEnd;
+	private LocalDate			dateEnd;
 
 	/**
 	 * Instantiates a new freecycle query builder.

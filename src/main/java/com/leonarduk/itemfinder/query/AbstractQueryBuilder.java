@@ -12,8 +12,8 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.htmlparser.util.ParserException;
 
-import com.leonarduk.itemfinder.html.HtmlParser;
-import com.leonarduk.itemfinder.html.HtmlParserImpl;
+import com.leonarduk.web.HtmlParser;
+import com.leonarduk.web.HtmlParserImpl;
 
 /**
  * The Class AbstractQueryBuilder.

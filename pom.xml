@@ -11,16 +11,13 @@
 	<description>A Java command line program to poll Freecycle.org for
 		specific items</description>
 	<url>http://leonarduk.com/maven2</url>
-	<prerequisites>
-		<maven>2.2.1</maven>
-	</prerequisites>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<log4j.version>1.2.17</log4j.version>
 		<junit.version>4.11</junit.version>
 		<java.version>1.8</java.version>
-		<webscraper-core.version>1.0.12</webscraper-core.version>
+		<webscraper-core.version>1.0.14</webscraper-core.version>
 		<jacoco.version>0.7.6.201602180812</jacoco.version>
 	</properties>
 
