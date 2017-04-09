@@ -23,8 +23,8 @@ import com.leonarduk.itemfinder.freecycle.Post;
 import com.leonarduk.itemfinder.freecycle.PostType;
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
 import com.leonarduk.itemfinder.freecycle.db.LatestPost;
-import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
+import com.leonarduk.web.HtmlParser;
 import com.leonarduk.webscraper.core.email.EmailException;
 import com.leonarduk.webscraper.core.email.EmailSender;
 import com.leonarduk.webscraper.core.email.EmailSession;
@@ -50,7 +50,7 @@ public final class SearchReporter {
 	private static final Logger	LOGGER					= Logger.getLogger(SearchReporter.class);
 
 	/** The db lock. */
-	private final Object dbLock = new Object();
+	private final Object		dbLock					= new Object();
 
 	/**
 	 * Instantiates a new search reporter.
@@ -151,7 +151,7 @@ public final class SearchReporter {
 	public StringBuilder generateSearch(final FreecycleConfig config, final Formatter formatter,
 	        final EntityManager em, final QueryReporter reporter, final boolean failIfEmpty,
 	        final EmailSender emailSender)
-	                throws InterruptedException, ExecutionException, ParserException, IOException {
+	        throws InterruptedException, ExecutionException, ParserException, IOException {
 		final String[] searches = config.getSearchTerms();
 
 		final String[] groupNames = config.getSearchGroupNames();
@@ -329,7 +329,7 @@ public final class SearchReporter {
 	        final EntityManager em, final FreecycleQueryBuilder queryBuilder,
 	        final StringBuffer wantedItems, final StringBuffer otherItems,
 	        final FreecycleGroup freecycleGroup, final int processed)
-	                throws ParserException, IOException {
+	        throws ParserException, IOException {
 		LatestPost latest;
 		final FreecycleQueryBuilder queryBuilderCopy = new FreecycleQueryBuilder(queryBuilder);
 		queryBuilderCopy.setTown(freecycleGroup);

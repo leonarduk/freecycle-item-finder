@@ -13,8 +13,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
-import com.leonarduk.itemfinder.html.HtmlParser;
-import com.leonarduk.itemfinder.html.HtmlParserImpl;
+import com.leonarduk.web.HtmlParser;
+import com.leonarduk.web.HtmlParserImpl;
 
 public class FreecycleScraperIT {
 

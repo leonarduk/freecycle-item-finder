@@ -24,7 +24,7 @@ import org.htmlparser.util.ParserException;
 import org.htmlparser.util.SimpleNodeIterator;
 
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
-import com.leonarduk.itemfinder.html.HtmlParser;
+import com.leonarduk.web.HtmlParser;
 
 /**
  * The Class FreecycleScraper.
@@ -37,36 +37,36 @@ import com.leonarduk.itemfinder.html.HtmlParser;
  */
 public class FreecycleScraper {
 
-	static final int LOCATION_NODE_INDEX = 14;
+	static final int				LOCATION_NODE_INDEX	= 14;
 
 	/** The date format. */
-	private static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss yyyy";
+	private static final String		DATE_FORMAT			= "EEE MMM dd HH:mm:ss yyyy";
 
 	/** The Constant tableDataContainingLinkFilter. */
-	private static final NodeFilter TABLE_LINK_FILTER = new AndFilter(new TagNameFilter("td"),
+	private static final NodeFilter	TABLE_LINK_FILTER	= new AndFilter(new TagNameFilter("td"),
 	        new HasChildFilter(new TagNameFilter("a")));
 
 	/** The log. */
-	private static final Logger LOG = Logger.getLogger(FreecycleScraper.class);
+	private static final Logger		LOG					= Logger.getLogger(FreecycleScraper.class);
 
-	final static String locationString = "Location :";
+	final static String				locationString		= "Location :";
 
-	final static String descriptionString = "Description  ";
+	final static String				descriptionString	= "Description  ";
 
 	/** The freecycle date format. */
-	private final SimpleDateFormat freecycleDateFormat;
+	private final SimpleDateFormat	freecycleDateFormat;
 
 	/** The item header filter. */
-	private final NodeFilter itemHeaderFilter = new TagNameFilter("div");
+	private final NodeFilter		itemHeaderFilter	= new TagNameFilter("div");
 
 	/** The parser. */
-	private final HtmlParser parser;
+	private final HtmlParser		parser;
 
 	/** The posts. */
-	private final List<Post> posts = new ArrayList<>();
+	private final List<Post>		posts				= new ArrayList<>();
 
 	/** The freecycle group. */
-	private final FreecycleGroup freecycleGroup;
+	private final FreecycleGroup	freecycleGroup;
 
 	/**
 	 * Parses the date from.
@@ -155,11 +155,8 @@ public class FreecycleScraper {
 		this.getParser().setURL(post.getLink());
 
 		final NodeList thumbnailNodes = this.getParser()
-		        .extractAllNodesThatMatch(
-		                new AndFilter(
-		                        new NodeFilter[] { new TagNameFilter("img"),
-		                                new NotFilter(new HasAttributeFilter("alt",
-		                                        "The Freecycle Network")),
+		        .extractAllNodesThatMatch(new AndFilter(new NodeFilter[] { new TagNameFilter("img"),
+		                new NotFilter(new HasAttributeFilter("alt", "The Freecycle Network")),
 		                new NotFilter(new HasAttributeFilter("alt", "Google+"))
 
 		}));

@@ -18,10 +18,10 @@ import com.leonarduk.itemfinder.ItemFinderException;
 import com.leonarduk.itemfinder.freecycle.db.FreecycleItem;
 import com.leonarduk.itemfinder.freecycle.db.LatestPost;
 import com.leonarduk.itemfinder.freecycle.db.ReportableItem;
-import com.leonarduk.itemfinder.html.HtmlParser;
 import com.leonarduk.itemfinder.interfaces.Item;
 import com.leonarduk.itemfinder.interfaces.ItemSearcher;
 import com.leonarduk.itemfinder.query.QueryBuilder;
+import com.leonarduk.web.HtmlParser;
 
 /**
  * The Class FreecycleItemSearcher.
@@ -35,13 +35,13 @@ import com.leonarduk.itemfinder.query.QueryBuilder;
 public class FreecycleItemSearcher implements ItemSearcher {
 
 	/** The log. */
-	private final Logger log = Logger.getLogger(FreecycleItemSearcher.class);
+	private final Logger		log		= Logger.getLogger(FreecycleItemSearcher.class);
 
 	/** The em. */
-	private final EntityManager em;
+	private final EntityManager	em;
 
 	/** The monitor. */
-	private final Object dbLock = new Object();
+	private final Object		dbLock	= new Object();
 
 	/**
 	 * Instantiates a new freecycle item searcher.
