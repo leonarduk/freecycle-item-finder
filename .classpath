@@ -29,7 +29,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/apple.jar"/>
-	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/jDeskMetrics.jar"/>
 	<classpathentry kind="lib" path="lib/jdesktop.jar"/>
 	<classpathentry kind="lib" path="lib/jl1.0.1.jar"/>
@@ -53,8 +52,8 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/webscraper-core"/>
 	<classpathentry kind="lib" path="C:/Users/steph/.m2/repository/junit/junit/4.13-beta-2/junit-4.13-beta-2.jar" sourcepath="C:/Users/steph/.m2/repository/junit/junit/4.13-beta-2/junit-4.13-beta-2-sources.jar">
 		<attributes>
-			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="test" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
 			<attribute name="maven.groupId" value="junit"/>
 			<attribute name="maven.artifactId" value="junit"/>
 			<attribute name="maven.version" value="4.13-beta-2"/>
