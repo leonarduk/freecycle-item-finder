@@ -18,7 +18,7 @@
 		<junit.version>4.13.1</junit.version>
 		<java.version>17</java.version>
 		<webscraper-core.version>1.0.19</webscraper-core.version>
-		<jacoco.version>0.8.11</jacoco.version>
+		<jacoco.version>0.8.12</jacoco.version>
 	</properties>
 
 	<repositories>
